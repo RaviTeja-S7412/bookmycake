@@ -13,16 +13,22 @@ import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
-import { logo } from 'src/assets/brand/logo'
-import { sygnet } from 'src/assets/brand/sygnet'
+// import { logo } from './assets/brand/logo'
+import { sygnet } from '../../public/assets/brand/sygnet'
 
 // sidebar nav config
 import navigation from '../_nav'
+import { Navigate } from 'react-router-dom'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const auth = useSelector(state => state.auth)
+
+  if(!auth.authenticate){
+    return <Navigate to={`/admin/login`} />
+  }
 
   return (
     <CSidebar
@@ -37,7 +43,7 @@ const AppSidebar = () => {
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
-          <img src='src/assets/logo.jpg' className='sidebar-brand-full' height={70} width={180} />
+          <img src='/assets/logo.jpg' className='sidebar-brand-full' height={70} width={180} />
           <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
         </CSidebarBrand>
         <CCloseButton
