@@ -12,11 +12,15 @@ import { isUserLoggedIn } from './redux/actions/auth.actions'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const DefaultFrontLayout = React.lazy(() => import('./layout/DefaultFrontLayout'))
 
 // Pages
 const Login = React.lazy(() => import('./views/Login'))
 
 const App = () => {
+
+  const pathname = window.location.pathname;
+  const uri = pathname.split('/')[1]; // Index 1 is the first segment
 
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth)
@@ -49,10 +53,12 @@ const App = () => {
           {/* <Route exact path="/register" name="Register Page" element={<Register />} />
           <Route exact path="/404" name="Page 404" element={<Page404 />} />
           <Route exact path="/500" name="Page 500" element={<Page500 />} /> */}
-          <Route path="*" name="Home" element={<DefaultLayout />} />
+          <Route path="/" exact name="Home" element={<DefaultFrontLayout />} />
+          <Route path="*" name="Admin" element={auth.authenticate && uri == 'admin' ? <DefaultLayout /> : <DefaultFrontLayout />} />
+          {/* <Route path="*" name="Home" element={<DefaultFrontLayout />} /> */}
         </Routes>
       </Suspense>
-      <><ToastContainer /></>
+      <ToastContainer />
     </BrowserRouter>
   )
 }
