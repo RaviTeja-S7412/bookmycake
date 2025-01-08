@@ -15,38 +15,39 @@ import CIcon from '@coreui/icons-react'
 import { cilPenAlt, cilTrash } from '@coreui/icons'
 import ReactDatatable from '../../../components/datatables/ReactDatatable'
 import { useNavigate } from 'react-router-dom'
+import { getCategories } from '../../../redux/actions/categories.actions'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Categories = () => {
 
+    const categories = useSelector(state => state.categories)
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [data, setData] = useState([]);
 
     const handleDelete = (id) => {
 
     }
 
-    const fetchUsers = () => {
-        const post_data = {
-            page: page1,
-            perPage: size,
-            search: search,
-            role: login_user && login_user.role,
-            team_leads: team_leads_data,
-            team_lead_id: login_user && login_user._id,
+    useEffect(() => {
+        if(categories.get_categories){
+            dispatch(getCategories());
+        }else{
+            setData(categories.categories);
         }
-        dispatch(getEmployees(post_data))
-        setLoading(false)
-    }
+        console.log("data", categories.categories);
+    }, [categories.get_categories])
 
     const columns = useMemo(
         () => [
             {
                 name: '#',
-                selector: (row) => `${row.serial}`,
+                selector: (row, key) => `${++key}`,
                 sortable: true,
             },
             {
                 name: 'Image',
-                selector: (row) => `${row.category_image}`,
+                cell: (row) => (<img src={`${import.meta.env.VITE_API_URL+row.category_image}`} />),
                 sortable: true,
             },
             {
@@ -67,33 +68,8 @@ const Categories = () => {
         [],
     )
 
-    const data = [
-        {
-            serial: 1,
-            category_name: 'Category 1',
-            category_image: 'Image 1',
-        },
-        {
-            serial: 2,
-            category_name: 'Category 2',
-            category_image: 'Image 2',
-        },
-        {
-            serial: 3,
-            category_name: 'Category 3',
-            category_image: 'Image 3',
-        },
-        {
-            serial: 4,
-            category_name: 'Category 4',
-            category_image: 'Image 4',
-        },
-        {
-            serial: 5,
-            category_name: 'Category 5',
-            category_image: 'Image 5',
-        }
-    ]
+    console.log(data);
+    
     
     return (
         <CRow>
@@ -112,7 +88,7 @@ const Categories = () => {
                                     <strong>List Of Categories</strong>
                                 </CCardHeader>
                                 <CCardBody>
-                                    <ReactDatatable columns={columns} data={data} actions={true} actionTarget={'/admin/inventory/create-category?ref=category'} />
+                                    {data.length > 0 && <ReactDatatable columns={columns} data={data} actions={true} actionTarget={'/admin/inventory/create-category?ref=category'} />}
                                 </CCardBody>
                             </CCard>
                         </CTabPanel>

@@ -2,6 +2,7 @@ const express = require('express');
 const env = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const path = require("path");
 const swaggerUi = require('swagger-ui-express'),
 swaggerDocument = require('../swagger.json');
 
@@ -17,6 +18,7 @@ extended: true
 }));
 const mongo = require('./connection.js');
 
+app.use('./uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(
   '/api-docs',
   swaggerUi.serve, 
@@ -28,6 +30,7 @@ mongo.connectToServer( function( err) {
   // auth routes
       app.use('/api',require('./routes/admin/auth'));
       app.use('/api',require('./routes/admin/admin'));
+      app.use('/api',require('./routes/admin/categories'));
       // app.use('/api',require('./routes/admin/clients'));
       // app.use('/api',require('./routes/admin/employees'));
       // app.use('/api',require('./routes/admin/leads'));
