@@ -56,7 +56,14 @@ const NavBarItems = [
             {id:67,label:"Jungle Theme Cakes",path:""},
             {id:68,label:"Princess Theme Cakes",path:""},
             {id:69,label:"Tier Theme Cakes",path:""},
-            {id:611,label:"Cartoon Theme Cakes",path:""},
+            {id:611,label:"Cartoon Theme Cakes",path:"",
+                childItems:[                    
+                    {id:"611a",label:"Spiderman Cakes",path:""},
+                    {id:"611b",label:"Chot Bheem Cake",path:""},
+                    {id:"611c",label:"Mickey Mouse Cakes",path:""},
+                    {id:"611d",label:"Cartoon Character Cake",path:""}
+                    ]
+                },
             {id:612,label:"Barbie Theme Cakes",path:""},
             {id:613,label:"PUBG Theme Cakes",path:""},
             {id:614,label:"Number Theme Cakes",path:""},

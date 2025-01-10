@@ -44,12 +44,25 @@ const FrontHeader = () => {
              <ul> {
                  NavBarItems.map(item=>(
                   <li key={item.id} className='dropdown cursor-pointer'>
-                    {item.subItems?(<>
+                    {item.subItems?(
+                      <>
                     <a>{item.label}</a>
                     <ul>
-                      {item.subItems.map((subnav)=>(<>
-                      <li key={subnav.id}>
-                        <a href={`${subnav.path}`}>{subnav.label}</a>
+                      {item.subItems.map((subnav)=>(
+                        <>
+                      <li key={subnav.id} className={subnav.childItems?"dropdown":""}>
+                        {subnav.childItems?(
+                          <>
+                          <a>{subnav.label}</a>
+                          <ul>
+                            {subnav.childItems.map(childItem=>(
+                              <li key={childItem.id}>
+                                <a href={childItem.path}>{childItem.label}</a>
+                              </li>
+                            ))}
+                          </ul>
+                        </>):(<a href={subnav.path}>{subnav.label}</a>)}
+                        {/* <a href={`${subnav.path}`}>{subnav.label}</a> */}
                       </li>
                       </>))}
                     </ul>
