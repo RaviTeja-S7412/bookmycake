@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import NavBarItems  from "../../Data/NavMenu"
 
 const FrontHeader = () => {
 
@@ -27,46 +28,54 @@ const FrontHeader = () => {
         <link href="/src/assets/front/css/main.css" rel="stylesheet" />
 
       </div>
+      
       <header id="header" className="header d-flex align-items-center sticky-top">
-        <div className="container-fluid position-relative d-flex align-items-center">
+        <div className="container-fluid position-relative row align-items-center">
+          <div className='col-sm'>
+            <a onClick={() => navigate('/')} className=" d-flex align-items-center me-auto cursor-pointer">
+              {/* <h1 className="sitename">Sailor</h1> */}
+              <img src='/assets/logo.jpg'/>
+            </a>
 
-          <a onClick={() => navigate('/')} className="logo d-flex align-items-center me-auto cursor-pointer">
-            <h1 className="sitename">Sailor</h1>
-          </a>
+          </div>
 
-          <nav id="navmenu" className="navmenu">
-            <ul>
-              <li><a onClick={() => navigate('/')} className="active">Christmas Specials</a></li>
-              <li><a onClick={() => navigate('/')} className="active">Indian Fusion Cakes</a></li>
-              <li className="dropdown"><a href="about.html"><span>Photo Cakes</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a onClick={() => navigate('/')}>All Photo Cakes</a></li>
-                  <li><a onClick={() => navigate('/')}>Custom Photo Cakes</a></li>
-                  <li><a onClick={() => navigate('/')}>Kids Photo Cakes</a></li>
-                  {/* <li className="dropdown"><a href="#"><span>Deep Dropdown</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
+          <div className='col-lg'>
+            <nav id="navmenu" className="navmenu">
+             <ul> {
+                 NavBarItems.map(item=>(
+                  <li key={item.id} className='dropdown cursor-pointer'>
+                    {item.subItems?(
+                      <>
+                    <a>{item.label}<i className="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
-                      <li><a href="#">Deep Dropdown 1</a></li>
-                      <li><a href="#">Deep Dropdown 2</a></li>
-                      <li><a href="#">Deep Dropdown 3</a></li>
-                      <li><a href="#">Deep Dropdown 4</a></li>
-                      <li><a href="#">Deep Dropdown 5</a></li>
+                      {item.subItems.map((subnav)=>(
+                        <>
+                      <li key={subnav.id} className={subnav.childItems?"dropdown":""}>
+                        {subnav.childItems?(
+                          <>
+                          <a>{subnav.label}<i className="bi bi-chevron-down toggle-dropdown"></i></a>
+                          <ul>
+                            {subnav.childItems.map(childItem=>(
+                              <li key={childItem.id}>
+                                <a href={childItem.path}>{childItem.label}</a>
+                              </li>
+                            ))}
+                          </ul>
+                        </>):(<a href={subnav.path}>{subnav.label}</a>)}
+                      </li>
+                      </>))}
                     </ul>
-                  </li> */}
-                </ul>
-              </li>
-              <li><a onClick={() => navigate('/')}>Flavor</a></li>
-              <li><a onClick={() => navigate('/')}>Desserts</a></li>
-              <li><a onClick={() => navigate('/')}>Pricing</a></li>
-              <li><a onClick={() => navigate('/')}>Designer Cakes</a></li>
-              <li><a onClick={() => navigate('/')}>Birthday</a></li>
-              <li><a onClick={() => navigate('/')}>Props</a></li>
-              <li><a onClick={() => navigate('/')}>Corporate Cakes</a></li>
-            </ul>
-            <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
-          </nav>
-
-          <a className="btn-getstarted" href="about.html">Get Started</a>
-
+                    </>):
+                    (<a href={item.path}>{item.label}</a>)}
+                  </li>
+                 ))
+              }
+              </ul>
+            </nav>
+          </div>
+          <div className='col-sm align-items-center px-auto'>
+            <a className="btn-getstarted" href="about.html">Get Started</a>
+          </div>
         </div>
       </header>
     </>
