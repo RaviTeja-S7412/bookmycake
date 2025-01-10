@@ -46,14 +46,14 @@ const FrontHeader = () => {
                   <li key={item.id} className='dropdown cursor-pointer'>
                     {item.subItems?(
                       <>
-                    <a>{item.label}</a>
+                    <a>{item.label}<i className="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
                       {item.subItems.map((subnav)=>(
                         <>
                       <li key={subnav.id} className={subnav.childItems?"dropdown":""}>
                         {subnav.childItems?(
                           <>
-                          <a>{subnav.label}</a>
+                          <a>{subnav.label}<i className="bi bi-chevron-down toggle-dropdown"></i></a>
                           <ul>
                             {subnav.childItems.map(childItem=>(
                               <li key={childItem.id}>
@@ -62,7 +62,6 @@ const FrontHeader = () => {
                             ))}
                           </ul>
                         </>):(<a href={subnav.path}>{subnav.label}</a>)}
-                        {/* <a href={`${subnav.path}`}>{subnav.label}</a> */}
                       </li>
                       </>))}
                     </ul>
