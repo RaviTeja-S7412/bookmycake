@@ -1,4 +1,6 @@
+
 import React, { useEffect, useRef } from 'react'
+import { NavLink } from 'react-router-dom'
 
 const FrontFooter = () => {
 
@@ -11,41 +13,47 @@ const FrontFooter = () => {
           <div className="row gy-4">
             <div className="col-lg-4 col-md-6 footer-about">
               <a href="index.html" className="logo d-flex align-items-center">
-                <span className="sitename">Sailor</span>
+                <span className="sitename">BookMyCake</span>
               </a>
               <div className="footer-contact pt-3">
-                <p>A108 Adam Street</p>
-                <p>New York, NY 535022</p>
-                <p className="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-                <p><strong>Email:</strong> <span>info@example.com</span></p>
+                <p>Bookmycake Private Limited
+                Gehlot farms,</p>
+                <p>(Opp 521) Sector 47 gurgaon
+                Haryana-122001</p>
+                <p className="mt-3"><strong>Phone:</strong> <span>+91 99900-26799</span></p>
+                <p><strong>Email:</strong> <span>Hello@bookmycake.co</span></p>
               </div>
-              <div className="social-links d-flex mt-4">
+              {/* <div className="social-links d-flex mt-4">
                 <a href=""><i className="bi bi-twitter-x"></i></a>
                 <a href=""><i className="bi bi-facebook"></i></a>
                 <a href=""><i className="bi bi-instagram"></i></a>
                 <a href=""><i className="bi bi-linkedin"></i></a>
-              </div>
+              </div> */}
+              <NavLink to={'/'}>
+              <span className="d-flex align-items-center me-auto cursor-pointer">
+                <img src='/assets/logo.jpg' alt="Logo" />
+              </span>
+            </NavLink>
             </div>
 
             <div className="col-lg-2 col-md-3 footer-links">
               <h4>Useful Links</h4>
               <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Terms of service</a></li>
-                <li><a href="#">Privacy policy</a></li>
+                <li><a href="#">Search</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Locate Us</a></li>
+                <li><a href="#">Terms and Conditions</a></li>
+                <li><a href="#">Cancellation and Refunds</a></li>
+                <li><a href="#">Track Order</a></li>
               </ul>
             </div>
 
             <div className="col-lg-2 col-md-3 footer-links">
-              <h4>Our Services</h4>
+              <h4>Heading</h4>
               <ul>
-                <li><a href="#">Web Design</a></li>
-                <li><a href="#">Web Development</a></li>
-                <li><a href="#">Product Management</a></li>
-                <li><a href="#">Marketing</a></li>
-                <li><a href="#">Graphic Design</a></li>
+                <li><p>Call / Whatsapp us on 99900-26799 for any queries or to get quote for designer cakes,</p></li>
+                <li><p>Whatsapp us the image<br/> Email : Hello@bookmycake.co</p></li>
+               
               </ul>
             </div>
             </div>
