@@ -7,6 +7,6 @@ router.get('/admin/get_categories',requireSignin,get_allcategories);
 router.post('/admin/create_category',requireSignin,create_category);
 router.put('/admin/update_category',requireSignin,update_category);
 router.post('/admin/get_singlecategory',requireSignin,get_singlecategory);
-router.delete('/admin/delete_category',requireSignin,deletecategory);
+router.delete('/admin/delete_category/:id',requireSignin,deletecategory);
 
 module.exports = router;

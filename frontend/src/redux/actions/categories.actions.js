@@ -23,7 +23,7 @@ export const createCategory = (udata) => {
 export const updateCategory = (udata) => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.UPDATE_CATEGORY_REQUEST })
-    const res = await axiosIntance.post(`/admin/update_category`, udata)
+    const res = await axiosIntance.put(`/admin/update_category`, udata)
 
     if (res.status === 200) {
       dispatch({
@@ -39,10 +39,10 @@ export const updateCategory = (udata) => {
   }
 }
 
-export const deleteCategory = (udata) => {
+export const deleteCategory = (id) => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.DELETE_CATEGORY_REQUEST })
-    const res = await axiosIntance.delete(`/admin/delete_category`, { data: udata })
+    const res = await axiosIntance.delete(`/admin/delete_category/${id}`,)
 
     if (res.status === 200) {
       dispatch({

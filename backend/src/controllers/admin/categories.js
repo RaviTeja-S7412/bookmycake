@@ -25,13 +25,21 @@ exports.create_category = [upload.single("file"),function(req,res){
 
     let category_image = "";
     if(!req.file){
-        // return res.status(202).json({ message: "Category Image is Required." });
+        return res.status(202).json({ message: "Category Image is Required." });
     }else{
-        category_image = "/uploads/categories/"+req.file.filename;
+        category_image = "categories/"+req.file.filename;
     }
 
-    const query = "INSERT INTO tbl_categories (category_name, category_image, status, deleted, created_date) VALUES (?, ?, ?, ?, ?)";
-    const values = [req.body.category_name, category_image, 1, 0, new Date()];
+    var category_route = req.body.category_name
+                        .toLowerCase()          // Convert to lowercase
+                        .replace(/\s+/g, '-')    // Replace spaces with hyphens
+                        .replace(/[^\w\-]+/g, '') // Remove any non-alphanumeric characters, except hyphens
+                        .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
+                        .replace(/^-+/, '')      // Remove leading hyphen
+                        .replace(/-+$/, '');
+
+    const query = "INSERT INTO tbl_categories (category_name, category_image, route, status, deleted, created_date) VALUES (?, ?, ?, ?, ?, ?)";
+    const values = [req.body.category_name, category_image, category_route, 1, 0, new Date()];
     
     db.query(query, values, function (err, result) {
     
@@ -60,8 +68,16 @@ exports.update_category = [upload.single("file"),function(req,res){
     if(!req.file){
         category_image = req.body.old_image;
     }else{
-        category_image = "/uploads/categories/"+req.file.filename;
+        category_image = "categories/"+req.file.filename;
     }
+
+    var category_route = req.body.category_name
+                        .toLowerCase()          // Convert to lowercase
+                        .replace(/\s+/g, '-')    // Replace spaces with hyphens
+                        .replace(/[^\w\-]+/g, '') // Remove any non-alphanumeric characters, except hyphens
+                        .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
+                        .replace(/^-+/, '')      // Remove leading hyphen
+                        .replace(/-+$/, '');
 
     const checkCategoryQuery = 'SELECT * FROM tbl_categories WHERE category_name = ? and id != ?';
     db.query(checkCategoryQuery, [req.body.category_name, req.body.id], (err, results) => {
@@ -73,8 +89,8 @@ exports.update_category = [upload.single("file"),function(req,res){
             return res.status(202).json({ error: 'Category name already exists' });
         }else{
             
-            const query = "UPDATE tbl_categories SET category_name = ?, category_image = ?, updated_date = ? where id = ?";
-            const values = [req.body.category_name, category_image, new Date(), req.body.id];
+            const query = "UPDATE tbl_categories SET category_name = ?, category_image = ?, route = ?, updated_date = ? where id = ?";
+            const values = [req.body.category_name, category_image, category_route, new Date(), req.body.id];
             
             db.query(query, values, function (err, result) {
             
@@ -95,13 +111,13 @@ exports.update_category = [upload.single("file"),function(req,res){
 
 exports.deletecategory = (req, res) => {
 
-    const id = req.body.id;
+    const { id } = req.params;
     if(!id){
         return res.status(202).json({ message: "Category ID is Required." });
     }
 
     const checkCategoryQuery = 'DELETE FROM tbl_categories WHERE id = ?';
-    db.query(checkCategoryQuery, [req.body.id], (err, result) => {
+    db.query(checkCategoryQuery, [id], (err, result) => {
 
         if (err) {
             return res.status(500).json({ error: 'Database error' });
@@ -119,17 +135,21 @@ exports.deletecategory = (req, res) => {
 
 exports.get_singlecategory = (req, res) => {
 
-    const id = req.body.user_id;
+    const id = req.body.id;
     if(!id){
-        return res.status(202).json({ message: "Client ID is Required." });
+        return res.status(202).json({ message: "Category ID is Required." });
     }
 
-    clients.find({ _id: new ObjectId(id) }).toArray((error, result) => {
-        
+    const checkCategoryQuery = 'SELECT * FROM tbl_categories WHERE id = ?';
+    db.query(checkCategoryQuery, [req.body.id], (err, result) => {
+        if (err) {
+            return callback(err);
+        }
+
         if (result.length > 0) {
             return res.status(200).json({ category_data: result[0] });
         }else{
-            return res.status(202).json({ message: "Client Not Found." });
+            return res.status(202).json({ message: "Category Not Found." });
         }
 
     });

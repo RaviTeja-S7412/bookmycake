@@ -14,6 +14,7 @@ const initState = {
   total_users_count: 0,
   prevPage: false,
   nextPage: false,
+  category_data: {},
 }
 
 export default (state = initState, action) => {
@@ -33,6 +34,7 @@ export default (state = initState, action) => {
         get_categories: true,
         is_category_added: true,
         message: action.payload.message,
+        category_data: {},
       }
       break
     case categoryConstants.SAVE_CATEGORY_FAILURE:
@@ -59,6 +61,7 @@ export default (state = initState, action) => {
         get_categories: true,
         is_category_added: true,
         message: action.payload.message,
+        category_data: {},
       }
       break
     case categoryConstants.UPDATE_CATEGORY_FAILURE:
@@ -83,7 +86,6 @@ export default (state = initState, action) => {
         ...state,
         loading: false,
         get_categories: true,
-        is_category_added: true,
         message: action.payload.message,
       }
       break
@@ -92,7 +94,6 @@ export default (state = initState, action) => {
         ...state,
         loading: false,
         get_categories: false,
-        is_category_added: false,
         message: action.payload.message,
       }
       break
@@ -116,6 +117,7 @@ export default (state = initState, action) => {
         total_users_count: action.payload.total_users_count,
         prevPage: action.payload.prevPage,
         nextPage: action.payload.nextPage,
+        category_data: {},
       }
       break
     case categoryConstants.GET_CATEGORIES_FAILURE:
@@ -148,6 +150,9 @@ export default (state = initState, action) => {
         get_singlecategory: false,
         message: action.payload.message,
       }
+      break
+    case categoryConstants.CATEGORIES_RESET:
+      state = initState
       break
   }
 

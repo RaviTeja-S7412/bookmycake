@@ -18,7 +18,6 @@ extended: true
 }));
 const mongo = require('./connection.js');
 
-app.use('./uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(
   '/api-docs',
   swaggerUi.serve, 
@@ -27,6 +26,7 @@ app.use(
 mongo.connectToServer( function( err) {
     if (err) console.log(err);
       app.use(cors());
+      app.use('/categories', express.static(path.join(__dirname, '../uploads', 'categories')));
   // auth routes
       app.use('/api',require('./routes/admin/auth'));
       app.use('/api',require('./routes/admin/admin'));

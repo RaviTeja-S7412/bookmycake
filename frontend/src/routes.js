@@ -15,7 +15,7 @@ const routes = [
   { path: '/admin/inventory/products', name: 'Products', element: Products },
   { path: '/admin/inventory/categories', name: 'Categories', element: Categories },
   { path: '/admin/inventory/create-category', name: 'Categories/Create Category', element: CategoryCrud },
-  { path: '/admin/inventory/update-category/:id', name: 'Update Category', element: CategoryCrud },
+  { path: '/admin/inventory/update-category', name: 'Categories/Update Category', element: CategoryCrud },
 ]
 
 export default routes
