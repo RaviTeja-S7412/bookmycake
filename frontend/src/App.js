@@ -49,13 +49,9 @@ const App = () => {
         }
       >
         <Routes>
-          <Route exact path="/admin/login" name="Login Page" element={<Login />} />
-          {/* <Route exact path="/register" name="Register Page" element={<Register />} />
-          <Route exact path="/404" name="Page 404" element={<Page404 />} />
-          <Route exact path="/500" name="Page 500" element={<Page500 />} /> */}
-          <Route path="/" exact name="Home" element={<DefaultFrontLayout />} />
-          <Route path="*" name="Admin" element={auth.authenticate && uri == 'admin' ? <DefaultLayout /> : <DefaultFrontLayout />} />
-          {/* <Route path="*" name="Home" element={<DefaultFrontLayout />} /> */}
+        <Route path="/" exact index name="Home" element={<DefaultFrontLayout />} />
+        <Route exact path="/admin/login" name="Login Page" element={<Login />} />
+        <Route path="*" name="Admin" element={auth.authenticate && uri == 'admin' ? <DefaultLayout /> : <DefaultFrontLayout />} />
         </Routes>
       </Suspense>
       <ToastContainer />
