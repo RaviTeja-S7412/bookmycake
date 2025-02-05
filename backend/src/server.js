@@ -35,7 +35,8 @@ mongo.connectToServer( function( err) {
       // app.use('/api',require('./routes/admin/employees'));
       // app.use('/api',require('./routes/admin/leads'));
       // app.use('/api',require('./routes/admin/routes'));
-    
+    //products routes
+    app.use('/api',require('./routes/products/productRoutes'))
 })
 
 app.listen(process.env.PORT,() =>{

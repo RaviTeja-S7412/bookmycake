@@ -52,7 +52,7 @@ const Home = () => {
                                 <CakeCard2
                                     product_image_url={Products[0].product_image_url}
                                     product_name={Products[0].product_name}
-                                    pricing_starts={Products[0].pricing_starts}
+                                    product_collection={"/collections"}
                                 />
                             </div>
                             <div className="flex-fill">
