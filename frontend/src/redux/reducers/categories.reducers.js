@@ -24,6 +24,7 @@ const initState = {
   get_singlesubcategory: true,
   is_subcategory_added: false,
   subcategory_data: {},
+  subcategoriesbyid_data: [],
 
 // child categories
 
@@ -429,7 +430,8 @@ export default (state = initState, action) => {
       state = {
         ...state,
         loading: true,
-        get_sub_categories_categoryid: true
+        get_sub_categories_categoryid: true,
+        subcategoriesbyid_data: []
       }
       break
     case categoryConstants.GET_SUBCATEGORIESBYCATEGORYID_SUCCESS:
@@ -437,7 +439,7 @@ export default (state = initState, action) => {
         ...state,
         loading: false,
         get_sub_categories_categoryid: false,
-        subcategory_data: {},
+        subcategoriesbyid_data: action.payload,
       }
       break
     case categoryConstants.GET_SUBCATEGORIESBYCATEGORYID_FAILURE:
@@ -446,6 +448,7 @@ export default (state = initState, action) => {
         loading: false,
         get_sub_categories_categoryid: false,
         message: action.payload.message,
+        subcategoriesbyid_data: []
       }
       break  
     

@@ -344,9 +344,9 @@ exports.get_subcategoriesbycategoryid = (req, res) => {
         }
 
         if (result.length > 0) {
-            return res.status(200).json({ sub_categories: result[0] });
+            return res.status(200).json({ sub_categories: result });
         }else{
-            return res.status(202).json({ message: "No Results Found." });
+            return res.status(202).json({ message: "No Results Found.", show: false });
         }
 
     });
@@ -443,7 +443,7 @@ exports.update_childcategory = [upload.single("file"),function(req,res){
         }else{
             
             const query = "UPDATE tbl_child_categories SET category_id = ?, sub_category_id = ?, child_category_name = ?, child_category_image = ?, route = ?, updated_date = ? where id = ?";
-            const values = [req.body.category_id, req.body.sub_category_id, req.body.child_category_name, child_category_image, route, req.body.isCategoryshow, new Date(), req.body.id];
+            const values = [req.body.category_id, req.body.sub_category_id, req.body.child_category_name, child_category_image, route, new Date(), req.body.id];
             
             db.query(query, values, function (err, result) {
             

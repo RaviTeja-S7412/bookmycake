@@ -27,7 +27,11 @@ axiosIntance.interceptors.response.use(
     if (res.status === 200) {
       toast.success(res.data.message)
     } else {
-      toast.error(res.data.message)
+      if(res.data.show === false){
+
+      }else{
+        toast.error(res.data.message)
+      }
     }
     return res
   },
