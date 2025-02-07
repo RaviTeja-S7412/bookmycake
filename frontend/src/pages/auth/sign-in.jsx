@@ -1,3 +1,4 @@
+import { login } from "@/redux/actions/auth.actions";
 import {
   Card,
   Input,
@@ -5,10 +6,29 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate } from "react-router-dom";
 
 
 export function SignIn() {
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+
+  const auth = useSelector((state)=>state.auth)
+  const dispatch= useDispatch();
+
+  const userLogin = (e)=>{
+    e.preventDefault()
+    const user= {
+      email,
+      password
+    }
+    dispatch(login(user))
+  }
+  if(auth.authenticate){
+    return <Navigate to={`/dashboard/home`}/>
+  }
   return (
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
@@ -16,23 +36,25 @@ export function SignIn() {
           <Typography variant="h2" className="font-bold mb-4">Sign In</Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to Sign In.</Typography>
         </div>
-        <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
+        <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2" onSubmit={userLogin}>
           <div className="mb-1 flex flex-col gap-6">
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Your email
             </Typography>
             <Input
+            onChange={(e)=>setEmail(e.target.value)}
               size="lg"
               placeholder="name@mail.com"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
-                className: "before:content-none after:content-none",
-              }}
+                className: "before:content-none after:content-none"}
+          }
             />
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Password
             </Typography>
             <Input
+            onChange={(e)=>setPassword(e.target.value)}
               type="password"
               size="lg"
               placeholder="********"
@@ -60,7 +82,7 @@ export function SignIn() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          <Button type='submit' className="mt-6" fullWidth>
             Sign In
           </Button>
 
