@@ -7,6 +7,7 @@ const Users = React.lazy(() => import('./views/users'));
 const Products = React.lazy(() => import('./views/inventory/products'));
 const Categories = React.lazy(() => import('./views/inventory/categories'));
 const CategoryCrud = React.lazy(() => import('./views/inventory/categories/crud'));
+const ProductCrud = React.lazy(() => import('./views/inventory/products/crud'));
 const SubCategoryCrud = React.lazy(() => import('./views/inventory/categories/subcategorycrud'));
 const ChildCategoryCrud = React.lazy(() => import('./views/inventory/categories/childcategorycrud'));
 
@@ -15,6 +16,8 @@ const routes = [
   { path: '/admin/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/admin/users', name: 'Users', element: Users },
   { path: '/admin/inventory/products', name: 'Products', element: Products },
+  { path: '/admin/inventory/create-product', name: 'Products/Create Product', element: ProductCrud },
+  { path: '/admin/inventory/update-product', name: 'Products/Update Product', element: ProductCrud },
   { path: '/admin/inventory/categories', name: 'Categories', element: Categories },
   { path: '/admin/inventory/create-category', name: 'Categories/Create Category', element: CategoryCrud },
   { path: '/admin/inventory/update-category', name: 'Categories/Update Category', element: CategoryCrud },

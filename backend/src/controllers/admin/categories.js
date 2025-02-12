@@ -46,9 +46,9 @@ exports.create_category = [upload.single("file"),function(req,res){
     
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
-              return res.status(202).json({ error: 'Category name already exists' });
+              return res.status(202).json({ message: 'Category name already exists' });
             }
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
 
         if (result) {
@@ -87,7 +87,7 @@ exports.update_category = [upload.single("file"),function(req,res){
         }
 
         if (results.length > 0) {
-            return res.status(202).json({ error: 'Category name already exists' });
+            return res.status(202).json({ message: 'Category name already exists' });
         }else{
             
             const query = "UPDATE tbl_categories SET category_name = ?, category_image = ?, route = ?, updated_date = ? where id = ?";
@@ -96,7 +96,7 @@ exports.update_category = [upload.single("file"),function(req,res){
             db.query(query, values, function (err, result) {
             
                 if (err) {
-                    return res.status(500).json({ error: err });
+                    return res.status(500).json({ message: err });
                 }
 
                 if (result) {
@@ -121,7 +121,7 @@ exports.deletecategory = (req, res) => {
     db.query(checkCategoryQuery, [id], (err, result) => {
 
         if (err) {
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
     
         if (result.affectedRows === 0) {
@@ -204,9 +204,9 @@ exports.create_subcategory = [upload.single("file"),function(req,res){
     
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
-              return res.status(202).json({ error: 'Sub Category name already exists' });
+              return res.status(202).json({ message: 'Sub Category name already exists' });
             }
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
 
         if (result) {
@@ -249,7 +249,7 @@ exports.update_subcategory = [upload.single("file"),function(req,res){
         }
 
         if (results.length > 0) {
-            return res.status(202).json({ error: 'Sub Category name already exists' });
+            return res.status(202).json({ message: 'Sub Category name already exists' });
         }else{
             
             const query = "UPDATE tbl_sub_categories SET category_id = ?, sub_category_name = ?, sub_category_image = ?, route = ?, isCategoryshow = ?, updated_date = ? where id = ?";
@@ -258,7 +258,7 @@ exports.update_subcategory = [upload.single("file"),function(req,res){
             db.query(query, values, function (err, result) {
             
                 if (err) {
-                    return res.status(500).json({ error: err });
+                    return res.status(500).json({ message: err });
                 }
 
                 if (result) {
@@ -283,7 +283,7 @@ exports.delete_sub_category = (req, res) => {
     db.query(checkCategoryQuery, [id], (err, result) => {
 
         if (err) {
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
     
         if (result.affectedRows === 0) {
@@ -390,9 +390,9 @@ exports.create_childcategory = [upload.single("file"),function(req,res){
     
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
-              return res.status(202).json({ error: 'Child Category name already exists' });
+              return res.status(202).json({ message: 'Child Category name already exists' });
             }
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
 
         if (result) {
@@ -439,7 +439,7 @@ exports.update_childcategory = [upload.single("file"),function(req,res){
         }
 
         if (results.length > 0) {
-            return res.status(202).json({ error: 'Child Category name already exists' });
+            return res.status(202).json({ message: 'Child Category name already exists' });
         }else{
             
             const query = "UPDATE tbl_child_categories SET category_id = ?, sub_category_id = ?, child_category_name = ?, child_category_image = ?, route = ?, updated_date = ? where id = ?";
@@ -448,7 +448,7 @@ exports.update_childcategory = [upload.single("file"),function(req,res){
             db.query(query, values, function (err, result) {
             
                 if (err) {
-                    return res.status(500).json({ error: err });
+                    return res.status(500).json({ message: err });
                 }
 
                 if (result) {
@@ -473,7 +473,7 @@ exports.delete_child_category = (req, res) => {
     db.query(checkCategoryQuery, [id], (err, result) => {
 
         if (err) {
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ message: 'Database error' });
         }
     
         if (result.affectedRows === 0) {

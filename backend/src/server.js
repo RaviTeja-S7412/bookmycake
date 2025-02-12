@@ -27,14 +27,12 @@ mongo.connectToServer( function( err) {
     if (err) console.log(err);
       app.use(cors());
       app.use('/categories', express.static(path.join(__dirname, '../uploads', 'categories')));
+      app.use('/products', express.static(path.join(__dirname, '../uploads', 'products')));
   // auth routes
       app.use('/api',require('./routes/admin/auth'));
       app.use('/api',require('./routes/admin/admin'));
       app.use('/api',require('./routes/admin/categories'));
-      // app.use('/api',require('./routes/admin/clients'));
-      // app.use('/api',require('./routes/admin/employees'));
-      // app.use('/api',require('./routes/admin/leads'));
-      // app.use('/api',require('./routes/admin/routes'));
+      app.use('/api',require('./routes/admin/products'));
     
 })
 
