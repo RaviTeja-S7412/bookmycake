@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CSpinner } from '@coreui/react'
 import './scss/style.scss'
 
-// We use those styles to show code examples, you should remove them in your application.
-import './scss/examples.scss'
 import { ToastContainer } from 'react-toastify'
 import { isUserLoggedIn } from './redux/actions/auth.actions'
 
