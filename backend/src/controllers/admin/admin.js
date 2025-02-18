@@ -1,7 +1,7 @@
 const db = require('../../connection.js').getDb();
 
 exports.get_userdata = (req, res) => {
-    
+
     db.query("SELECT * FROM tbl_users", function (err, result) {
         if (err) throw err;
         console.log(result);
@@ -13,7 +13,7 @@ exports.get_userdata = (req, res) => {
 
 exports.get_roles = (req, res) => {
 
-    roles.find({id:{$nin:[1,5]}})
+    roles.find({ id: { $nin: [1, 5] } })
         .toArray((error, result) => {
 
             if (error) {
@@ -25,56 +25,10 @@ exports.get_roles = (req, res) => {
                 return res.status(200).json({
                     roles: result,
                 });
-                    
+
             } else {
                 return res.status(202).json({
                     message: "Error Occured."
-                });
-            }
-        })
-}
-
-exports.get_teamleads = (req, res) => {
-
-    users.find({ "created_by": req.body.user_id, "role": 4 })
-        .toArray((error, result) => {
-
-            if (error) {
-                return res.status(202).json({ message: error });
-            }
-
-            if (result) {
-
-                return res.status(200).json({
-                    team_leads: result,
-                });
-                    
-            } else {
-                return res.status(202).json({
-                    message: error
-                });
-            }
-        })
-}
-
-exports.get_tlemployees = (req, res) => {
-    
-    employees.find({ "team_lead": req.body.user_id })
-        .toArray((error, result) => {
-
-            if (error) {
-                return res.status(202).json({ message: error });
-            }
-
-            if (result) {
-
-                return res.status(200).json({
-                    employees: result,
-                });
-                    
-            } else {
-                return res.status(202).json({
-                    message: error
                 });
             }
         })
@@ -90,7 +44,7 @@ exports.get_dashboarddata = (req, res) => {
     var activequery = {};
     var exitquery = {};
     var offerquery = {};
-    if(role == 5){
+    if (role == 5) {
         // empquery["team_lead"] = user_id;
         offerquery["status"] = { "$exists": true, "$in": [2] };
         offerquery["employee_id"] = user_id;
@@ -98,7 +52,7 @@ exports.get_dashboarddata = (req, res) => {
         activequery["employee_id"] = user_id;
         exitquery["status"] = { "$exists": true, "$in": [0] };
         exitquery["employee_id"] = user_id;
-    }else if(role == 4){
+    } else if (role == 4) {
         empquery["team_lead"] = user_id;
         offerquery["status"] = { "$exists": true, "$in": [2] };
         offerquery["team_lead"] = user_id;
@@ -106,7 +60,7 @@ exports.get_dashboarddata = (req, res) => {
         activequery["team_lead"] = user_id;
         exitquery["status"] = { "$exists": true, "$in": [0] };
         exitquery["team_lead"] = user_id;
-    }else if(role == 3){
+    } else if (role == 3) {
         // empquery["team_lead"] = user_id;
         offerquery["status"] = { "$exists": true, "$in": [2] };
         offerquery["accounts_manager"] = user_id;
@@ -116,34 +70,38 @@ exports.get_dashboarddata = (req, res) => {
         exitquery["accounts_manager"] = user_id;
         tlquery["role"] = { "$exists": true, "$in": [4] }
         tlquery["created_by"] = user_id
-    }else if(role == 2){
+    } else if (role == 2) {
         // empquery["team_lead"] = user_id;
         offerquery["status"] = { "$exists": true, "$in": [2] };
         activequery["status"] = { "$exists": true, "$in": [1] };
         exitquery["status"] = { "$exists": true, "$in": [0] };
-    }else if(role == 1){
+    } else if (role == 1) {
         offerquery["status"] = { "$exists": true, "$in": [2] };
         activequery["status"] = { "$exists": true, "$in": [1] };
         exitquery["status"] = { "$exists": true, "$in": [0] };
         tlquery["role"] = { "$exists": true, "$in": [4] }
     }
-    
+
     users.aggregate([
-        { "$facet": {
-          "AMCount": [
-            { "$match" : { "role": { "$exists": true, "$in": [3] }}},
-            { "$count": "AMCount" },
-          ],
-          "TLCount": [
-            { "$match" : tlquery},
-            { "$count": "TLCount" },
-          ]
-        }},
-        { "$project": {
-          "accounts_managers_count": { "$arrayElemAt": ["$AMCount.AMCount", 0] },
-          "team_leads_count": { "$arrayElemAt": ["$TLCount.TLCount", 0] },
-        }}
-      ]).toArray((error, result) => {
+        {
+            "$facet": {
+                "AMCount": [
+                    { "$match": { "role": { "$exists": true, "$in": [3] } } },
+                    { "$count": "AMCount" },
+                ],
+                "TLCount": [
+                    { "$match": tlquery },
+                    { "$count": "TLCount" },
+                ]
+            }
+        },
+        {
+            "$project": {
+                "accounts_managers_count": { "$arrayElemAt": ["$AMCount.AMCount", 0] },
+                "team_leads_count": { "$arrayElemAt": ["$TLCount.TLCount", 0] },
+            }
+        }
+    ]).toArray((error, result) => {
 
         if (error) {
             return res.status(202).json({ message: error });
@@ -151,29 +109,33 @@ exports.get_dashboarddata = (req, res) => {
 
         if (result) {
 
-            employees.find(empquery).count(function(err,count){
+            employees.find(empquery).count(function (err, count) {
 
                 leads.aggregate([
-                    { "$facet": {
-                      "OCount": [
-                        { "$match" : offerquery},
-                        { "$count": "OCount" },
-                      ],
-                      "ACount": [
-                        { "$match" : activequery},
-                        { "$count": "ACount" },
-                      ],
-                      "ECount": [
-                        { "$match" : exitquery},
-                        { "$count": "ECount" }
-                      ]
-                    }},
-                    { "$project": {
-                      "OCount": { "$arrayElemAt": ["$OCount.OCount", 0] },
-                      "ACount": { "$arrayElemAt": ["$ACount.ACount", 0] },
-                      "ECount": { "$arrayElemAt": ["$ECount.ECount", 0] }
-                    }}
-                  ]).toArray(function(err,lcount){
+                    {
+                        "$facet": {
+                            "OCount": [
+                                { "$match": offerquery },
+                                { "$count": "OCount" },
+                            ],
+                            "ACount": [
+                                { "$match": activequery },
+                                { "$count": "ACount" },
+                            ],
+                            "ECount": [
+                                { "$match": exitquery },
+                                { "$count": "ECount" }
+                            ]
+                        }
+                    },
+                    {
+                        "$project": {
+                            "OCount": { "$arrayElemAt": ["$OCount.OCount", 0] },
+                            "ACount": { "$arrayElemAt": ["$ACount.ACount", 0] },
+                            "ECount": { "$arrayElemAt": ["$ECount.ECount", 0] }
+                        }
+                    }
+                ]).toArray(function (err, lcount) {
 
                     result[0]["employees_count"] = count;
                     result[0]["offer_leads_count"] = lcount[0]["OCount"];
@@ -187,7 +149,7 @@ exports.get_dashboarddata = (req, res) => {
                 });
 
             })
-                
+
         } else {
             return res.status(202).json({
                 message: error
@@ -196,132 +158,60 @@ exports.get_dashboarddata = (req, res) => {
     })
 }
 
-exports.get_chartdata = (req, res) => {
+exports.get_navigationmenu = (req, res) => {
 
-    const role = req.body.role;
-    const user_id = req.body.user_id;
-    const sdate = new Date(req.body.sdate + 'T00:00:00.000Z');
-    const edate = new Date(req.body.edate + 'T23:59:59.999Z');
-
-    var oquery = {};
-    var aquery = {};
-    var equery = {};
-    oquery["status"] = { "$exists": true, "$in": [2] };
-    aquery["status"] = { "$exists": true, "$in": [1] };
-    equery["status"] = { "$exists": true, "$in": [0] };
-    oquery["created_date"] = {"$gte": sdate,"$lte": edate};
-    aquery["created_date"] = {"$gte": sdate,"$lte": edate};
-    equery["created_date"] = {"$gte": sdate,"$lte": edate};
-    if(role == 5){
-        oquery["employee_id"] = user_id;
-        aquery["employee_id"] = user_id;
-        equery["employee_id"] = user_id;
-    }else if(role == 4){
-        oquery["team_lead"] = user_id;
-        aquery["team_lead"] = user_id;
-        equery["team_lead"] = user_id;
-    }else if(role == 3){
-        oquery["accounts_manager"] = user_id;
-        aquery["accounts_manager"] = user_id;
-        equery["accounts_manager"] = user_id;
-    }
-
-    leads.aggregate([
-        { "$facet": {
-            "oCount": [
-                { "$sort": { 'created_date' : 1 } },
-                { "$match" : oquery},
-                { $group: {
-                    _id: {month: {$month: "$created_date"}},
-                    count: { $sum: 1}
-                }}
-            ],
-            "aCount": [
-                { "$sort": { 'created_date' : 1 } },
-                { "$match" : aquery},
-                { $group: {
-                    _id: {month: {$month: "$created_date"}},
-                    count: { $sum: 1}
-                }}
-            ], 
-            "eCount": [
-                { "$sort": { 'created_date' : 1 } },
-                { "$match" : equery},
-                { $group: {
-                    _id: {month: {$month: "$created_date"}},
-                    count: { $sum: 1}
-                }}
-            ],  
-        }}
-      ]).toArray((error, result) => {
-
-        if (error) {
-            return res.status(202).json({ message: error });
+    const navQuery = 'SELECT c.id AS category_id, c.category_name AS category_label, c.route AS category_path, s.id AS subcategory_id, s.sub_category_name AS subcategory_label, s.route AS subcategory_path, ch.id AS childcategory_id, ch.child_category_name AS childcategory_label, ch.route AS childcategory_path FROM tbl_categories c LEFT JOIN tbl_sub_categories s ON c.id = s.category_id LEFT JOIN tbl_child_categories ch ON s.id = ch.sub_category_id ORDER BY c.id, s.id, ch.id';
+    db.query(navQuery,(err, categories) => {
+        if (err) {
+            return callback(err);
         }
 
-        if (result) {
+        if (categories.length > 0) {
+            const result = [];
 
-            var odata = [];
-            var adata = [];
-            var edata = [];
-            var docount = 0;
-            var dacount = 0;
-            var decount = 0;
-            var oCount = result[0]['oCount'];
-            var aCount = result[0]['aCount'];
-            var eCount = result[0]['eCount'];
+            categories.forEach((category) => {
+                // Find existing category or create new
+                let categoryItem = result.find((item) => item.id === category.category_id);
 
-            var months = [{1:"Jan"},{2:"Feb"},{3:"Mar"},{4:"Apr"},{5:"May"},{6:"June"},{7:"July"},{8:"Aug"},{9:"Sep"},{10:"Oct"},{11:"Nov"},{12:"Dec"}];
+                if (!categoryItem) {
+                    categoryItem = {
+                        id: category.category_id,
+                        label: category.category_label,
+                        path: category.category_path,
+                        subItems: [],
+                    };
+                    result.push(categoryItem);
+                }
 
-            months.forEach((om, okey) => {
-                var ostatus = false;
-                oCount.forEach((oc) => {
-                    if(om[oc._id.month]){
-                        odata.push(oc.count);
-                        docount += oc.count;
-                        ostatus = true;
+                // Handle subcategories and child categories
+                if (category.subcategory_id) {
+                    let subcategoryItem = categoryItem.subItems.find((item) => item.id === category.subcategory_id);
+                    if (!subcategoryItem) {
+                        subcategoryItem = {
+                            id: category.subcategory_id,
+                            label: category.subcategory_label,
+                            path: category.subcategory_path,
+                            childItems: [],
+                        };
+                        categoryItem.subItems.push(subcategoryItem);
                     }
-                })
-                if(!ostatus)
-                odata.push(0);
 
-                var astatus = false;
-                aCount.forEach((ac) => {
-                    if(om[ac._id.month]){
-                        adata.push(ac.count);
-                        dacount += ac.count;
-                        astatus = true;
+                    if (category.childcategory_id) {
+                        subcategoryItem.childItems.push({
+                            id: category.childcategory_id,
+                            label: category.childcategory_label,
+                            path: category.childcategory_path,
+                        });
                     }
-                })
-                if(!astatus)
-                adata.push(0);
-
-                var estatus = false;
-                eCount.forEach((ec) => {
-                    if(om[ec._id.month]){
-                        edata.push(ec.count);
-                        decount += ec.count;
-                        estatus = true;
-                    }
-                })
-                if(!estatus)
-                edata.push(0);
-            })
-            return res.status(200).json({
-                chart_data: {
-                    "bar_offer_count": odata,
-                    "bar_active_count": adata,
-                    "bar_exit_count": edata,
-                    "doughnut_chart_count": [docount,dacount,decount],
                 }
             });
-
-        } else {
-            return res.status(202).json({
-                message: error
-            });
+            return res.status(200).json({ navbar_data: result });
+        }else{
+            return res.status(202).json({ message: "Data Not Found." });
         }
-    })
+
+    });
+
 }
 
 
