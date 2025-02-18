@@ -265,7 +265,7 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-                                <CFormLabel>Ingredients:</CFormLabel>
+                                {/* <CFormLabel>Ingredients:</CFormLabel> */}
                                 {/* <ReactQuill
                                     value={ingredeints}
                                     onChange={(value) => setIngredeints(value)}
@@ -282,7 +282,7 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-                                <CFormLabel>Nutritional Information:</CFormLabel>
+                                {/* <CFormLabel>Nutritional Information:</CFormLabel> */}
                                 {/* <ReactQuill
                                     value={nutritional_info}
                                     onChange={(value) => setnutritional_info(value)}
