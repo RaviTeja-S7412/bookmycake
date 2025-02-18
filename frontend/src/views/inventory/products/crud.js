@@ -16,8 +16,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { categoryConstants, productConstants } from '../../../redux/actions/constants';
-import ReactQuill from 'react-quill'; // Import the ReactQuill component
-import 'react-quill/dist/quill.snow.css'; // Import Quill's snow theme styles
+// import ReactQuill from 'react-quill'; // Import the ReactQuill component
+// import 'react-quill/dist/quill.snow.css'; // Import Quill's snow theme styles
 import { cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { createProduct, get_singleproduct, updateProduct } from '../../../redux/actions/products.actions';
@@ -266,24 +266,36 @@ const ProductCrud = () => {
                             </CCol>
                             <CCol md={6}>
                                 <CFormLabel>Ingredients:</CFormLabel>
-                                <ReactQuill
+                                {/* <ReactQuill
                                     value={ingredeints}
                                     onChange={(value) => setIngredeints(value)}
                                     theme="snow"
                                     modules={{
                                     toolbar: quillToolbar,
                                     }}
+                                /> */}
+                                <CFormTextarea
+                                    label="Ingredients:"
+                                    rows={2}
+                                    onChange={(e) => setIngredeints(e.target.value)}
+                                    value={ingredeints}
                                 />
                             </CCol>
                             <CCol md={6}>
                                 <CFormLabel>Nutritional Information:</CFormLabel>
-                                <ReactQuill
+                                {/* <ReactQuill
                                     value={nutritional_info}
                                     onChange={(value) => setnutritional_info(value)}
                                     theme="snow"
                                     modules={{
                                     toolbar: quillToolbar,
                                     }}
+                                /> */}
+                                <CFormTextarea
+                                    label="Nutritional Information:"
+                                    rows={2}
+                                    onChange={(e) => setnutritional_info(e.target.value)}
+                                    value={nutritional_info}
                                 />
                             </CCol>
                             <CCol md={2}>
