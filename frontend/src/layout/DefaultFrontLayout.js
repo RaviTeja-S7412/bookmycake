@@ -8,7 +8,7 @@ const DefaultFrontLayout = () => {
     <div>
       <div className="wrapper d-flex flex-column min-vh-500">
         <FrontHeader />
-        <div className="body flex-grow-1">
+        <div className="">
           <FrontContent />
         </div>
         <FrontFooter />
