@@ -26,6 +26,8 @@
     "@coreui/react": "^5.4.1",
     "@coreui/react-chartjs": "^3.0.0",
     "@coreui/utils": "^2.0.2",
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@popperjs/core": "^2.11.8",
     "@redux-devtools/extension": "^3.3.0",
     "axios": "^1.7.9",
