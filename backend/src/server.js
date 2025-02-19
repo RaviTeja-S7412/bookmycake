@@ -24,7 +24,7 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 );
 
-app.get("/test", "testing");
+app.use("/test", "testing");
 
 mongo.connectToServer( function( err) {
     if (err) console.log(err);
