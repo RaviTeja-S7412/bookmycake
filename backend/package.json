@@ -4,7 +4,8 @@
   "description": "Back-end for an e-commerce website",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/server.js"
+    "start": "nodemon ./src/server.js",
+    "build": "node build"
   },
   "keywords": [
     "ecommerce",
