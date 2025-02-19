@@ -29,7 +29,7 @@ export default function Home() {
             <span className="sr-only">Book My Cake</span>
             <img
               alt=""
-              src="public\assets\logo.jpg"
+              src="assets/logo.jpg"
               className="h-full w-full"
             />
           </a>
