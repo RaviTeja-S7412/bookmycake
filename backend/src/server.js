@@ -25,7 +25,7 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 );
 
-router.get("/test", function test(){
+router.get("/", function test(){
   return "hello";
 });
 
