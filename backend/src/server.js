@@ -3,6 +3,7 @@ const env = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const path = require("path");
+const router = express.Router();
 const swaggerUi = require('swagger-ui-express'),
 swaggerDocument = require('../swagger.json');
 
@@ -24,7 +25,9 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 );
 
-app.get("/test", "testing");
+router.get("/test", function test(){
+  return "hello";
+});
 
 mongo.connectToServer( function( err) {
     if (err) console.log(err);
