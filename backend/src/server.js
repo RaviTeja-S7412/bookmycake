@@ -23,6 +23,9 @@ app.use(
   swaggerUi.serve, 
   swaggerUi.setup(swaggerDocument)
 );
+
+app.get("/test", "testing");
+
 mongo.connectToServer( function( err) {
     if (err) console.log(err);
       app.use(cors());
