@@ -9,13 +9,13 @@ import Products from "../../Data/Products"
   
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {Products.map((product) => (
-              <div key={product.id} className="group relative">
+              <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg">
                 <img
                   alt={product.imageAlt}
                   src={product.imageSrc}
-                  className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                  className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                 />
-                <div className="mt-4 flex justify-between">
+                <div className="mt-4 flex justify-between p-2">
                   <div>
                     <p className="text-md">
                       <a href={product.href} className="!text-gray-900 font-medium !no-underline">
