@@ -1,9 +1,13 @@
+import Carousel from "../../components/carousel/Carousel"
 import Products from "../../Data/Products"
 
   export default function Example() {
     return (
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <div className=" max-w-full">
+          <Carousel/>
+          </div>
           
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">Featured collection</h2>
   
