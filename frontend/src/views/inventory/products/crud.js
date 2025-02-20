@@ -305,7 +305,7 @@ const ProductCrud = () => {
                                     label="Size"
                                     onChange={(e) => setIssize(!isSize)}
                                     checked={isSize}
-                                    required
+                                    
                                 />
                             </CCol>
                             <CCol md={2}>
@@ -315,7 +315,7 @@ const ProductCrud = () => {
                                     label="Flavor"
                                     onChange={(e) => setIsflavor(!isFlavor)}
                                     checked={isFlavor}
-                                    required
+                                    
                                 />
                             </CCol>
                             <CCol md={8}></CCol>
