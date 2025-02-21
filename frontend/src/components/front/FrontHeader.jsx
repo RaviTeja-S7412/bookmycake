@@ -19,7 +19,7 @@ export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-[#f0efe9] ">
+    <header className="">
        <p className="flex h-10 items-center justify-center bg-[#E1262A] px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
        Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
         </p>

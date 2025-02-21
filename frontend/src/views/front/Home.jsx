@@ -3,7 +3,7 @@ import Products from "../../Data/Products"
 
   export default function Example() {
     return (
-      <div className="bg-[#e8eee9]">
+      <div className="">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
           <div className=" max-w-full">
           <Carousel/>
