@@ -9,6 +9,7 @@ const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
   { path: '/products', exact: true, name: 'Products', element: AllProducts },
   { path: '/products/:id', exact: true, name: 'Products', element: AllProducts },
+  { path: '/products/:id/:id', exact: true, name: 'Products', element: AllProducts },
 ]
 
 export default front_routes
