@@ -21,7 +21,7 @@ export default function HomeHeader() {
   const navigate = useNavigate();
 
   return (
-    <header className="">
+    <header className="bg-white">
        <p className="flex h-10 items-center justify-center bg-[#E1262A] px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
        Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
         </p>
@@ -31,7 +31,7 @@ export default function HomeHeader() {
             <span className="sr-only">Book My Cake</span>
             <img
               alt=""
-              src="assets/logo.jpg"
+              src="/assets/logo.jpg"
               className="h-full w-full"
             />
           </a>

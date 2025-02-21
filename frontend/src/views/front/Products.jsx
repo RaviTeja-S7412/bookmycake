@@ -140,7 +140,7 @@ function classNames(...classes) {
               <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg">
                 <img
                   alt={product.imageAlt}
-                  src={product.imageSrc}
+                  src={'/'+product.imageSrc}
                   className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                 />
                 <div className="mt-4 flex justify-between p-2">

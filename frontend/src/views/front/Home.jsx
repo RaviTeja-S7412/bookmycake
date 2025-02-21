@@ -3,10 +3,10 @@ import Products from "../../Data/Products"
 
   export default function Home() {
     return (
-      <div className="">
+      <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-          <div className=" max-w-full">
-          <Carousel/>
+          <div className=" max-w-full h-64">
+            <Carousel/>
           </div>
           
           <h2 className="text-2xl font-bold tracking-tight pt-5 text-gray-900">Featured collection</h2>
@@ -16,7 +16,7 @@ import Products from "../../Data/Products"
               <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg">
                 <img
                   alt={product.imageAlt}
-                  src={product.imageSrc}
+                  src={'/'+product.imageSrc}
                   className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                 />
                 <div className="mt-4 flex justify-between p-2">
