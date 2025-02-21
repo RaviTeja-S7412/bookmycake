@@ -15,12 +15,12 @@ import {
 import { Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon ,ShoppingBagIcon, UserIcon} from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu"
 
-export default function Home() {
+export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white ">
-       <p className="flex h-10 items-center justify-center bg-rose-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+    <header className="">
+       <p className="flex h-10 items-center justify-center bg-[#E1262A] px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
        Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
         </p>
       <nav aria-label="Global" className="mx-auto max-w-max flex  items-center justify-between p-6 lg:px-8">
