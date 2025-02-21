@@ -54,7 +54,7 @@ const ProductCrud = () => {
     const [shipping_info, setshipping_info] = useState('')
     const [isSize, setIssize] = useState(false)
     const [isFlavor, setIsflavor] = useState(false)
-    const [sizes, setSizes] = useState([{ kg: '', price: '' }]);
+    const [sizes, setSizes] = useState([{ kg: '', unit: '', price: '' }]);
     const [flavors, setFlavors] = useState([""]);
     const [categoriesList, setCategories] = useState([])
     const [subcategoriesList, setSubCategories] = useState([])
@@ -82,7 +82,7 @@ const ProductCrud = () => {
         setnutritional_info("");
         setIssize(false);
         setIsflavor(false);
-        setSizes([{ kg: '', price: '' }]);
+        setSizes([{ kg: '', unit: '' , price: '' }]);
         setFlavors([""]);
     }
 
@@ -328,11 +328,24 @@ const ProductCrud = () => {
                                                     type="number"
                                                     name='kg'
                                                     id="validationDefault01"
-                                                    label="Size in kg's: "
+                                                    label="Size kg's/ml : "
                                                     onChange={(e) => handleSizeChange(index, e)}
                                                     value={size.kg}
                                                 />
                                             </CCol>
+                                            <CCol md={2}>
+                                                <CFormSelect
+                                                    type="number"
+                                                    name='unit'
+                                                    id="validationDefault01"
+                                                    label="Unit"
+                                                    onChange={(e) => handleSizeChange(index, e)}
+                                                    value={size.unit}>
+                                                    <option value="kg">Kg</option>
+                                                    <option value="ml">ml</option>
+                                                </CFormSelect>
+                                            </CCol>
+
                                             <CCol md={5}>
                                                 <CFormInput
                                                     type="number"
