@@ -14,9 +14,11 @@ import {
 } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon ,ShoppingBagIcon, UserIcon} from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu"
+import { useNavigate } from 'react-router-dom';
 
 export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="">
@@ -68,7 +70,7 @@ export default function HomeHeader() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-6">
           {NavBarItems.map((item) => (
             <Popover key={item.id} className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none">
+              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none" onClick={(e) => navigate('products'+item.path)}>
                 {item.label}
                 {item.subItems && <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />}
               </PopoverButton>
