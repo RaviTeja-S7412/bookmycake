@@ -205,7 +205,7 @@ exports.get_navigationmenu = (req, res) => {
                     }
                 }
             });
-            return res.status(200).json({ navbar_data: result });
+            return res.status(200).json({ menu_items: result });
         }else{
             return res.status(202).json({ message: "Data Not Found." });
         }

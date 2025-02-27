@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogPanel,
@@ -12,49 +12,68 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon ,ShoppingBagIcon, UserIcon} from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu"
+import { useNavigate } from 'react-router-dom';
+import axiosIntance from '../axios';
 
-export default function Home() {
+export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuItems, setMenuitems] = useState([]);
+  const navigate = useNavigate();
+
+  const getMenuItems = async () => {
+    const res = await axiosIntance.get(`/admin/get_navigationmenu`)
+
+    if (res.status === 200) {
+      setMenuitems(res.data.menu_items)
+    } else {
+      if (res.status === 202) {
+      }
+    }
+  }
+
+  useEffect(() => {    
+    getMenuItems();
+  }, [])
 
   return (
-    <header className="bg-white ">
-       <p className="flex h-10 items-center justify-center bg-rose-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-       Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
-        </p>
+    <header className="bg-white">
+      <p className="flex h-10 items-center justify-center bg-[#E1262A] px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+        Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
+      </p>
       <nav aria-label="Global" className="mx-auto max-w-max flex  items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1 lg:mr-5">
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Book My Cake</span>
             <img
               alt=""
-              src="assets/logo.jpg"
+              src="/assets/logo.jpg"
               className="h-full w-full"
             />
           </a>
         </div>
         <div className="flex lg:hidden">
-        <div className="flex lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
-                  <a href="#" className="text-sm p-2 font-medium text-gray-700 hover:text-gray-800">
-                    <UserIcon aria-hidden='true' className='size-6 text-rose-600'/>
-                  </a>
-              
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
-                  </a>
-              
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </a>
-            
-            </div>
+          <div className="flex lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
+            <a href="#" className="text-sm p-2 font-medium text-gray-700 hover:text-gray-800">
+              <UserIcon aria-hidden='true' className='size-6 text-rose-600' />
+            </a>
+
+            <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+              <span className="sr-only">Search</span>
+              <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
+            </a>
+
+            <a href="#" className="group -m-2 flex items-center p-2">
+              <ShoppingBagIcon
+                aria-hidden="true"
+                className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+              <span className="sr-only">items in cart, view bag</span>
+            </a>
+
+          </div>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
@@ -63,19 +82,19 @@ export default function Home() {
             <span className="sr-only">Open main menu</span>
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
-          
+
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-6">
-          {NavBarItems.map((item) => (
+          {menuItems.map((item) => (
             <Popover key={item.id} className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none">
+              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none" onClick={(e) => item.subItems.length === 0 && navigate('products/' + item.path)}>
                 {item.label}
-                {item.subItems && <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />}
+                {item.subItems.length > 0 && <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />}
               </PopoverButton>
-              {item.subItems && (
-                <PopoverPanel className="absolute top-full z-10 mt-3 w-48 bg-white shadow-lg rounded-lg p-2">
+              {(item.subItems.length > 0 && 
+                <PopoverPanel className="absolute top-full z-10 mt-3 w-52 bg-white shadow-lg rounded-lg p-2">
                   {item.subItems.map((sub) => (
-                    <a key={sub.id} href={sub.path} className="block px-4 py-2 text-sm !text-gray-700 hover:bg-gray-100 !no-underline">
+                    <a key={sub.id} href={'javascript:void(0)'} onClick={() => navigate('products/' + item.path + '/'+sub.path)} className="block px-4 py-2 text-sm !text-gray-700 hover:bg-gray-100 !no-underline">
                       {sub.label}
                     </a>
                   ))}
@@ -84,53 +103,36 @@ export default function Home() {
             </Popover>
           ))}
         </PopoverGroup>
-       
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    <UserIcon aria-hidden='true' className='size-6 text-rose-600'/>
-                  </a>
-              
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
-                  </a>
-              
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </a>
-            
-            </div>
-        {/* <div className="flex lg:flex-1">
-       <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
-                  </a>
-          
-        </div> */}
-          {/* <div className="ml-4 flow-root lg:ml-2">
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </a>
-                </div> */}
+
+        <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
+          <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+            <UserIcon aria-hidden='true' className='size-6 text-rose-600' />
+          </a>
+
+          <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+            <span className="sr-only">Search</span>
+            <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
+          </a>
+
+          <a href="#" className="group -m-2 flex items-center p-2">
+            <ShoppingBagIcon
+              aria-hidden="true"
+              className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
+            />
+            <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+            <span className="sr-only">items in cart, view bag</span>
+          </a>
+
+        </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Book My Cake</span>
               <img
                 alt=""
-                src="public\assets\logo.jpg"
+                src="assets/logo.jpg"
                 className="h-15 w-30"
               />
             </a>
@@ -142,7 +144,7 @@ export default function Home() {
               <XMarkIcon aria-hidden="true" className="size-6" />
             </button>
           </div>
-          
+
           <div className="mt-6">
             {NavBarItems.map((item) => (
               <Disclosure key={item.id} as="div" className="mb-2">
@@ -162,11 +164,11 @@ export default function Home() {
               </Disclosure>
             ))}
           </div>
-          
+
         </DialogPanel>
-        
+
       </Dialog>
-      
+
     </header>
   );
 }
