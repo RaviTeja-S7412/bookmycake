@@ -179,3 +179,85 @@ exports.get_allproducts = (req, res) => {
     })
 }
 
+exports.get_filter_products = (req, res) => {
+    const category_id = req.query.category_id;
+    const sub_category_id = req.query.sub_category_id;
+    const alpha_asc = req.query.alpha_asc;
+    const price_asc = req.query.price_asc;
+    const price_desc = req.query.price_desc;
+    const in_stock = req.query.in_stock;
+    const out_of_stock = req.query.out_of_stock;
+    const min_price = req.query.min_price;
+    const max_price = req.query.max_price;
+
+    let conditions = [];
+    let values = [];
+    let orderBy = "id desc";
+    let alpha_desc = req.query.alpha_desc;
+    let date_asc = req.query.date_asc;
+    let date_desc = req.query.date_desc;
+
+
+    if(date_asc){
+        orderBy = "created_date asc";
+    }
+    if(date_desc){
+        orderBy = "created_date desc";
+    }
+
+    if(alpha_desc){
+        orderBy = "product_name desc";
+    }
+    if(alpha_asc){
+        orderBy = "product_name asc";
+    }
+
+    if(price_asc){
+        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
+    }
+    if(price_desc){
+        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
+    }
+
+    if (min_price && max_price) {
+        conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
+        values.push(min_price, max_price);
+    }
+    
+
+    if(in_stock){
+        conditions.push("stock > 0");
+    }
+    if(out_of_stock){
+        conditions.push("stock = 0");
+    }
+   
+  
+    if (category_id) {
+        conditions.push("category_id = ?");
+        values.push(category_id);
+    }
+    if (sub_category_id) {
+        conditions.push("sub_category_id = ?");
+        values.push(sub_category_id);
+    }
+    
+    let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
+    if (conditions.length > 0) {
+        query += " AND (" + conditions.join(" AND ") + ")";
+    }
+
+    db.query(query + " order by " + orderBy, values, function (error, result) {
+        if (error) {
+            return res.status(202).json({ message: error });
+        }
+
+        return res.status(200).json({
+            products: result,
+        });
+    });
+
+}
+
+
+
