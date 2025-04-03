@@ -2,12 +2,14 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import Products from "../../Data/Products"
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/24/outline"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
   export default function AllProducts() {
 
+    const navigate = useNavigate();
     const [sortOptions, setSortOptions] = useState([
       { name: 'Featured', value: 'manual', href: '#', current: true },
       { name: 'Best selling', value: 'best-selling', href: '#', current: false },
@@ -137,7 +139,7 @@ function classNames(...classes) {
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {Products.map((product) => (
-              <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg">
+              <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg cursor-pointer" onClick={() => navigate(product.href)}>
                 <img
                   alt={product.imageAlt}
                   src={'/'+product.imageSrc}
@@ -145,11 +147,9 @@ function classNames(...classes) {
                 />
                 <div className="mt-4 flex justify-between p-2">
                   <div>
-                    <p className="text-md">
-                      <a href={product.href} className="!text-gray-900 font-medium !no-underline">
+                    <p className="text-md !text-gray-900 font-medium !no-underline">
                         <span aria-hidden="true" className="absolute inset-0" />
                         {product.name}
-                      </a>
                     </p>
                     <p className="mt-1 text-gray-500">{product.flavour}</p>
                   </div>
