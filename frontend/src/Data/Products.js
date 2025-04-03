@@ -2,7 +2,7 @@ const Products = [
     {
         id: 1,
         name: "K-pop BTS Square Cake",
-        href: "#",
+        href: "/products/christmas-special/square-cake",
         price: 650,
         imageSrc: "products/1.jpg",
         imageAlt: "KPOP-BTS-PHOTO-CAKE",
@@ -11,7 +11,7 @@ const Products = [
 
     {
         id: 2,
-        href: "#",
+        href: "/products/christmas-special/square-cake",
         name: "Elsa Frozen Cake",
         price: 750,
         imageAlt: "",
@@ -21,7 +21,7 @@ const Products = [
     },
     {
         id: 3,
-        href: "#",
+        href: "/products/christmas-special/square-cake",
         name: "Photo Cake Square - Yellow",
         price: 688,
         imageAlt: "",
@@ -30,7 +30,7 @@ const Products = [
     },
     {
         d: 4,
-        href: "#",
+        href: "/products/christmas-special/square-cake",
         name: "Avengers Cake - Square",
         price: 800,
         imageAlt: "",
