@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Products from '../../Data/Products';
+import Banners from '../../Data/banners';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -11,7 +12,7 @@ import 'swiper/css/pagination';
 import './styles.css';
 
 // import required modules
-import { Autoplay,Navigation,Pagination,Mousewheel, Keyboard  } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
 export default function Carousel() {
   return (
@@ -20,20 +21,22 @@ export default function Carousel() {
         cssMode={true}
         spaceBetween={30}
         autoplay={{
-            delay:3000,
-            
+          delay: 2500,
+          disableOnInteraction: false,
         }}
-        navigation={true}
-        pagination={true}
+        navigation={false}
+        pagination={false}
         mousewheel={true}
         keyboard={true}
-        modules={[Autoplay,Navigation, Pagination, Mousewheel, Keyboard]}
+        modules={[Autoplay, Navigation, Pagination, Mousewheel, Keyboard]}
         className=""
       >
         {
-            Products.map(image=>(
-                <SwiperSlide className='relative' ><img src={image.imageSrc} alt={image.name} className='w-full h-auto max-h-64 rounded border-1 border-[#b9b3cc]'/> <span className='absolute top-3 left-3 font-bold text-gray-100'>{image.name}</span></SwiperSlide>
-            ))
+          Banners.map(image => (
+            <SwiperSlide className='relative'>
+              <img src={image.imageSrc} alt={image.name} className='w-full' /> <span className='absolute bottom-0 left-0 right-0 font-bold text-gray-100 text-[50px]'>{image.name}</span>
+            </SwiperSlide>
+          ))
         }
       </Swiper>
     </>
