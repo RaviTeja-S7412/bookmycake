@@ -179,8 +179,9 @@ exports.get_allproducts = (req, res) => {
     })
 }
 
+
 exports.get_filter_products = (req, res) => {
-    const category_id = req.query.category_id;
+    const category_id = req.query.category_id;  
     const sub_category_id = req.query.sub_category_id;
     const sort_by = req.query.sort_by;
     const availability_by = req.query.availability_by;
@@ -190,72 +191,103 @@ exports.get_filter_products = (req, res) => {
     let conditions = [];
     let values = [];
     let orderBy = "id desc";
-    let alpha_desc = req.query.alpha_desc;
-    let date_asc = req.query.date_asc;
-    let date_desc = req.query.date_desc;
 
-
-    if(sort_by === "alpha_asc"){
+    if (sort_by === "alpha_asc") {
         orderBy = "product_name asc";
     }
 
-    if(sort_by === "alpha_desc"){
-        orderBy = "product_name desc";
+    if (sort_by === "alpha_desc") {
+        orderBy = "LOWER(product_name) desc";
     }
 
-    if(sort_by === "price_asc"){
+    if (sort_by === "price_asc") {
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
     }
-    if(sort_by === "price_desc"){
+    if (sort_by === "price_desc") {
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
     }
 
-    if(sort_by === "date_asc"){
+    if (sort_by === "date_asc") {
         orderBy = "created_date asc";
     }
-    if(sort_by === "date_desc"){
+    if (sort_by === "date_desc") {
         orderBy = "created_date desc";
     }
-    
-    if(availability_by === "in-stock"){
+
+    if (availability_by === "in-stock") {
         conditions.push("stock > 0");
     }
-    if(availability_by === "out-of-stock"){
+    if (availability_by === "out-of-stock") {
         conditions.push("stock = 0");
     }
-   
 
     if (min_price && max_price) {
         conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
         values.push(min_price, max_price);
     }
 
-  
-    if (category_id) {
-        conditions.push("category_id = ?");
-        values.push(category_id);
-    }
     if (sub_category_id) {
         conditions.push("sub_category_id = ?");
         values.push(sub_category_id);
     }
-    
-    let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
-    if (conditions.length > 0) {
-        query += " AND (" + conditions.join(" AND ") + ")";
-    }
 
-    db.query(query + " order by " + orderBy, values, function (error, result) {
-        if (error) {
-            return res.status(202).json({ message: error });
+    let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
+
+    if (category_id) {
+        // Fetch category_id based on the passed query parameter
+        const categoryQuery = "SELECT id FROM tbl_categories WHERE route = ?";
+        db.query(categoryQuery, [category_id], function (error, categoryResult) {
+            if (error) {
+                return res.status(500).json({ message: "Database error", error });
+            }
+            if (categoryResult.length === 0) {
+                return res.status(404).json({ message: "Category not found" });
+            }
+
+            const fetchedCategoryId = categoryResult[0].id;
+            conditions.push("category_id = ?");
+            values.push(fetchedCategoryId);
+
+            if (conditions.length > 0) {
+                query += " AND (" + conditions.join(" AND ") + ")";
+            }
+
+            db.query(query + " ORDER BY " + orderBy, values, function (error, result) {
+                if (error) {
+                    return res.status(500).json({ message: "Database error", error });
+                }
+            
+                return res.status(200).json({
+                    products: result,
+                });
+            });
+        });
+    } else {
+        if (conditions.length > 0) {
+            query += " AND (" + conditions.join(" AND ") + ")";
         }
 
-        return res.status(200).json({
-            products: result,
-        });
-    });
+        db.query(query + " order by " + orderBy, values, function (error, result) {
+            if (error) {
+                return res.status(500).json({ message: "Database error", error });
+            }
 
-}
+            return res.status(200).json({
+                products: result,
+            });
+        });
+    }
+};
+
+
+
+
+
+
+
+
+
+
 
 
 

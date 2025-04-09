@@ -1,7 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import Products from "../../Data/Products"
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/24/outline"
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosIntance from "../../components/axios";
@@ -39,14 +38,11 @@ function classNames(...classes) {
         const params = {
           "sort_by": sort_by,
           "availability_by" : availability_by,
-          "minPrice" : minPrice,
-          "maxPrice" : maxPrice,
         }
 
         const res = await axiosIntance.get(`/admin/get_filterproducts`,{ params });
         
         if (res.status === 200) {
-          console.log(res);
           setProducts(res?.data?.products)
         } else {
           
@@ -58,7 +54,7 @@ function classNames(...classes) {
       getProducts(sortOptions?.find((option) => option.current)?.value);
     }, []);
 
-    console.log(products);
+    // console.log(products);
     
 
     return (
@@ -188,7 +184,7 @@ function classNames(...classes) {
                   return parseFloat(size.kg) < parseFloat(min.kg) ? size : min;
                 });
                 return (
-                  <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg">
+                  <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg" onClick={() => navigate('/products/'+product.route)}>
                     <img
                       alt={product.imageAlt}
                       src={import.meta.env.VITE_APIBASE_URL + product.product_image}
@@ -197,7 +193,7 @@ function classNames(...classes) {
                     <div className="mt-4 flex justify-between p-2">
                       <div>
                         <p className="text-md">
-                          <a href={product.href} className="!text-gray-900 font-medium !no-underline">
+                          <a href={'javascript:void(0)'} className="!text-gray-900 font-medium !no-underline">
                             <span aria-hidden="true" className="absolute inset-0" />
                             {product.product_name}
                           </a>

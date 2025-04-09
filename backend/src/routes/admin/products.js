@@ -7,7 +7,7 @@ const { get_allproducts, create_product, update_product, get_singleproduct, dele
 router.get('/admin/get_products', requireSignin, get_allproducts);
 router.post('/admin/create_product', requireSignin, create_product);
 router.put('/admin/update_product', requireSignin, update_product);
-router.post('/admin/get_singleproduct', requireSignin, get_singleproduct);
+router.post('/admin/get_singleproduct', get_singleproduct);
 router.delete('/admin/delete_product/:id', requireSignin, deleteproduct);
 router.get('/admin/get_filterproducts',  get_filter_products);
 
