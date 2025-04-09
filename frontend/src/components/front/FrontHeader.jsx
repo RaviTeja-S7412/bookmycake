@@ -87,14 +87,14 @@ export default function HomeHeader() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-6">
           {menuItems.map((item) => (
             <Popover key={item.id} className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none" onClick={(e) => item.subItems.length === 0 && navigate('products/' + item.path)}>
+              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none" onClick={(e) => item.subItems.length === 0 && navigate('collections/' + item.path)}>
                 {item.label}
                 {item.subItems.length > 0 && <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />}
               </PopoverButton>
               {(item.subItems.length > 0 && 
                 <PopoverPanel className="absolute top-full z-10 mt-3 w-52 bg-white shadow-lg rounded-lg p-2">
                   {item.subItems.map((sub) => (
-                    <a key={sub.id} href={'javascript:void(0)'} onClick={() => navigate('products/' + item.path + '/'+sub.path)} className="block px-4 py-2 text-sm !text-gray-700 hover:bg-gray-100 !no-underline">
+                    <a key={sub.id} href={'javascript:void(0)'} onClick={() => navigate('collections/' + item.path + '/'+sub.path)} className="block px-4 py-2 text-sm !text-gray-700 hover:bg-gray-100 !no-underline">
                       {sub.label}
                     </a>
                   ))}

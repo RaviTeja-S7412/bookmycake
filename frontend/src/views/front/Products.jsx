@@ -4,6 +4,7 @@ import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/24
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosIntance from "../../components/axios";
+import { useParams } from "react-router-dom"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -11,6 +12,8 @@ function classNames(...classes) {
   export default function AllProducts() {
 
     const navigate = useNavigate();
+    const { category_id, sub_category_id } = useParams();
+    
     const [sortOptions, setSortOptions] = useState([
       { name: 'Featured', value: 'latest', current: true },
       { name: 'Best selling', value: 'best-selling', current: false },
@@ -35,24 +38,29 @@ function classNames(...classes) {
     const getProducts = async (sort_by = '', availability_by = '') => {
       setLoading(true);
    
-        const params = {
-          "sort_by": sort_by,
-          "availability_by" : availability_by,
-        }
+      const params = {
+        "sort_by": sort_by,
+        "availability_by" : availability_by,
+      }
+      if(sub_category_id){
+        params.sub_category_id = sub_category_id;
+      }else if(category_id){
+        params.category_id = category_id;
+      }
 
-        const res = await axiosIntance.get(`/admin/get_filterproducts`,{ params });
+      const res = await axiosIntance.get(`/admin/get_filterproducts`,{ params });
+      
+      if (res.status === 200) {
+        setProducts(res?.data?.products)
+      } else {
         
-        if (res.status === 200) {
-          setProducts(res?.data?.products)
-        } else {
-          
-        }
+      }
      
     }
 
     useEffect(() => {
       getProducts(sortOptions?.find((option) => option.current)?.value);
-    }, []);
+    }, [category_id, sub_category_id]);
 
     // console.log(products);
     
@@ -175,7 +183,7 @@ function classNames(...classes) {
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {products.map((product) => {
+              {products?.length > 0 ? products.map((product) => {
                 // Parse the product_size JSON to get available sizes
                 const productSizes = JSON.parse(product.product_size);
 
@@ -188,7 +196,7 @@ function classNames(...classes) {
                     <img
                       alt={product.imageAlt}
                       src={import.meta.env.VITE_APIBASE_URL + product.product_image}
-                      className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                      className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80 object-fill"
                     />
                     <div className="mt-4 flex justify-between p-2">
                       <div>
@@ -205,7 +213,13 @@ function classNames(...classes) {
                     </div>
                   </div>
                 );
-              })}
+              })
+              : (
+                  <div className="col-span-4 text-center">
+                    <p className="text-lg font-medium text-gray-900">No Products Found</p>
+                  </div>
+                )
+              }
             </div>
         </div>
       </div>
