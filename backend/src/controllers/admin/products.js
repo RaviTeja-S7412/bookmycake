@@ -182,11 +182,8 @@ exports.get_allproducts = (req, res) => {
 exports.get_filter_products = (req, res) => {
     const category_id = req.query.category_id;
     const sub_category_id = req.query.sub_category_id;
-    const alpha_asc = req.query.alpha_asc;
-    const price_asc = req.query.price_asc;
-    const price_desc = req.query.price_desc;
-    const in_stock = req.query.in_stock;
-    const out_of_stock = req.query.out_of_stock;
+    const sort_by = req.query.sort_by;
+    const availability_by = req.query.availability_by;
     const min_price = req.query.min_price;
     const max_price = req.query.max_price;
 
@@ -198,40 +195,41 @@ exports.get_filter_products = (req, res) => {
     let date_desc = req.query.date_desc;
 
 
-    if(date_asc){
-        orderBy = "created_date asc";
-    }
-    if(date_desc){
-        orderBy = "created_date desc";
-    }
-
-    if(alpha_desc){
-        orderBy = "product_name desc";
-    }
-    if(alpha_asc){
+    if(sort_by === "alpha_asc"){
         orderBy = "product_name asc";
     }
 
-    if(price_asc){
+    if(sort_by === "alpha_desc"){
+        orderBy = "product_name desc";
+    }
+
+    if(sort_by === "price_asc"){
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
     }
-    if(price_desc){
+    if(sort_by === "price_desc"){
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
     }
+
+    if(sort_by === "date_asc"){
+        orderBy = "created_date asc";
+    }
+    if(sort_by === "date_desc"){
+        orderBy = "created_date desc";
+    }
+    
+    if(availability_by === "in-stock"){
+        conditions.push("stock > 0");
+    }
+    if(availability_by === "out-of-stock"){
+        conditions.push("stock = 0");
+    }
+   
 
     if (min_price && max_price) {
         conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
         values.push(min_price, max_price);
     }
-    
 
-    if(in_stock){
-        conditions.push("stock > 0");
-    }
-    if(out_of_stock){
-        conditions.push("stock = 0");
-    }
-   
   
     if (category_id) {
         conditions.push("category_id = ?");
