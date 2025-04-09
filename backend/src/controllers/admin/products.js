@@ -179,3 +179,103 @@ exports.get_allproducts = (req, res) => {
     })
 }
 
+
+exports.get_filter_products = async (req, res) => {
+    const category_id = req.query.category_id;  
+    const sub_category_id = req.query.sub_category_id;
+    const sort_by = req.query.sort_by;
+    const availability_by = req.query.availability_by;
+    const min_price = req.query.min_price;
+    const max_price = req.query.max_price;
+
+    let conditions = [];
+    let values = [];
+    let orderBy = "id desc";
+
+    if (sort_by === "alpha_asc") {
+        orderBy = "product_name asc";
+    }
+
+    if (sort_by === "alpha_desc") {
+        orderBy = "LOWER(product_name) desc";
+    }
+
+    if (sort_by === "price_asc") {
+        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
+    }
+    if (sort_by === "price_desc") {
+        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
+    }
+
+    if (sort_by === "date_asc") {
+        orderBy = "created_date asc";
+    }
+    if (sort_by === "date_desc") {
+        orderBy = "created_date desc";
+    }
+
+    if (availability_by === "in-stock") {
+        conditions.push("stock > 0");
+    }
+    if (availability_by === "out-of-stock") {
+        conditions.push("stock = 0");
+    }
+
+    if (min_price && max_price) {
+        conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
+        values.push(min_price, max_price);
+    }
+
+    let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
+
+    if (category_id) {
+        const categoryQuery = "SELECT id FROM tbl_categories WHERE route = ?";
+        const categoryId = await new Promise((resolve, reject) => {
+            db.query(categoryQuery, [category_id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.id);
+            });
+        });
+        conditions.push("category_id = ?");
+        values.push(categoryId);
+    }
+
+    if (sub_category_id) {
+        const subcategoryQuery = "SELECT id FROM tbl_sub_categories WHERE route = ?";
+        const subcategoryId = await new Promise((resolve, reject) => {
+            db.query(subcategoryQuery, [sub_category_id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.id);
+            });
+        });
+        conditions.push("sub_category_id = ?");
+        values.push(subcategoryId);
+    }
+    
+    if (conditions.length > 0) {
+        query += " AND (" + conditions.join(" AND ") + ")";
+    }
+
+    db.query(query + " order by " + orderBy, values, function (error, result) {
+        if (error) {
+            return res.status(500).json({ message: "Database error", error });
+        }
+
+        return res.status(200).json({
+            products: result,
+        });
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+

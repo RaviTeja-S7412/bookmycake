@@ -1,10 +1,11 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import Products from "../../Data/Products"
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
+import axiosIntance from "../../components/axios";
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -80,6 +81,30 @@ export default function ProductSingle() {
       [faq]: !prevState[faq]
     }));
   };
+
+
+  const getSingleProduct = async () => {
+    setLoading(true);
+ 
+      const params = {
+        "id": sort_by
+      }
+
+      const res = await axiosIntance.post(`/admin/get_filterproducts`, params);
+      console.log('res: ', res);
+      
+
+      if (res.status === 200) {
+        // setProducts(res?.data?.products)
+      } else {
+        
+      }
+   
+  }
+
+  useEffect(() => {
+    getSingleProduct();
+  }, []);
 
   return (
     <div className="bg-white">
