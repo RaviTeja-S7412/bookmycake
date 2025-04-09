@@ -203,7 +203,7 @@ exports.get_allproducts = (req, res) => {
 }
 
 
-exports.get_filter_products = (req, res) => {
+exports.get_filter_products = async (req, res) => {
     const category_id = req.query.category_id;  
     const sub_category_id = req.query.sub_category_id;
     const sort_by = req.query.sort_by;
@@ -249,57 +249,45 @@ exports.get_filter_products = (req, res) => {
         values.push(min_price, max_price);
     }
 
-    if (sub_category_id) {
-        conditions.push("sub_category_id = ?");
-        values.push(sub_category_id);
-    }
-
     let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
 
     if (category_id) {
-        // Fetch category_id based on the passed query parameter
         const categoryQuery = "SELECT id FROM tbl_categories WHERE route = ?";
-        db.query(categoryQuery, [category_id], function (error, categoryResult) {
-            if (error) {
-                return res.status(500).json({ message: "Database error", error });
-            }
-            if (categoryResult.length === 0) {
-                return res.status(404).json({ message: "Category not found" });
-            }
-
-            const fetchedCategoryId = categoryResult[0].id;
-            conditions.push("category_id = ?");
-            values.push(fetchedCategoryId);
-
-            if (conditions.length > 0) {
-                query += " AND (" + conditions.join(" AND ") + ")";
-            }
-
-            db.query(query + " ORDER BY " + orderBy, values, function (error, result) {
-                if (error) {
-                    return res.status(500).json({ message: "Database error", error });
-                }
-            
-                return res.status(200).json({
-                    products: result,
-                });
+        const categoryId = await new Promise((resolve, reject) => {
+            db.query(categoryQuery, [category_id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.id);
             });
         });
-    } else {
-        if (conditions.length > 0) {
-            query += " AND (" + conditions.join(" AND ") + ")";
+        conditions.push("category_id = ?");
+        values.push(categoryId);
+    }
+
+    if (sub_category_id) {
+        const subcategoryQuery = "SELECT id FROM tbl_sub_categories WHERE route = ?";
+        const subcategoryId = await new Promise((resolve, reject) => {
+            db.query(subcategoryQuery, [sub_category_id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.id);
+            });
+        });
+        conditions.push("sub_category_id = ?");
+        values.push(subcategoryId);
+    }
+    
+    if (conditions.length > 0) {
+        query += " AND (" + conditions.join(" AND ") + ")";
+    }
+
+    db.query(query + " order by " + orderBy, values, function (error, result) {
+        if (error) {
+            return res.status(500).json({ message: "Database error", error });
         }
 
-        db.query(query + " order by " + orderBy, values, function (error, result) {
-            if (error) {
-                return res.status(500).json({ message: "Database error", error });
-            }
-
-            return res.status(200).json({
-                products: result,
-            });
+        return res.status(200).json({
+            products: result,
         });
-    }
+    });
 };
 
 
