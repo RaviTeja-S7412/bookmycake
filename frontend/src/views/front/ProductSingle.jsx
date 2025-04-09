@@ -83,14 +83,14 @@ export default function ProductSingle() {
   };
 
 
-  const getSingleProduct = async () => {
+  const get_singleproduct_by_route = async () => {
     setLoading(true);
  
       const params = {
-        "id": sort_by
+        "route": route
       }
 
-      const res = await axiosIntance.post(`/admin/get_filterproducts`, params);
+      const res = await axiosIntance.post(`/admin/get_singleproductroute`, params);
       console.log('res: ', res);
       
 
@@ -103,9 +103,9 @@ export default function ProductSingle() {
   }
 
   useEffect(() => {
-    getSingleProduct();
+    get_singleproduct_by_route();
   }, []);
-
+  
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 !py-10 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 grid sm:grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-8">
@@ -120,7 +120,7 @@ export default function ProductSingle() {
         {/* Product info */}
         <div className="mx-auto px-4 pt-10 pb-16 sm:px-6 gap-x-8 px-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{'Elsa Frozen Cake'}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{productData.name || "Product Name"}</h1>
           </div>
 
           {/* Options */}

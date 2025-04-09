@@ -165,6 +165,29 @@ exports.get_singleproduct = (req, res) => {
 
 }
 
+exports.get_singleproduct_by_route = (req, res) => {
+    
+    const route = req.query.route;
+    if(!route){
+        return res.status(202).json({ message: "Product Route is Required." });
+    }
+
+    const checkCategoryQuery = 'SELECT * FROM tbl_products WHERE route =?';
+    db.query(checkCategoryQuery, [route], (err, result) => {
+        if (err) {
+            return callback(err);
+        }
+
+        if (result.length > 0) {
+            return res.status(200).json({ product_data: result[0] });
+        }else{
+            return res.status(202).json({ message: "Product Not Found." });
+        }
+
+    });
+}
+
+
 exports.get_allproducts = (req, res) => {
 
     db.query("SELECT * FROM tbl_products WHERE status=1 and deleted=0 order by id desc", function (error, result) {    
@@ -278,6 +301,9 @@ exports.get_filter_products = (req, res) => {
         });
     }
 };
+
+
+
 
 
 
