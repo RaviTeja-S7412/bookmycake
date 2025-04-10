@@ -39,6 +39,7 @@ mongo.connectToServer( function( err) {
       app.use('/api',require('./routes/admin/admin'));
       app.use('/api',require('./routes/admin/categories'));
       app.use('/api',require('./routes/admin/products'));
+      app.use('/api',require('./routes/admin/cart'));
     
 })
 

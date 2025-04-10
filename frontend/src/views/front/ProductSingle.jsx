@@ -1,74 +1,20 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
-import Products from "../../Data/Products"
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import axiosIntance from "../../components/axios";
 
-const product = {
-  name: 'Basic Tee 6-Pack',
-  price: '$192',
-  href: '#',
-  breadcrumbs: [
-    { id: 1, name: 'Men', href: '#' },
-    { id: 2, name: 'Clothing', href: '#' },
-  ],
-  images: [
-    {
-      src: 'https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-      alt: 'Two each of gray, white, and black shirts laying flat.',
-    },
-    {
-      src: 'https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-      alt: 'Model wearing plain black basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-      alt: 'Model wearing plain gray basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/plus-assets/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-      alt: 'Model wearing plain white basic tee.',
-    },
-  ],
-  colors: [
-    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-  ],
-  sizes: [
-    { name: 'XXS', inStock: false },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: true },
-    { name: '2XL', inStock: true },
-    { name: '3XL', inStock: true },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    'Hand cut and sewn locally',
-    'Dyed with our proprietary colors',
-    'Pre-washed & pre-shrunk',
-    'Ultra-soft 100% cotton',
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function ProductSingle() {
 
+  const { product_id } = useParams();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-
+  const [product, setProduct] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedFlavor, setSelectedFlavor] = useState(null);
   const [expanded, setExpanded] = useState({
     faq1: false,
     faq2: false,
@@ -82,37 +28,68 @@ export default function ProductSingle() {
     }));
   };
 
-
-  const get_singleproduct_by_route = async () => {
+  const get_singleproductroute = async () => {
     setLoading(true);
- 
-      const params = {
-        "route": route
-      }
 
-      const res = await axiosIntance.post(`/admin/get_singleproductroute`, params);
-      console.log('res: ', res);
-      
+    const params = {
+      route: product_id
+    };
+
+    try {
+      const res = await axiosIntance.get(`/admin/get_singleproductroute`, { params });
 
       if (res.status === 200) {
-        // setProducts(res?.data?.products)
-      } else {
+        const fetchedProduct = res.data.product_data;
+        setProduct(fetchedProduct);
+        setSelectedSize(JSON.parse(fetchedProduct?.product_size)?.[0]); 
+        setSelectedFlavor(fetchedProduct?.product_flavor?.[0]); 
         
+      } else {
       }
-   
-  }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      // Handle API error
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    get_singleproduct_by_route();
-  }, []);
+    if (product_id) {
+      get_singleproductroute();
+    }
+  }, [product_id]);
+
+  // If product is loading or doesn't exist, show loading state or an error message
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found.</div>;
+  }
+
+  const productImages = [
+    { src: product.product_image, alt: product.product_name }
+  ];
+
+  const sizes = JSON.parse(product.product_size); // Assuming the size data is in a JSON string
+  console.log('sizes: ', sizes);
+  const flavors = JSON.parse(product.product_flavor); // Assuming the flavor data is in a JSON string
+  console.log('flavors: ', flavors);
+
+  const getPrice = () => {
+    return selectedSize ? `Rs. ${selectedSize.price}` : 'Rs. 0';
+  };
   
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 !py-10 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8 grid sm:grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-8">
         <div className="mx-auto mt-6">
           <img
-            alt={product.images[0].alt}
-            src={product.images[0].src}
+            alt={productImages[0].alt}
+            src={import.meta.env.VITE_APIBASE_URL + product.product_image}
             className="rounded-lg object-cover"
           />
         </div>
@@ -120,13 +97,15 @@ export default function ProductSingle() {
         {/* Product info */}
         <div className="mx-auto px-4 pt-10 pb-16 sm:px-6 gap-x-8 px-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{productData.name || "Product Name"}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.product_name}</h1>
           </div>
 
           {/* Options */}
           <div className="mt-4 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{'Rs. 650.00'}</p>
+            {/* <p className="text-3xl tracking-tight text-gray-900">{`Rs. ${sizes[0].price}`}</p> */}
+            <p className="text-3xl tracking-tight text-gray-900">{getPrice()}</p>
+
 
             <form className="mt-10">
               {/* Size */}
@@ -138,92 +117,45 @@ export default function ProductSingle() {
                     onChange={setSelectedSize}
                     className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
                   >
-                    {product.sizes.map((size) => (
+                    {sizes.map((size) => (
                       <Radio
-                        key={size.name}
+                        key={size.kg}
                         value={size}
-                        disabled={!size.inStock}
-                        className={classNames(
-                          size.inStock
-                            ? 'cursor-pointer bg-white text-gray-900 shadow-xs'
-                            : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                          'group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-hidden data-focus:ring-2 data-focus:ring-indigo-500 sm:flex-1 sm:py-6',
-                        )}
+                        className={`group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase sm:flex-1 sm:py-6 ${size.price ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                       >
-                        <span>{'0.5 KG'}</span>
-                        {size.inStock ? (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-checked:border-indigo-500 group-data-focus:border"
-                          />
-                        ) : (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                          >
-                            <svg
-                              stroke="currentColor"
-                              viewBox="0 0 100 100"
-                              preserveAspectRatio="none"
-                              className="absolute inset-0 size-full stroke-2 text-gray-200"
-                            >
-                              <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
-                            </svg>
-                          </span>
-                        )}
+                        <span>{`${size.kg} KG`}</span>
                       </Radio>
                     ))}
                   </RadioGroup>
                 </fieldset>
               </div>
 
-              {/* Flavor */}
-              <div className="mb-3">
-                <h5 className="font-medium text-gray-900 mt-3">Flavor</h5>
-                <fieldset aria-label="Choose a size" className="mt-2">
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
-                  >
-                    {product.sizes.map((size) => (
-                      <Radio
-                        key={size.name}
-                        value={size}
-                        disabled={!size.inStock}
-                        className={classNames(
-                          size.inStock
-                            ? 'cursor-pointer bg-white text-gray-900 shadow-xs'
-                            : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                          'group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-hidden data-focus:ring-2 data-focus:ring-indigo-500 sm:flex-1 sm:py-6',
-                        )}
+                {/* Flavor */}
+                {flavors.length > 0 && (
+                  <div className="mb-3">
+                    <h5 className="font-medium text-gray-900 mt-3">Flavor</h5>
+                    <fieldset aria-label="Choose a flavor" className="mt-2">
+                      <RadioGroup
+                        value={selectedFlavor}
+                        onChange={setSelectedFlavor}
+                        className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
                       >
-                        <span>{'0.5 KG'}</span>
-                        {size.inStock ? (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-checked:border-indigo-500 group-data-focus:border"
-                          />
-                        ) : (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+                        {flavors.map((flavor, index) => (
+                          <Radio
+                            key={index}
+                            value={flavor}
+                            className="group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase sm:flex-1 sm:py-6 cursor-pointer"
                           >
-                            <svg
-                              stroke="currentColor"
-                              viewBox="0 0 100 100"
-                              preserveAspectRatio="none"
-                              className="absolute inset-0 size-full stroke-2 text-gray-200"
-                            >
-                              <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
-                            </svg>
-                          </span>
-                        )}
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                </fieldset>
-              </div>
+                            <span>{flavor}</span>
+                          </Radio>
+                        ))}
+                      </RadioGroup>
+                    </fieldset>
+                  </div>
+                )}
+
+
+
 
               <button
                 type="submit"
@@ -240,197 +172,164 @@ export default function ProductSingle() {
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{product.description}</p>
+                <p className="text-base text-gray-900">{product.product_description}</p>
               </div>
             </div>
 
             <div className="mt-10">
-              
-            <div className="relative font-inter antialiased">
-              <main className="relative flex flex-col justify-center overflow-hidden">
-                <div className="w-full max-w-2xl mx-auto">
-                  {/* Accordion component */}
-                  <div className="divide-y divide-slate-200">
-                    {/* Accordion item 1 */}
-                    <div className="py-2">
-                      <h5>
-                        <button
-                          id="faqs-title-01"
-                          type="button"
-                          className="flex items-center justify-between w-full text-left font-semibold py-2"
-                          onClick={() => handleToggle('faq1')}
-                          aria-expanded={expanded.faq1}
-                          aria-controls="faqs-text-01"
-                        >
-                          <span>Ingredients</span>
-                          <svg
-                            className="fill-indigo-500 shrink-0 ml-8"
-                            width="16"
-                            height="16"
-                            xmlns="http://www.w3.org/2000/svg"
+              <div className="relative font-inter antialiased">
+                <main className="relative flex flex-col justify-center overflow-hidden">
+                  <div className="w-full max-w-2xl mx-auto">
+                    {/* Accordion component */}
+                    <div className="divide-y divide-slate-200">
+                      {/* Ingredients */}
+                      <div className="py-2">
+                        <h5>
+                          <button
+                            id="faqs-title-01"
+                            type="button"
+                            className="flex items-center justify-between w-full text-left font-semibold py-2"
+                            onClick={() => handleToggle('faq1')}
+                            aria-expanded={expanded.faq1}
+                            aria-controls="faqs-text-01"
                           >
-                            <rect
-                              y="7"
+                            <span>Ingredients</span>
+                            <svg
+                              className="fill-indigo-500 shrink-0 ml-8"
                               width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center transition duration-200 ease-out ${
-                                expanded.faq1 ? '!rotate-180' : ''
-                              }`}
-                            />
-                            <rect
-                              y="7"
-                              width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center rotate-90 transition duration-200 ease-out ${
-                                expanded.faq1 ? '!rotate-180' : ''
-                              }`}
-                            />
-                          </svg>
-                        </button>
-                      </h5>
-                      <div
-                        id="faqs-text-01"
-                        role="region"
-                        aria-labelledby="faqs-title-01"
-                        className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${
-                          expanded.faq1 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <p className="pb-3">
-                            If you go over your organisations or user limit, a member of the team will reach out about
-                            bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users
-                            that are over the 100-account or 1,000-user limit.
-                          </p>
+                              height="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center transition duration-200 ease-out ${expanded.faq1 ? '!rotate-180' : ''}`}
+                              />
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center rotate-90 transition duration-200 ease-out ${expanded.faq1 ? '!rotate-180' : ''}`}
+                              />
+                            </svg>
+                          </button>
+                        </h5>
+                        <div
+                          id="faqs-text-01"
+                          role="region"
+                          aria-labelledby="faqs-title-01"
+                          className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${expanded.faq1 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="pb-3">{product.ingredients || 'No ingredients listed.'}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Accordion item 2 */}
-                    <div className="py-2">
-                      <h5>
-                        <button
-                          id="faqs-title-02"
-                          type="button"
-                          className="flex items-center justify-between w-full text-left font-semibold py-2"
-                          onClick={() => handleToggle('faq2')}
-                          aria-expanded={expanded.faq2}
-                          aria-controls="faqs-text-02"
-                        >
-                          <span>Nutritional Info</span>
-                          <svg
-                            className="fill-indigo-500 shrink-0 ml-8"
-                            width="16"
-                            height="16"
-                            xmlns="http://www.w3.org/2000/svg"
+                      {/* Nutritional Info */}
+                      <div className="py-2">
+                        <h5>
+                          <button
+                            id="faqs-title-02"
+                            type="button"
+                            className="flex items-center justify-between w-full text-left font-semibold py-2"
+                            onClick={() => handleToggle('faq2')}
+                            aria-expanded={expanded.faq2}
+                            aria-controls="faqs-text-02"
                           >
-                            <rect
-                              y="7"
+                            <span>Nutritional Info</span>
+                            <svg
+                              className="fill-indigo-500 shrink-0 ml-8"
                               width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center transition duration-200 ease-out ${
-                                expanded.faq2 ? '!rotate-180' : ''
-                              }`}
-                            />
-                            <rect
-                              y="7"
-                              width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center rotate-90 transition duration-200 ease-out ${
-                                expanded.faq2 ? '!rotate-180' : ''
-                              }`}
-                            />
-                          </svg>
-                        </button>
-                      </h5>
-                      <div
-                        id="faqs-text-02"
-                        role="region"
-                        aria-labelledby="faqs-title-02"
-                        className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${
-                          expanded.faq2 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <p className="pb-3">
-                            If you go over your organisations or user limit, a member of the team will reach out about
-                            bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users
-                            that are over the 100-account or 1,000-user limit.
-                          </p>
+                              height="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center transition duration-200 ease-out ${expanded.faq2 ? '!rotate-180' : ''}`}
+                              />
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center rotate-90 transition duration-200 ease-out ${expanded.faq2 ? '!rotate-180' : ''}`}
+                              />
+                            </svg>
+                          </button>
+                        </h5>
+                        <div
+                          id="faqs-text-02"
+                          role="region"
+                          aria-labelledby="faqs-title-02"
+                          className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${expanded.faq2 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="pb-3">{product.nutritional_info || 'No nutritional info available.'}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Accordion item 3 */}
-                    <div className="py-2">
-                      <h5>
-                        <button
-                          id="faqs-title-03"
-                          type="button"
-                          className="flex items-center justify-between w-full text-left font-semibold py-2"
-                          onClick={() => handleToggle('faq3')}
-                          aria-expanded={expanded.faq3}
-                          aria-controls="faqs-text-03"
-                        >
-                          <span>Shipping</span>
-                          <svg
-                            className="fill-indigo-500 shrink-0 ml-8"
-                            width="16"
-                            height="16"
-                            xmlns="http://www.w3.org/2000/svg"
+                      {/* Shipping */}
+                      <div className="py-2">
+                        <h5>
+                          <button
+                            id="faqs-title-03"
+                            type="button"
+                            className="flex items-center justify-between w-full text-left font-semibold py-2"
+                            onClick={() => handleToggle('faq3')}
+                            aria-expanded={expanded.faq3}
+                            aria-controls="faqs-text-03"
                           >
-                            <rect
-                              y="7"
+                            <span>Shipping</span>
+                            <svg
+                              className="fill-indigo-500 shrink-0 ml-8"
                               width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center transition duration-200 ease-out ${
-                                expanded.faq3 ? '!rotate-180' : ''
-                              }`}
-                            />
-                            <rect
-                              y="7"
-                              width="16"
-                              height="2"
-                              rx="1"
-                              className={`transform origin-center rotate-90 transition duration-200 ease-out ${
-                                expanded.faq3 ? '!rotate-180' : ''
-                              }`}
-                            />
-                          </svg>
-                        </button>
-                      </h5>
-                      <div
-                        id="faqs-text-03"
-                        role="region"
-                        aria-labelledby="faqs-title-03"
-                        className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${
-                          expanded.faq3 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <p className="pb-3">
-                            If you go over your organisations or user limit, a member of the team will reach out about
-                            bespoke pricing. In the meantime, our collaborative features won't appear in accounts or users
-                            that are over the 100-account or 1,000-user limit.
-                          </p>
+                              height="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center transition duration-200 ease-out ${expanded.faq3 ? '!rotate-180' : ''}`}
+                              />
+                              <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center rotate-90 transition duration-200 ease-out ${expanded.faq3 ? '!rotate-180' : ''}`}
+                              />
+                            </svg>
+                          </button>
+                        </h5>
+                        <div
+                          id="faqs-text-03"
+                          role="region"
+                          aria-labelledby="faqs-title-03"
+                          className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${expanded.faq3 ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="pb-3">{product.shipping || 'No shipping info available.'}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </main>
+                </main>
+              </div>
             </div>
-
-            </div>
-
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
