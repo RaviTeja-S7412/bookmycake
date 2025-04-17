@@ -1,3 +1,4 @@
+import { element } from 'prop-types';
 import React from 'react'
 
 // admin
@@ -10,6 +11,12 @@ const CategoryCrud = React.lazy(() => import('./views/inventory/categories/crud'
 const ProductCrud = React.lazy(() => import('./views/inventory/products/crud'));
 const SubCategoryCrud = React.lazy(() => import('./views/inventory/categories/subcategorycrud'));
 const ChildCategoryCrud = React.lazy(() => import('./views/inventory/categories/childcategorycrud'));
+const Cities = React.lazy(() => import('./views/settings/cities'));
+const CitiesCrud = React.lazy(() => import('./views/settings/cities/crud'));
+const Areas = React.lazy(() => import('./views/settings/areas'));
+const AreasCrud = React.lazy(() => import('./views/settings/areas/crud'));
+const Props = React.lazy(() => import('./views/settings/props'));
+const PropsCrud = React.lazy(() => import('./views/settings/props/crud'));
 
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
@@ -25,6 +32,17 @@ const routes = [
   { path: '/admin/inventory/update-sub-category', name: 'Categories/Update Sub Category', element: SubCategoryCrud },
   { path: '/admin/inventory/create-child-category', name: 'Categories/Create Child Category', element: ChildCategoryCrud },
   { path: '/admin/inventory/update-child-category', name: 'Categories/Update Child Category', element: ChildCategoryCrud },
+  { path: '/admin/settings/cities', name: 'Cities', element: Cities },
+  { path: '/admin/settings/create-cities', name: 'Cities/Create Cities', element: CitiesCrud },
+  { path: '/admin/settings/update-city', name: 'Cities/Update Cities', element: CitiesCrud },
+  
+  { path: '/admin/settings/areas', name: 'Areas', element: Areas },
+  { path: '/admin/settings/create-areas', name: 'Areas/Create Areas', element: AreasCrud},
+  { path: '/admin/settings/update-area', name: 'Areas/Update Area', element: AreasCrud},
+
+  { path: '/admin/settings/props', name: 'Props', element: Props },
+  { path: '/admin/settings/create-props', name: 'Props/Create Props', element: PropsCrud},
+  { path: '/admin/settings/update-prop', name: 'Props/Update Prop', element: PropsCrud}
 ]
 
 export default routes

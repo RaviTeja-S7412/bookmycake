@@ -44,6 +44,11 @@ const _nav = [
         component: CNavItem,
         name: 'Categories',
         to: '/admin/inventory/categories',
+      },
+      {
+        component: CNavItem,
+        name: 'Props',
+        to: '/admin/settings/props',
       }
     ],
   },
@@ -75,12 +80,31 @@ const _nav = [
       }
     ],
   },
+
   {
     component: CNavItem,
     name: 'Payments',
     to: '/theme/colors',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
-  }
+  },
+  {
+    component: CNavGroup,
+    name: 'Settings',
+    to: '/base',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Cities',
+        to: '/admin/settings/cities',
+      },
+      {
+        component: CNavItem,
+        name: 'Areas',
+        to: '/admin/settings/areas',
+      }
+    ],
+  },
 ]
 
 export default _nav
