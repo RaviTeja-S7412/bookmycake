@@ -41,13 +41,13 @@ export default function ProductSingle() {
       if (res.status === 200) {
         const fetchedProduct = res.data.product_data;
         setProduct(fetchedProduct);
-        setSelectedSize(JSON.parse(fetchedProduct?.product_size)?.[0]); 
-        setSelectedFlavor(fetchedProduct?.product_flavor?.[0]); 
-        
+        setSelectedSize(JSON.parse(fetchedProduct?.product_size)?.[0]);
+        setSelectedFlavor(fetchedProduct?.product_flavor?.[0]);
+
       } else {
       }
     } catch (error) {
-      console.error('Error fetching product:', error);
+      // console.error('Error fetching product:', error);
       // Handle API error
     } finally {
       setLoading(false);
@@ -81,7 +81,10 @@ export default function ProductSingle() {
   const getPrice = () => {
     return selectedSize ? `Rs. ${selectedSize.price}` : 'Rs. 0';
   };
+
+  console.log(selectedSize);
   
+
 
   return (
     <div className="bg-white">
@@ -108,39 +111,38 @@ export default function ProductSingle() {
 
 
             <form className="mt-10">
-              {/* Size */}
-              <div>
-                <h5 className="font-medium text-gray-900">Size</h5>
-                <fieldset aria-label="Choose a size" className="mt-2">
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
-                  >
-                    {sizes.map((size) => (
-                      <Radio
-                        key={size.kg}
-                        value={size}
-                        className={`group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase sm:flex-1 sm:py-6 ${size.price ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                      >
-                        <span>{`${size.kg} KG`}</span>
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                </fieldset>
-              </div>
-
-                {/* Flavor */}
-                {flavors.length > 0 && (
-                  <div className="mb-3">
-                    <h5 className="font-medium text-gray-900 mt-3">Flavor</h5>
-                    <fieldset aria-label="Choose a flavor" className="mt-2">
-                      <RadioGroup
-                        value={selectedFlavor}
-                        onChange={setSelectedFlavor}
-                        className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
-                      >
-                        {flavors.map((flavor, index) => (
+              {sizes.length > 0 && sizes.some(size => size.kg.trim() !== '') && selectedSize && (
+                <div className="mb-2">
+                  <h5 className="font-medium text-gray-900">Sizes</h5>
+                  <fieldset aria-label="Choose a size" className="mt-2">
+                    <RadioGroup
+                      value={selectedSize}
+                      className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
+                    >
+                      {sizes.map((size) => (
+                        <Radio
+                          key={size.kg}
+                          value={size}
+                          className={`group relative flex items-center justify-center rounded-md border px-2 py-2 text-sm font-medium uppercase sm:flex-1 sm:py-6 ${size.price ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                        >
+                          <span>{`${size.kg} KG`}</span>
+                        </Radio>
+                      ))}
+                    </RadioGroup>
+                  </fieldset>
+                </div>
+              )}
+              {flavors.length > 0 && flavors.some(flavor => flavor.trim() !== '') && (
+                <div className="mb-2">
+                  <h5 className="font-medium text-gray-900 mt-3">Flavor</h5>
+                  <fieldset aria-label="Choose a flavor" className="mt-2">
+                    <RadioGroup
+                      value={selectedFlavor}
+                      onChange={setSelectedFlavor}
+                      className="grid grid-cols-4 gap-3 sm:grid-cols-8 lg:grid-cols-5"
+                    >
+                      {flavors.map((flavor, index) => (
+                        flavor.trim() !== '' && (
                           <Radio
                             key={index}
                             value={flavor}
@@ -148,20 +150,18 @@ export default function ProductSingle() {
                           >
                             <span>{flavor}</span>
                           </Radio>
-                        ))}
-                      </RadioGroup>
-                    </fieldset>
-                  </div>
-                )}
-
-
-
+                        )
+                      ))}
+                    </RadioGroup>
+                  </fieldset>
+                </div>
+              )}
 
               <button
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
               >
-                Add to cart Get 20% off
+                Add To Cart
               </button>
             </form>
           </div>
