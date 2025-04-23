@@ -298,11 +298,12 @@ const ProductCrud = () => {
                                     value={nutritional_info}
                                 />
                             </CCol>
+                            <CCol md={12}>Options:</CCol>
                             <CCol md={2}>
                                 <CFormCheck
                                     type="checkbox"
                                     id="validationDefault09"
-                                    label="Size"
+                                    label="Weight"
                                     onChange={(e) => setIssize(!isSize)}
                                     checked={isSize}
                                     
@@ -313,6 +314,16 @@ const ProductCrud = () => {
                                     type="checkbox"
                                     id="validationDefault10"
                                     label="Flavor"
+                                    onChange={(e) => setIsflavor(!isFlavor)}
+                                    checked={isFlavor}
+                                    
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault10"
+                                    label="Egg/Eggless"
                                     onChange={(e) => setIsflavor(!isFlavor)}
                                     checked={isFlavor}
                                     
