@@ -45,6 +45,7 @@ const PropCrud = () => {
     const [category_name, setCategoryName] = useState('')
     const [prop_name, setpropName] = useState('')
     const [price, setprice] = useState('')
+    const [stock, setStock] = useState('')
     const [prop_image, setpropImage] = useState('')
     const [prop_old_image, setpropOldImage] = useState('')
     const [propcategoriesList, setCategories] = useState([])
@@ -68,22 +69,9 @@ const PropCrud = () => {
         setprice("");
         setpropImage("");
         setpropOldImage("");
+        setStock("");
         setIspopular(false);
     }
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const formData = {'prop_cat_id': category_name, 'prop_name': prop_name, 'file': prop_image, 'price': price}
-
-    //     if(queryParams.get("id")){
-    //         formData.append('id', queryParams.get("id"))
-    //         formData.append('old_image', prop_old_image)
-    //         dispatch(updateProp(formData));
-    //     }else{
-    //         dispatch(createProp(formData));
-    //     }
-    // }
-
   
 
      const handleSubmit = (e) => {
@@ -92,6 +80,7 @@ const PropCrud = () => {
             formData.append('prop_cat_id', category_name)
             formData.append('prop_name', prop_name)
             formData.append('price', price)
+            formData.append('stock',stock)
             formData.append('is_popular', isPopular)
             formData.append('file', prop_image)
             if(queryParams.get("id")){
@@ -122,6 +111,7 @@ const PropCrud = () => {
                 setprice(props.prop_data ? props.prop_data.price : '')
                 setpropOldImage(props.prop_data ? props.prop_data.prop_image : '')
                 setIspopular(props.prop_data ? props.prop_data.is_popular : '')
+                setStock(props.prop_data ? props.prop_data.stock : '')
             }
         }
     }, [queryParams.get("id"), props.get_singleprop])
@@ -189,6 +179,18 @@ const PropCrud = () => {
                                 />
                             </CCol>
 
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="number"
+                                    id="validationDefault03"
+                                    label="Stock"
+                                    onChange={(e) => setStock(e.target.value)}
+                                    value={stock}
+                                    min={0}
+                                    required
+                                />
+                            </CCol>
+                            
                             <CCol md={6}>
                                 <CFormCheck
                                     type="checkbox"
@@ -200,7 +202,7 @@ const PropCrud = () => {
                                 />
                             </CCol>
                           
-                          
+                        
                             <CCol xs={12}>
                                 <CButton color="primary" type="submit">
                                     Submit

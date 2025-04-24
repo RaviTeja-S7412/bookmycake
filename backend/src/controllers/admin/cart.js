@@ -26,16 +26,24 @@ exports.addcart = (req, res) => {
     const query = "INSERT INTO tbl_cart (product_id, product_size, product_flavor, product_qty, product_price, created_date) VALUES (?, ?, ?, ?, ?, ?)";
     const values = [req.body.product_id, req.body.product_size, req.body.product_flavor, req.body.product_qty, req.body.product_price, new Date()];
 
-    db.query(query, values, function (err, result) {
+   db.query(query, values, function (err, result) {
+    
         if (err) {
-            return res.status(500).json({ message: "Database error", error: err });
+            if (err.code === 'ER_DUP_ENTRY') {
+              return res.status(202).json({ message: 'Product already exists' });
+            }
+            return res.status(500).json({ message: 'Database error' });
         }
 
-        return res.status(200).json({
-            message: "Added to Cart Successfully",
-        });
+        if (result) {
+            return res.status(200).json({
+                message: "Add to cart"
+            })
+        }
     });
 };
+
+
 
 
 

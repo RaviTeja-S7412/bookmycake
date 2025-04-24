@@ -43,6 +43,7 @@ const routes = [
   { path: '/admin/settings/props', name: 'Props', element: Props },
   { path: '/admin/settings/create-props', name: 'Props/Create Props', element: PropsCrud},
   { path: '/admin/settings/update-prop', name: 'Props/Update Prop', element: PropsCrud}
+  
 ]
 
 export default routes

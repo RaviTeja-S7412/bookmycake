@@ -45,6 +45,7 @@ mongo.connectToServer( function( err) {
       app.use('/api',require('./routes/admin/areas'));
       app.use('/api',require('./routes/admin/props'));
       app.use('/api',require('./routes/admin/propcategories'));
+      
     
 })
 

@@ -39,6 +39,23 @@ export const updateProp = (udata) => {
   }
 }
 
+// export const updatePropStatus = (udata) => {
+//   return async (dispatch) => {
+//       dispatch({ type: propConstants.UPDATE_PROP_STATUS_REQUEST });
+//       try {
+//           const res = await axios.post('/admin/update-status', udata);
+//           if (res.status === 200) {
+//               dispatch({ type: propConstants.UPDATE_PROP_STATUS_SUCCESS });
+//               dispatch(getProps()); // Refresh list
+//           } else {
+//               dispatch({ type: propConstants.UPDATE_PROP_STATUS_FAILURE, payload: res.data.message });
+//           }
+//       } catch (error) {
+//           dispatch({ type: propConstants.UPDATE_PROP_STATUS_FAILURE, payload: error.message });
+//       }
+//   };
+// };
+
 export const deleteProp = (id) => {
   return async (dispatch) => {
     dispatch({ type: propConstants.DELETE_PROP_REQUEST })

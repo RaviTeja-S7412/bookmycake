@@ -30,6 +30,10 @@ exports.create_prop = [upload.single("file"),function(req,res){
     if(!req.body.price){
         return res.status(202).json({ message: "Prop Price is Required." });
     }
+
+    if(!req.body.stock){
+        return res.status(202).json({ message : "Stock is Required" });
+    }
    
     let prop_image = "";
     if(!req.file){
@@ -38,9 +42,10 @@ exports.create_prop = [upload.single("file"),function(req,res){
         prop_image = "props/"+req.file.filename;
     }
 
-
-    const query = "INSERT INTO tbl_props (prop_cat_id, prop_name, price, prop_image, is_popular, status, created_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const values = [req.body.prop_cat_id, req.body.prop_name, req.body.price, prop_image, req.body.is_popular, 1, new Date()];
+    const is_popular = req.body.is_popular == 'true' || req.body.is_popular == 1 ? 1 : 0;
+    
+    const query = "INSERT INTO tbl_props (prop_cat_id, prop_name, price, prop_image, is_popular, stock, status, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [req.body.prop_cat_id, req.body.prop_name, req.body.price, prop_image, is_popular, req.body.stock, 1, new Date()];
     
     db.query(query, values, function (err, result) {
     
@@ -85,8 +90,15 @@ exports.update_prop = [upload.single("file"),function(req,res){
         if (results.length > 0) {
             return res.status(202).json({ message: 'Prop name already exists' });
         }else{
-            const query = "UPDATE tbl_props SET prop_cat_id = ?, prop_name = ?, prop_image = ?, price = ?, is_popular = ?, updated_at = ? where id = ?";
-            const values = [req.body.prop_cat_id, req.body.prop_name, prop_image, req.body.price, req.body.is_popular, new Date(), req.body.id];
+            
+            const is_popular = req.body.is_popular == 'true' || req.body.is_popular == 1 ? 1 : 0;
+
+            const query = "UPDATE tbl_props SET prop_cat_id = ?, prop_name = ?, prop_image = ?, price = ?, is_popular = ?, stock = ?, updated_at = ? where id = ?";
+            
+            
+            // const values = [req.body.prop_cat_id, req.body.prop_name, prop_image, req.body.price, req.body.is_popular, req.body.stock, new Date(), req.body.id];
+
+            const values = [req.body.prop_cat_id, req.body.prop_name, prop_image, req.body.price, is_popular, req.body.stock, new Date(), req.body.id];
 
             
             db.query(query, values, function (err, result) {
@@ -105,6 +117,8 @@ exports.update_prop = [upload.single("file"),function(req,res){
 
     })
 }]
+
+
 
 exports.deleteprop = (req, res) => {
 

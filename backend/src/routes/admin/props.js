@@ -11,4 +11,5 @@ router.post('/admin/get_singleprop', get_singleprop);
 router.delete('/admin/delete_prop/:id', requireSignin, deleteprop);
 
 
+
 module.exports = router;
