@@ -20,6 +20,24 @@ export const createProduct = (udata) => {
   }
 }
 
+export const createProductoption = (udata) => {
+  return async (dispatch) => {
+    dispatch({ type: productConstants.SAVE_PRODUCT_REQUEST })
+    const res = await axiosIntance.post(`/admin/create_productoption`, udata)
+    if(res.status === 200) {
+      dispatch({
+        type: productConstants.SAVE_PRODUCT_SUCCESS,
+        payload: { message: res.data.message },
+      })
+    } else {
+      dispatch({
+      type: productConstants.SAVE_PRODUCT_FAILURE,
+      payload: { message: res.data.message },
+      })
+    }
+  }
+}
+
 export const updateProduct = (udata) => {
   return async (dispatch) => {
     dispatch({ type: productConstants.UPDATE_PRODUCT_REQUEST })

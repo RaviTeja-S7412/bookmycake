@@ -19,7 +19,7 @@ var upload = multer({storage: storage})
 
 // categories
 exports.create_product = [upload.single("file"),function(req,res){
-    
+
     if(!req.body.category_id){
         return res.status(202).json({ message: "Category is Required." });
     }
@@ -45,8 +45,8 @@ exports.create_product = [upload.single("file"),function(req,res){
                         .replace(/^-+/, '')      // Remove leading hyphen
                         .replace(/-+$/, '');
 
-    const query = "INSERT INTO tbl_products (category_id, sub_category_id, product_name, product_image, product_description, ingredients, nutritional_info, shipping, product_size, product_flavor, stock, route, is_size, is_flavor, status, deleted, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [req.body.category_id, req.body.sub_category_id, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.product_size, req.body.product_flavor, req.body.stock, product_route, req.body.is_size, req.body.is_flavor, 1, 0, new Date()];
+    const query = "INSERT INTO tbl_products (category_id, sub_category_id, product_name, product_image, product_description, ingredients, nutritional_info, shipping, options,product_size, product_flavor, product_eggtype, stock, sku, route, is_size, is_flavor, status, deleted, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [req.body.category_id, req.body.sub_category_id, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, req.body.product_size, req.body.product_flavor, req.body.product_eggtype, req.body.stock, req.body.sku, product_route, req.body.is_size, req.body.is_flavor, 1, 0, new Date()];
     
     db.query(query, values, function (err, result) {
     
@@ -64,6 +64,104 @@ exports.create_product = [upload.single("file"),function(req,res){
         }
     });
 }]
+
+// exports.create_product_option = [function(req, res) {
+//     if(!req.body.category_id) {
+//         return res.status(202).json({ message: "Category is Required." });
+//     }
+//     if(!req.body.product_name) {
+//         return res.status(202).json({ message: "Product Name is Required." });
+//     }
+//     if(!req.body.stock) {
+//         return res.status(202).json({ message: "Stock is Required." });
+//     }
+
+//     let product_image = "";
+//     if(!req.file) {
+//         return res.status(202).json({ message: "Product Image is Required." });
+//     } else {
+//         product_image = "products/"+req.file.filename;
+//     }
+
+//     var product_route = req.body.product_name
+//         .toLowerCase()          // Convert to lowercase
+//         .replace(/\s+/g, '-')    // Replace spaces with hyphens
+//         .replace(/[^\w\-]+/g, '') // Remove any non-alphanumeric characters, except hyphens
+//         .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
+//         .replace(/^-+/, '')      // Remove leading hyphen
+//         .replace(/-+$/, '');
+
+//     const query = "INSERT INTO tbl_products (category_id, sub_category_id, product_name, product_image, product_description, ingredients, nutritional_info, shipping, options, product_size, product_flavor, product_eggtype, stock, sku, route, is_size, is_flavor, status, deleted, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//     const values = [req.body.category_id, req.body.sub_category_id, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, req.body.product_size, req.body.product_flavor, req.body.product_eggtype, req.body.stock, req.body.sku, product_route, req.body.is_size, req.body.is_flavor, 1, 0, new Date()];
+
+//     db.query(query, values, function (err, result) {
+//         if (err) {
+//             if (err.code === 'ER_DUP_ENTRY') {
+//                 return res.status(202).json({ message: 'Product name already exists' });
+//             }
+//             return res.status(500).json({ message: 'Database error' });
+//         }
+
+//         if (result) {
+//             // Now insert the options into tbl_product_option
+//             const product_id = result.insertId; // Get the newly inserted product ID
+
+//             const optionQuery = "INSERT INTO tbl_product_option (product_id, weight, sku, unit, price, flavor, eggoption) VALUES (?, ?, ?, ?, ?, ?, ?)";
+//             const optionValues = [product_id, req.body.weight, req.body.sku, req.body.unit, req.body.price, req.body.flavor, req.body.eggoption];
+
+//             db.query(optionQuery, optionValues, function (err2, result2) {
+//                 if (err2) {
+//                     return res.status(500).json({ message: 'Error inserting product options' });
+//                 }
+
+//                 return res.status(200).json({
+//                     message: "Product and options created successfully"
+//                 });
+//             });
+//         }
+//     });
+// }]
+
+exports.create_productoption = function(req, res) {
+
+    if(!req.body.product_id) {
+        return res.status(202).json({ message: "Product id is Required." });
+    }
+    if(!req.body.sku) {
+        return res.status(202).json({ message: "sku is Required." });
+    }
+    if(!req.body.weight) {
+        return res.status(202).json({ message: "weight is Required." });
+    }
+
+    if(!req.body.unit) {
+        return res.status(202).json({ message: "unit is required" });
+    }
+
+    if(!req.body.price){
+        return res.status(202).json({ message: "price is required "});
+    }
+
+    const query = "INSERT INTO tbl_product_option (product_id, sku, weight, unit, price, flavor, eggoption, stock, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [req.body.product_id, req.body.sku, req.body.weight, req.body.unit, req.body.price, req.body.flavor, req.body.eggoption, req.body.stock, new Date()];
+
+     
+    db.query(query, values, function (err, result) {
+    
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+              return res.status(202).json({ message: 'Product id already exists' });
+            }
+            return res.status(500).json({ message: 'Database error' });
+        }
+
+        if (result) {
+            return res.status(200).json({
+                message: "Created Successfully"
+            })
+        }
+    });
+}
 
 exports.update_product = [upload.single("file"),function(req,res){
 
