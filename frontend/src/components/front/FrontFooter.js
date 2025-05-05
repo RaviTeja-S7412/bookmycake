@@ -1,64 +1,101 @@
-
-import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const FrontFooter = () => {
-
-
   return (
-    <>
-      <footer id="footer" className="bg-rose-900 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap -mx-4">
-            <div className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-              <NavLink to="/" className="flex items-center mb-4 text-white ">
-                <span className="text-xl font-bold no-underline">BookMyCake</span>
-              </NavLink>
-              <div className="text-sm">
-                <p>Bookmycake Private Limited Gehlot farms,</p>
-                <p>(Opp 521) Sector 47 Gurgaon Haryana-122001</p>
-                <p className="mt-3"><strong>Phone:</strong> <span>+91 99900-26799</span></p>
-                <p><strong>Email:</strong> <span>Hello@bookmycake.co</span></p>
+    <footer className="text-black py-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {/* Section 1: BookMyCake Logo & Copyright */}
+          <div className="md:col-span-1">
+            <NavLink to="/" className="flex items-center mb-4 text-white ">
+              <span className="text-xl font-bold no-underline"><img
+                alt=""
+                src="/assets/logo.jpg"
+                className="h-full w-full"
+              /></span>
+            </NavLink>
+            <div className="text-sm">
+              <p>© 2023</p> {/* As seen in the image */}
+              <div className="mt-2">
+              {/* <h6 className="font-semibold mb-2">Show Us Some Love  & Connect with us</h6> */}
+                <span className="mr-2">Show us some love & Connect with us</span>
+                <div className='flex'>
+                <a href="#" className="mr-1"><img src="/icons/facebook.png" alt="Facebook" className="h-5 w-5" /></a>
+                <a href="#" className="mr-1"><img src="/icons/instagram.png" alt="Instagram" className="h-5 w-5" /></a>
+                <a href="#" className="mr-1"><img src="/icons/youtube.png" alt="Youtube" className="h-5 w-5" /></a>
+                <a href="#" className="mr-1"><img src="/icons/linkedin.png" alt="linkedin" className="h-5 w-5" /></a>
+                <a href="#" className="mr-1"><img src="/icons/twitter.png" alt="twitter" className="h-5 w-5" /></a>
+                <a href="#" className="mr-1"><img src="/icons/pinterest.png" alt="pinterest" className="h-5 w-5" /></a>
+                </div>
               </div>
-              <NavLink to={'/'}>
-                <span className="flex items-center mt-4 cursor-pointer">
-                  <img src='/assets/logo.jpg' alt="Logo" className="h-20 max-w-min" />
-                </span>
-              </NavLink>
-            </div>
-
-            <div className="w-full md:w-1/4 lg:w-1/4 px-4 mb-8">
-              <h4 className="text-lg font-semibold mb-4">Useful Links</h4>
-              <ul className="text-sm space-y-2 !p-0">
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Search</a></li>
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Contact Us</a></li>
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Locate Us</a></li>
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Terms and Conditions</a></li>
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Cancellation and Refunds</a></li>
-                <li className='!leading-6'><a href="#" className="text-white !no-underline">Track Order</a></li>
-              </ul>
-            </div>
-
-            <div className="w-full md:w-1/4 lg:w-1/4 px-4 mb-8">
-              <h4 className="text-lg font-semibold mb-4">Heading</h4>
-              <ul className="text-sm space-y-2 !p-0">
-                <li><p>Call / Whatsapp us on 99900-26799 for any queries or to get quote for designer cakes,</p></li>
-                <li><p>Whatsapp us the image<br/> Email : Hello@bookmycake.co</p></li>
-              </ul>
             </div>
           </div>
-        </div>
+        
+          {/* Section 3: Know Us */}
+          <div>
+            <h6 className="font-semibold mb-2">Know Us</h6>
+            <ul className="text-sm space-y-2 !p-0">
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Our Story</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Contact Us</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Locate Us</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Blog</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Media</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Careers</a></li>
+            </ul>
+          </div>
 
-        <div className="container mx-auto px-4 text-center mt-8">
-          <p>© <span>Copyright</span> <strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
+          {/* Section 4: Need Help */}
+          <div>
+            <h6 className="font-semibold mb-2">Need Help</h6>
+            <ul className="text-sm space-y-2 !p-0">
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">FAQ</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Cancellation and Returns</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Privacy Policy</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Terms and Conditions</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Customer Reviews</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Sitemap</a></li>
+            </ul>
+          </div>
+
+          {/* Section 5: More Info */}
+          <div>
+            <h6 className="font-semibold mb-2">More Info</h6>
+            <ul className="text-sm space-y-2 !p-0">
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Corporate Cakes</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Franchise & Offers</a></li>
+              <li className='!leading-6'><a href="#" className="text-black !no-underline">Download App</a></li>
+            </ul>
+          </div>
+
+          {/* Section 6: App Links */}
+          <div className="lg:col-span-2">
+           <h6 className="font-semibold mb-2">Experience Better, App on Mobile</h6>
+           <div className="flex items-start">
+          <img src="/icons/qrcode.png" alt="App QR Code" className="h-16 mt-0 mr-1" />
+          {/* googleplay icon and app store */ }
+          <div className="flex flex-col items-start">
+            <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
+            <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
+            {/* <a href="#"><img src="/icons/appstore_download.png" alt="App Store" className="h-10" /></a> */}
+          </div>
+          {/* googleplay icon and app store */ }
         </div>
-      </footer>
+      </div>
+
+        </div>
+      </div>
+      
+
+      <div className="container mx-auto px-4 text-center mt-8">
+        <p>© <span>Copyright</span> <strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
+      </div>
+
       <a href="#" id="scroll-top" className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700">
         <i className="bi bi-arrow-up-short"></i>
       </a>
-    </>
-  
-   )
-}
+    </footer>
+  );
+};
 
-export default FrontFooter
+export default FrontFooter;

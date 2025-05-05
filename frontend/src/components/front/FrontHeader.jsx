@@ -139,8 +139,7 @@ export default function HomeHeader() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            >
+              className="-m-2.5 rounded-md p-2.5 text-gray-700">
               <XMarkIcon aria-hidden="true" className="size-6" />
             </button>
           </div>

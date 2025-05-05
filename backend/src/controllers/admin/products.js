@@ -300,7 +300,6 @@ exports.get_allproducts = (req, res) => {
     })
 }
 
-
 exports.get_filter_products = async (req, res) => {
     const category_id = req.query.category_id;  
     const sub_category_id = req.query.sub_category_id;
