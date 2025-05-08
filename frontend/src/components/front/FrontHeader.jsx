@@ -12,7 +12,9 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon
+} from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu"
 import { useNavigate } from 'react-router-dom';
 import axiosIntance from '../axios';
@@ -22,79 +24,79 @@ export default function HomeHeader() {
   const [menuItems, setMenuitems] = useState([]);
   const navigate = useNavigate();
 
-  const getMenuItems = async () => {
-    const res = await axiosIntance.get(`/admin/get_navigationmenu`)
-
-    if (res.status === 200) {
-      setMenuitems(res.data.menu_items)
-    } else {
-      if (res.status === 202) {
+  useEffect(() => {
+    const getMenuItems = async () => {
+      const res = await axiosIntance.get(`/admin/get_navigationmenu`);
+      if (res.status === 200) {
+        setMenuitems(res.data.menu_items);
       }
-    }
-  }
-
-  useEffect(() => {    
+    };
     getMenuItems();
-  }, [])
+  }, []);
 
   return (
-    <header className="bg-white">
-      <p className="flex h-10 items-center justify-center bg-[#E1262A] px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-        Use code BMC20 Get Flat 20% Discount, Call / Whatsapp us 9990026799
-      </p>
-      <nav aria-label="Global" className="mx-auto max-w-max flex  items-center justify-between p-6 lg:px-8">
-        <div className="flex lg:flex-1 lg:mr-5">
-          <a href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Book My Cake</span>
-            <img
-              alt=""
-              src="/assets/logo.jpg"
-              className="h-full w-full"
-            />
-          </a>
+    <header className="bg-white border-b">
+      <div className="flex items-center justify-between px-6 py-4 gap-6 flex-wrap">
+        {/* Left: Logo + City */}
+        <div className="flex items-center gap-4 min-w-[200px]">
+          <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
+          <select className="border rounded px-2 py-1 text-sm">
+            <option>Select City</option>
+            <option>Delhi</option>
+            <option>Mumbai</option>
+          </select>
         </div>
-        <div className="flex lg:hidden">
-          <div className="flex lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
-            <a href="#" className="text-sm p-2 font-medium text-gray-700 hover:text-gray-800">
-              <UserIcon aria-hidden='true' className='size-6 text-rose-600' />
-            </a>
 
-            <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Search</span>
-              <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
-            </a>
+        {/* Middle: Search */}
+        <div className="flex-grow max-w-[500px] relative">
+          <input
+            type="text"
+            placeholder="Search for cakes, occasion, flavor and more"
+            className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
+          />
+          <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+        </div>
 
-            <a href="#" className="group -m-2 flex items-center p-2">
-              <ShoppingBagIcon
-                aria-hidden="true"
-                className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-              />
-              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-              <span className="sr-only">items in cart, view bag</span>
-            </a>
-
+        {/* Right: Support + Icons */}
+        <div className="flex items-center gap-4 min-w-[250px] justify-end">
+          <div className="text-xs text-right leading-tight">
+            <div className="font-semibold">24/7 Support Center</div>
+            <div className="text-black font-bold text-sm">+91 9560804758</div>
           </div>
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon aria-hidden="true" className="size-6" />
-          </button>
-
+          <div className="flex items-center gap-4">
+            <span className="text-xs">Track Order</span>
+            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            <div className="flex items-center gap-1 cursor-pointer">
+              <UserIcon className="h-5 w-5 text-gray-600" />
+              <span className="text-xs text-rose-600 font-medium">Login/Signup</span>
+            </div>
+          </div>
         </div>
-        <PopoverGroup className="hidden lg:flex lg:gap-x-6">
+      </div>
+
+      {/* Bottom Menu (Categories) */}
+      <nav className="flex justify-center gap-6 text-sm font-medium text-gray-700 px-6 py-3 border-t">
+        <PopoverGroup className="flex gap-4">
           {menuItems.map((item) => (
             <Popover key={item.id} className="relative">
-              <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold text-gray-900 focus:outline-none" onClick={(e) => item.subItems.length === 0 && navigate('collections/' + item.path)}>
+              <PopoverButton
+                className="flex items-center gap-1 hover:text-rose-600 focus:outline-none"
+                onClick={(e) => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+              >
                 {item.label}
-                {item.subItems.length > 0 && <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />}
+                {item.subItems.length > 0 && (
+                  <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                )}
               </PopoverButton>
-              {(item.subItems.length > 0 && 
-                <PopoverPanel className="absolute top-full z-10 mt-3 w-52 bg-white shadow-lg rounded-lg p-2">
+              {item.subItems.length > 0 && (
+                <PopoverPanel className="absolute top-full z-10 mt-2 bg-white shadow-md rounded p-2 w-48">
                   {item.subItems.map((sub) => (
-                    <a key={sub.id} href={'javascript:void(0)'} onClick={() => navigate('collections/' + item.path + '/'+sub.path)} className="block px-4 py-2 text-sm !text-gray-700 hover:bg-gray-100 !no-underline">
+                    <a
+                      key={sub.id}
+                      href="#"
+                      onClick={() => navigate('/collections/' + item.path + '/' + sub.path)}
+                      className="block px-3 py-1 text-sm hover:bg-gray-100"
+                    >
                       {sub.label}
                     </a>
                   ))}
@@ -103,35 +105,16 @@ export default function HomeHeader() {
             </Popover>
           ))}
         </PopoverGroup>
-
-        <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-3">
-          <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-            <UserIcon aria-hidden='true' className='size-6 text-rose-600' />
-          </a>
-
-          <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-            <span className="sr-only">Search</span>
-            <MagnifyingGlassIcon aria-hidden="true" className="size-6 text-rose-600" />
-          </a>
-
-          <a href="#" className="group -m-2 flex items-center p-2">
-            <ShoppingBagIcon
-              aria-hidden="true"
-              className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-            />
-            <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-            <span className="sr-only">items in cart, view bag</span>
-          </a>
-
-        </div>
       </nav>
+
+      {/* Mobile Menu */}
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Book My Cake</span>
               <img
-                alt=""
+                alt="Logo"
                 src="assets/logo.jpg"
                 className="h-15 w-30"
               />
@@ -154,7 +137,7 @@ export default function HomeHeader() {
                 {item.subItems && (
                   <DisclosurePanel className="mt-1 space-y-1 pl-4">
                     {item.subItems.map((sub) => (
-                      <a key={sub.id} href={sub.path} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <a key={sub.id} href={sub.path} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 no-underline">
                         {sub.label}
                       </a>
                     ))}
@@ -163,11 +146,19 @@ export default function HomeHeader() {
               </Disclosure>
             ))}
           </div>
-
         </DialogPanel>
-
       </Dialog>
 
+      {/* Mobile menu icon for smaller screens */}
+      <div className="lg:hidden flex items-center justify-between px-6 py-4">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md"
+          onClick={() => setMobileMenuOpen(true)}
+        >
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
     </header>
   );
 }

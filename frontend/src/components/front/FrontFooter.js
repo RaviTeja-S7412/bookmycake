@@ -17,7 +17,7 @@ const FrontFooter = () => {
             </NavLink>
             <div className="text-sm">
               <p>© 2023</p> {/* As seen in the image */}
-              <div className="mt-2">
+              <div className="mt-1">
               {/* <h6 className="font-semibold mb-2">Show Us Some Love  & Connect with us</h6> */}
                 <span className="mr-2">Show us some love & Connect with us</span>
                 <div className='flex'>
