@@ -1,0 +1,135 @@
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+    CCard,
+    CCardBody,
+    CCardHeader,
+    CCol,
+    CRow
+} from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilPenAlt, cilTrash } from '@coreui/icons'
+import ReactDatatable from '../../../components/datatables/ReactDatatable'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProps, deleteProp } from '../../../redux/actions/props.actions'
+import { useNavigate } from 'react-router-dom'
+import { propConstants } from '../../../redux/actions/constants'
+import Swal from 'sweetalert2'
+
+const Props = () => {
+
+    const props = useSelector(state => state.props)
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleDelete = (id) => {
+
+        Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this Prop!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(deleteProp(id));
+                        dispatch({type: propConstants.PROPS_RESET})
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your prop has been deleted.",
+                            icon: "success"
+                        });
+                    }
+                });
+    }
+
+    useEffect(() => {
+        if(props.get_props){
+            dispatch(getProps());
+        }
+    }, [props.get_props])
+
+     const update_prop = (id) => {
+            dispatch({ type: propConstants.GET_SINGLEPROP_REQUEST })
+            navigate('/admin/settings/update-prop?id='+id)
+        }
+
+    const columns = useMemo(
+        () => [
+            {
+                name: '#',
+                selector: (row, key) => `${++key}`,
+                sortable: true,
+            },
+            {
+                name: 'Prop Name',
+                selector: (row) => `${row.prop_name}`,
+                sortable: true,
+            },
+            {
+                name: 'Prop Image',
+                cell: (row) => (<img src={`${import.meta.env.VITE_APIBASE_URL+row.prop_image}`} height={'80px'} width={'120px'}className='p-2 rounded-4' />),
+                sortable: true,
+            },
+            {
+                name: 'Price',
+                selector: (row) => `₹ ${row.price}`,
+                sortable: true,
+            },
+            
+            // {
+            //     name: 'Status',
+            //     cell: (row) => (
+            //       <label className="inline-flex items-center cursor-pointer">
+            //         <input
+            //           type="checkbox"
+            //           className="sr-only peer"
+            //           checked={row.status === 'Active'}
+            //           onChange={() => handleToggleStatus(row.id, row.status)}
+            //         />
+            //         <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 
+            //           dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full 
+            //           rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white 
+            //           after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white 
+            //           after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 
+            //           after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 
+            //           dark:peer-checked:bg-blue-600">
+            //         </div>
+            //       </label>
+            //     ),
+            //     sortable: true,
+            //   },
+       
+            {
+                name: "Action",
+                cell: (row) => (
+                    <>
+                        <CIcon icon={cilPenAlt} height={18} customClassName="nav-icon favicon m-2" style={{cursor: 'pointer'}} onClick={() => update_prop(row.id)} />
+                        <CIcon icon={cilTrash} height={18} customClassName="nav-icon favicon" style={{cursor: 'pointer'}} onClick={() => handleDelete(row.id)} />
+                    </>
+                ),
+            },
+        ],
+        [],
+    )
+    
+
+    return (
+        <CRow>
+            <CCol xs={12}>
+                <CCard className="mb-4">
+                    <CCardHeader>
+                        <strong>List Of Props</strong>
+                    </CCardHeader>
+                    <CCardBody>
+                    {props?.props.length > 0 && <ReactDatatable columns={columns} data={props?.props} actions={true} actionTarget={'/admin/settings/create-props'} />}
+                    </CCardBody>
+                </CCard>
+            </CCol>
+        </CRow>
+    )
+    
+}
+
+export default Props

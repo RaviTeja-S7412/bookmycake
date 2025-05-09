@@ -1,12 +1,21 @@
 import Carousel from "../../components/carousel/Carousel"
 import Reviews from "../../components/reviews/Reviews"
 import Products from "../../Data/Products"
+import CategoryCards from "../../components/categorycards";
+import Sweetfullcakes from "../../components/sweetfullcakes";
+import CorporateCollections from "../../components/corporatecollect";
+ import DesignerCollections from "../../components/DesignerCollections";
 
 export default function Home() {
   return (
     <>
       <div className="mx-auto w-full">
         <Carousel />
+        <CategoryCards />
+        <DesignerCollections />
+        <Sweetfullcakes />
+        <CorporateCollections />
+        
 
         {/* <h2 className="text-2xl font-bold tracking-tight pt-5 text-gray-900">Featured collection</h2>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
@@ -33,6 +42,7 @@ export default function Home() {
           ))}
         </div> */}
 
+        {/* 
         <section id="categoreis" className="w-4/5 mx-auto my-3">
           <div class="grid grid-cols-4 gap-4">
             <div class="col-span-2">
@@ -58,10 +68,10 @@ export default function Home() {
               <img src="products/categories/2.jpg" alt="" className="rounded-lg" />
             </div>
           </div>
-        </section>
+        </section> */}
 
         <section className="w-4/5 mx-auto my-3">
-          <h2 className="text-2xl font-bold tracking-tight pt-5 text-gray-900 text-center">Reviews</h2>
+          <h2 className="text-2xl font-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
           <div className="mt-6">
             <Reviews />
           </div>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosIntance from "../../components/axios";
 import { useParams } from "react-router-dom"
+import { BsCartPlus } from "react-icons/bs";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -210,6 +211,7 @@ function classNames(...classes) {
                       </div>
                       {/* Display the price of the smallest size */}
                       <p className="font-medium !text-gray-900">₹ {startingSize.price}</p>
+                      <BsCartPlus />
                     </div>
                   </div>
                 );

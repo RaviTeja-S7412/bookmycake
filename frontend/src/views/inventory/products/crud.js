@@ -11,10 +11,11 @@ import {
     CFormTextarea,
     CFormLabel,
     CFormCheck,
-    CFormSelect
+    CFormSelect,
   } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CreatableSelect from 'react-select/creatable';
 import { categoryConstants, productConstants } from '../../../redux/actions/constants';
 // import ReactQuill from 'react-quill'; // Import the ReactQuill component
 // import 'react-quill/dist/quill.snow.css'; // Import Quill's snow theme styles
@@ -54,10 +55,17 @@ const ProductCrud = () => {
     const [shipping_info, setshipping_info] = useState('')
     const [isSize, setIssize] = useState(false)
     const [isFlavor, setIsflavor] = useState(false)
+    const [isEggtype, setIseggtype] = useState(false)
+    const [sku, setSku] = useState('')
     const [sizes, setSizes] = useState([{ kg: '', unit: '', price: '' }]);
     const [flavors, setFlavors] = useState([""]);
+    const [eggtypes, setEggtypes] = useState([""]);
     const [categoriesList, setCategories] = useState([])
     const [subcategoriesList, setSubCategories] = useState([])
+    const [items, setItems] = useState([
+        { kg: '', unit: 'kg', price: '', flavor: '', eggtype: '' }
+      ]);
+      
     
     useEffect(() => {
         dispatch({type: productConstants.PRODUCTS_RESET})
@@ -80,14 +88,23 @@ const ProductCrud = () => {
         setproductOldImage("");
         setIngredeints("");
         setnutritional_info("");
+        setSku("");
         setIssize(false);
         setIsflavor(false);
+        setIseggtype(false);
         setSizes([{ kg: '', unit: '' , price: '' }]);
         setFlavors([""]);
+        setEggtypes([""]);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const selectedOptions = [];
+        if (isSize) selectedOptions.push('weight');
+        if (isFlavor) selectedOptions.push('flavor');
+        if (isEggtype) selectedOptions.push('egg');
+
         const formData = new FormData()
         formData.append('category_id', category_name)
         formData.append('sub_category_id', subcategory_name)
@@ -99,9 +116,16 @@ const ProductCrud = () => {
         formData.append('shipping', shipping_info)
         formData.append('product_size', JSON.stringify(sizes))
         formData.append('product_flavor', JSON.stringify(flavors))
+        formData.append('product_eggtype', JSON.stringify(eggtypes))
         formData.append('is_size', isSize)
         formData.append('is_flavor', isFlavor)
-        formData.append('stock', stock)
+        formData.append('is_eggtype', isEggtype);
+        formData.append('stock', stock);
+        formData.append('sku', sku)
+
+          // Append the formatted options
+    formData.append('options', JSON.stringify(selectedOptions));
+
         if(queryParams.get("id")){
             formData.append('id', queryParams.get("id"))
             formData.append('old_image', product_old_image)
@@ -136,9 +160,12 @@ const ProductCrud = () => {
                 setshipping_info(products.product_data ? products.product_data.shipping : '')
                 setSizes(products.product_data ? JSON.parse(products.product_data.product_size) : '')
                 setFlavors(products.product_data ? JSON.parse(products.product_data.product_flavor) : '')
+                setEggtypes(products.product_data ? JSON.parse(products.product_data.product_eggtype) : '')
                 setIssize(products.product_data ? products.product_data.is_size : '')
                 setIsflavor(products.product_data ? products.product_data.is_flavor : '')
+                setIseggtype(products.product_data ? products.product_data.is_eggtype : '')
                 setStock(products.product_data ? products.product_data.stock : '')
+                setSku(products.product_data ? products.product_data.sku : '')
             }
         }
     }, [queryParams.get("id"), products.get_singleproduct])
@@ -166,6 +193,11 @@ const ProductCrud = () => {
         const updatedList = flavors.filter((_, i) => i !== index);
         setFlavors(updatedList);
     };
+
+    const handleEggtypeDelete = (index) => {
+        const updatedList = eggtypes.filter((_, i) => i !== index);
+        setEggtypes(updatedList);
+    }
 
     const getSubcategories = (categoryid) => {
         const post_data = {
@@ -265,15 +297,7 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-                                {/* <CFormLabel>Ingredients:</CFormLabel> */}
-                                {/* <ReactQuill
-                                    value={ingredeints}
-                                    onChange={(value) => setIngredeints(value)}
-                                    theme="snow"
-                                    modules={{
-                                    toolbar: quillToolbar,
-                                    }}
-                                /> */}
+                           
                                 <CFormTextarea
                                     label="Ingredients:"
                                     rows={2}
@@ -282,15 +306,7 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-                                {/* <CFormLabel>Nutritional Information:</CFormLabel> */}
-                                {/* <ReactQuill
-                                    value={nutritional_info}
-                                    onChange={(value) => setnutritional_info(value)}
-                                    theme="snow"
-                                    modules={{
-                                    toolbar: quillToolbar,
-                                    }}
-                                /> */}
+
                                 <CFormTextarea
                                     label="Nutritional Information:"
                                     rows={2}
@@ -298,112 +314,160 @@ const ProductCrud = () => {
                                     value={nutritional_info}
                                 />
                             </CCol>
+                          
+                            <CCol md={12}>Options:</CCol>
                             <CCol md={2}>
-                                <CFormCheck
-                                    type="checkbox"
-                                    id="validationDefault09"
-                                    label="Size"
-                                    onChange={(e) => setIssize(!isSize)}
-                                    checked={isSize}
-                                    
-                                />
+                            <CFormCheck
+                                type="checkbox"
+                                id="validationDefault09"
+                                label="Weight"
+                                onChange={() => setIssize(!isSize)}
+                                checked={isSize}
+                            />
                             </CCol>
                             <CCol md={2}>
-                                <CFormCheck
-                                    type="checkbox"
-                                    id="validationDefault10"
-                                    label="Flavor"
-                                    onChange={(e) => setIsflavor(!isFlavor)}
-                                    checked={isFlavor}
-                                    
-                                />
+                            <CFormCheck
+                                type="checkbox"
+                                id="validationDefault10"
+                                label="Flavor"
+                                onChange={() => setIsflavor(!isFlavor)}
+                                checked={isFlavor}
+                            />
                             </CCol>
-                            <CCol md={8}></CCol>
-                            {isSize && 
-                                <CCol md={6}>
-                                    {sizes.map((size, index) => (
-                                        <CRow key={index}>
-                                            <CCol md={5}>
-                                                <CFormInput
-                                                    type="number"
-                                                    name='kg'
-                                                    id="validationDefault01"
-                                                    label="Size kg's/ml : "
-                                                    onChange={(e) => handleSizeChange(index, e)}
-                                                    value={size.kg}
-                                                />
-                                            </CCol>
-                                            <CCol md={2}>
-                                                <CFormSelect
-                                                    type="number"
-                                                    name='unit'
-                                                    id="validationDefault01"
-                                                    label="Unit"
-                                                    onChange={(e) => handleSizeChange(index, e)}
-                                                    value={size.unit}>
-                                                    <option value="kg">Kg</option>
-                                                    <option value="ml">ml</option>
-                                                </CFormSelect>
-                                            </CCol>
+                            <CCol md={2}>
+                            <CFormCheck
+                                type="checkbox"
+                                id="validationDefault11"
+                                label="Egg/Eggless"
+                                onChange={() => setIseggtype(!isEggtype)}
+                                checked={isEggtype}
+                            />
+                            </CCol>
 
-                                            <CCol md={5}>
-                                                <CFormInput
-                                                    type="number"
-                                                    name='price'
-                                                    id="validationDefault01"
-                                                    label="Price: "
-                                                    onChange={(e) => handleSizeChange(index, e)}
-                                                    value={size.price}
-                                                />
-                                            </CCol>
-                                            {index > 0 &&
-                                                <CCol md={2}>
-                                                    <CIcon icon={cilTrash} height={18} customClassName="nav-icon favicon" style={{cursor: 'pointer', color: 'red', marginTop:'40px'}} onClick={() => handleSizeDelete(index)} /> 
-                                                </CCol>
-                                            }
-                                        </CRow>
-                                    ))}
-                                    <CRow className='mt-2'>
-                                        <CCol md={8}></CCol>
-                                        <CCol md={2}>
-                                            <CButton color="primary" className='float-end' type="button" onClick={() => setSizes([...sizes, { kg: '', price: '' }])} style={{width: '60px'}}>
-                                                Add
-                                            </CButton>
-                                        </CCol>  
-                                    </CRow>    
+                            <CCol md={8}></CCol>
+
+                            {(isSize || isFlavor || isEggtype) && (
+                            <>
+                                {Array.from({ length: Math.max(sizes.length, flavors.length, eggtypes.length) }).map((_, index) => (
+                                <CRow key={index} className="mb-3">
+                                    {isSize && sizes[index] && (
+                                    <>
+                                    <CCol xs={12} md={2}>
+                                        <CFormInput
+                                            type="text"
+                                            name="sku"
+                                            label="Sku"
+                                            onChange={(e) => setSku(e.target.value)}
+                                            value={sku}
+                                        />
+                                        </CCol>
+                                        <CCol xs={12} md={2}>
+                                        <CFormInput
+                                            type="number"
+                                            name="kg"
+                                            label="Size kg's/ml:"
+                                            onChange={(e) => handleSizeChange(index, e)}
+                                            value={sizes[index].kg}
+                                        />
+                                        </CCol>
+                                        <CCol xs={12} md={1}>
+                                        <CFormSelect
+                                            name="unit"
+                                            label="Unit"
+                                            onChange={(e) => handleSizeChange(index, e)}
+                                            value={sizes[index].unit}
+                                        >
+                                            <option value="kg">Kg</option>
+                                            <option value="ml">ml</option>
+                                        </CFormSelect>
+                                        </CCol>
+                                        <CCol xs={12} md={2}>
+                                        <CFormInput
+                                            type="number"
+                                            name="price"
+                                            label="Price:"
+                                            onChange={(e) => handleSizeChange(index, e)}
+                                            value={sizes[index].price}
+                                        />
+                                        </CCol>
+                                    </>
+                                    )}
+
+                                    {isFlavor && flavors[index] !== undefined && (
+                                    <CCol xs={12} md={3}>
+                                        <CreatableSelect
+                                        isClearable
+                                        options={[
+                                            { value: 'Chocolate Truffle', label: 'Chocolate Truffle' },
+                                            { value: 'Exotic Pineapple', label: 'Exotic Pineapple' },
+                                            { value: 'Caramel Butterscotch', label: 'Caramel Butterscotch' },
+                                            { value: 'Black Forest', label: 'Black Forest' },
+                                            { value: 'Blue Berry', label: 'Blue Berry' },
+                                            { value: 'Pineapple', label: 'Pineapple' }
+                                        ]}
+                                        value={flavors[index] ? { label: flavors[index], value: flavors[index] } : null}
+                                        onChange={(newValue) => {
+                                            const updated = [...flavors];
+                                            updated[index] = newValue ? newValue.value : '';
+                                            setFlavors(updated);
+                                        }}
+                                        />
+                                    </CCol>
+                                    )}
+
+                                    {isEggtype && eggtypes[index] !== undefined && (
+                                    <CCol xs={12} md={2}>
+                                        <CreatableSelect
+                                        isClearable
+                                        options={[
+                                            { value: 'Egg', label: 'Egg' },
+                                            { value: 'Eggless', label: 'Eggless' }
+                                        ]}
+                                        value={eggtypes[index] ? { label: eggtypes[index], value: eggtypes[index] } : null}
+                                        onChange={(newValue) => {
+                                            const updated = [...eggtypes];
+                                            updated[index] = newValue ? newValue.value : '';
+                                            setEggtypes(updated);
+                                        }}
+                                        />
+                                    </CCol>
+                                    )}
+
+                                    <CCol xs={12} md={1}>
+                                    {index > 0 && (
+                                        <CIcon
+                                        icon={cilTrash}
+                                        height={18}
+                                        style={{ cursor: 'pointer', color: 'red', marginTop: '40px' }}
+                                        onClick={() => {
+                                            if (isSize) handleSizeDelete(index);
+                                            if (isFlavor) handleFlavorDelete(index);
+                                            if (isEggtype) handleEggtypeDelete(index);
+                                        }}
+                                        />
+                                    )}
+                                    </CCol>
+                                </CRow>
+                                ))}
+
+                                <CRow className="mb-3">
+                                <CCol xs={12} md={2}>
+                                    <CButton
+                                    color="info"
+                                    type="button"
+                                    onClick={() => {
+                                        if (isSize) setSizes([...sizes, { kg: '', unit: 'kg', price: '' }]);
+                                        if (isFlavor) setFlavors([...flavors, '']);
+                                        if (isEggtype) setEggtypes([...eggtypes, '']);
+                                    }}
+                                    >
+                                    Add
+                                    </CButton>
                                 </CCol>
-                            }
-                            {isFlavor && 
-                                <CCol md={6}>
-                                    {flavors.map((flavor, index) => (
-                                        <CRow key={index}>
-                                            <CCol md={10}>
-                                                <CFormInput
-                                                    type="text"
-                                                    name='kg'
-                                                    id="validationDefault01"
-                                                    label={"Flavor Name: "}
-                                                    onChange={(e) => handleFlavorChange(index, e)}
-                                                    value={flavor}
-                                                />
-                                            </CCol>
-                                            {index > 0 &&
-                                                <CCol md={2}>
-                                                    <CIcon icon={cilTrash} height={18} customClassName="nav-icon favicon" style={{cursor: 'pointer', color: 'red', marginTop:'40px'}} onClick={() => handleFlavorDelete(index)} /> 
-                                                </CCol>
-                                            }
-                                        </CRow>
-                                    ))}
-                                    <CRow className='mt-2'>
-                                        <CCol md={8}></CCol>
-                                        <CCol md={2}>
-                                            <CButton color="primary" className='float-end' type="button" onClick={() => setFlavors([...flavors, ""])} style={{width: '60px'}}>
-                                                Add
-                                            </CButton>
-                                        </CCol>  
-                                    </CRow>  
-                                </CCol>
-                            }
+                                </CRow>
+                            </>
+                            )}
+
                             <CCol xs={12}>
                                 <CButton color="primary" type="submit">
                                     Submit
@@ -415,7 +479,5 @@ const ProductCrud = () => {
             </CCol>
         </CRow>
     )
-
 }
-
 export default ProductCrud

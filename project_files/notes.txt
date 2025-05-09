@@ -1,0 +1,17 @@
+weight: weight, price, egg_option-> dropdown(egg/eggless), sku, unit
+flavor: price, egg_option-> dropdown(egg/eggless), sku, unit
+egg: price, egg_option-> dropdown(egg/eggless), sku
+
+common fields: price, sku
+
+
+remove columns in (tbl_products)
+
+product_size
+product_flavor
+product_eggtype
+is_size
+is_flavor
+is_eggtype
+
+
