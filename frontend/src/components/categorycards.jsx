@@ -1,14 +1,14 @@
 const categories = [
-  { title: "Christmas Specials", icon: "/icons/christams_special.png" },
-  { title: "Birthday Cakes", icon: "/icons/birthday-cake.png" },
-  { title: "Desserts", icon: "/icons/desserts.png" },
-  { title: "Anniversary Cakes", icon: "/icons/anniversary_cake.png" },
-  { title: "Photo Cakes", icon: "/icons/photoframe_cake.png" },
+  { title: "Christmas Specials", icon: "/icons/christmas.png" },
+  { title: "Birthday Cakes", icon: "/icons/birthday.png" },
+  { title: "Desserts", icon: "/icons/dessert.png" },
+  { title: "Anniversary Cakes", icon: "/icons/anniversary.png" },
+  { title: "Photo Cakes", icon: "/icons/photo.png" },
 ];
 
 export default function CategoryCards() {
   return (
-    <section className="w-4/5 mx-auto my-6">
+    <section className="default-width">
       <h5 className="text-2xl font-bold text-left text-gray-800 mb-6 py-2">Shop by Categories</h5>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {categories.map((cat, index) => (
