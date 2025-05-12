@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
+import Slider from "react-slick";
 
 const cakes = [
   { title: "Elsa Frozen Cake", image: "/assets/images/wallpaperflare.com_wallpaper.jpg" },
@@ -12,8 +13,9 @@ const cakes = [
 
 export default function DesignerCollections() {
   return (
-    <section className="bg-[#b18658] py-8 px-4 md:px-10">
-      <h4 className="text-xl md:text-2xl font-semibold text-white mb-6 py-2 md:mb-8">Designer Collections</h4>
+    <section className='bg-[url(/assets/images/designer-bg.jpg)] bg-cover bg-no-repeat bg-center'>
+      <div className="default-width py-10">
+      <h4 className="!text-4xl poppins-semibold text-gray-800 mb-4 text-white">Designer Collections</h4>
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
@@ -62,6 +64,7 @@ export default function DesignerCollections() {
           background: #000;
         }
       `}</style>
+      </div>
     </section>
   );
 }
