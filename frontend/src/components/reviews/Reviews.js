@@ -109,8 +109,8 @@ export default function Carousel() {
                                             </svg>
                                         ))}
                                     </div>
-                                    <p className="text-gray-700">{review.review}</p>
-                                    <p className="text-gray-500 mt-1">{review.itemType}</p>
+                                    <p className="text-gray-700 mb-0">{review.review}</p>
+                                    <p className="text-gray-500 mt-1 mb-0">{review.itemType}</p>
                                 </div>
                                 <div className='review_img'>
                                     <img src={review.image} alt={review.name} className="w-full max-h-[200px] object-cover" />
