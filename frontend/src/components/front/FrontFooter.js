@@ -72,9 +72,9 @@ const FrontFooter = () => {
           <div className="lg:col-span-2">
            <h6 className="font-semibold mb-2">Experience Better, App on Mobile</h6>
            <div className="flex items-start">
-          <img src="/icons/qrcode.png" alt="App QR Code" className="h-16 mt-0 mr-1" />
-          {/* googleplay icon and app store */ }
-          <div className="flex flex-col items-start">
+           <img src="/icons/qrcode.png" alt="App QR Code" className="h-16 mt-0 mr-1" />
+           {/* googleplay icon and app store */ }
+           <div className="flex flex-col items-start">
             <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
             <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
             {/* <a href="#"><img src="/icons/appstore_download.png" alt="App Store" className="h-10" /></a> */}
@@ -82,13 +82,12 @@ const FrontFooter = () => {
           {/* googleplay icon and app store */ }
         </div>
       </div>
-
         </div>
       </div>
       
 
       <div className="container mx-auto px-4 text-center mt-8">
-        <p>© <span>Copyright</span> <strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
+        <p>© <span>Copyright</span><strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
       </div>
 
       <a href="#" id="scroll-top" className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700">
