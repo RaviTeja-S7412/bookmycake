@@ -118,3 +118,25 @@
   width: 90%;
   margin: 0 auto;
 }
+
+.slick-dots li.slick-active button:before {
+    opacity: .75;
+    color: #ffffff;
+    border: 0px;
+}
+
+.slick-dots li button:before {
+font-size: 15px;
+    line-height: 17px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    content: '•';
+    text-align: center;
+    opacity: .25;
+    color: inherit;
+    border: 1px solid black;
+    border-radius: 100px;
+}
