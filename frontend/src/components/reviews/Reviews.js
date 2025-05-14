@@ -1,112 +1,125 @@
 import React, { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import Slider from "react-slick";
 
-import { Pagination, FreeMode } from 'swiper/modules';
+const reviews = [
+    {
+        name: "Ashok K.",
+        date: "1/20/2025",
+        rating: 5,
+        review: "Good.",
+        itemType: "Chocolate Indulgence Pastry",
+        avatar: "/assets/images/avatars/3.jpg",
+        image: "/assets/images/real_madrid.jpg"
+    },
+    {
+        name: "Amarendra Swain",
+        date: "1/20/2025",
+        rating: 5,
+        review: "Good.",
+        itemType: "Chocolate Indulgence Pastry",
+        avatar: "/assets/images/avatars/3.jpg",
+        image: "/assets/images/real_madrid.jpg"
+    },
+    {
+        name: "Manoj",
+        date: "1/20/2025",
+        rating: 5,
+        review: "Good.",
+        itemType: "Chocolate Indulgence Pastry",
+        avatar: "/assets/images/avatars/3.jpg",
+        image: "/assets/images/real_madrid.jpg"
+    },
+    {
+        name: "Melisa Khan",
+        date: "1/20/2025",
+        rating: 4,
+        review: "Good.",
+        itemType: "Chocolate Indulgence Pastry",
+        avatar: "/assets/images/avatars/3.jpg",
+        image: "/assets/images/real_madrid.jpg",
+    },
+
+];
 
 export default function Carousel() {
-    const reviews = [
-        {
-            name: "Ashok K.",
-            date: "1/20/2025",
-            rating: 5,
-            review: "Good.",
-            itemType: "Chocolate Indulgence Pastry / Chocolate Rocher Pastry / Eggless.",
-            avatar: "/assets/images/avatars/3.jpg",
-            image: "/assets/images/real_madrid.jpg"
-        },
-        {
-            name: "Amarendra Swain",
-            date: "1/20/2025",
-            rating: 5,
-            review: "Good. It is a long established fact that a reader will be distracted...",
-            itemType: "Chocolate Indulgence Pastry / Chocolate Rocher Pastry / Eggless.",
-            avatar: "/assets/images/avatars/3.jpg",
-            image: "/assets/images/real_madrid.jpg"
-        },
-        {
-            name: "Manoj",
-            date: "1/20/2025",
-            rating: 5,
-            review: "Good.",
-            itemType: "Chocolate Indulgence Pastry / Chocolate Rocher Pastry / Eggless.",
-            avatar: "/assets/images/avatars/3.jpg",
-            image: "/assets/images/real_madrid.jpg"
-        },
-        {
-            name: "Melisa Khan",
-            date: "1/20/2025",
-            rating: 4,
-            review: "Good.",
-            itemType: "Chocolate Indulgence Pastry / Chocolate Rocher Pastry / Eggless.",
-            avatar: "/assets/images/avatars/3.jpg",
-            image: "/assets/images/real_madrid.jpg",
-        },
-       
-    ];
 
-    const [slidesPerView, setSlidesPerView] = useState(4);
-
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 640) {
-                setSlidesPerView(1); // For extra small screens (mobile)
-            } else if (window.innerWidth < 768) {
-                setSlidesPerView(2); // For small screens (tablets)
-            } else if (window.innerWidth < 1024) {
-                setSlidesPerView(3); // For medium screens (larger tablets/small laptops)
-            } else {
-                setSlidesPerView(4); // For large screens and above
+    const settings = {
+        dots: true,
+        arrows: false,
+        infinite: true,
+        speed: 1500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        initialSlide: 0,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        cssEase: "linear",
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    initialSlide: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
             }
-        };
-
-        // Initial call to set the initial number of slides
-        handleResize();
-
-        // Listen for window resize events
-        window.addEventListener('resize', handleResize);
-
-        // Clean up the event listener on component unmount
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        ]
+    };
 
     return (
-        <Swiper
-            slidesPerView={slidesPerView}
-            spaceBetween={20}
-            freeMode={true}
-            pagination={{ clickable: true }}
-            modules={[FreeMode, Pagination]}
-            className="mySwiper py-10 px-4"
-        >
-            {reviews.map((review, idx) => (
-                <SwiperSlide key={idx}>
-                    <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-between h-full">
-                        <div className="flex items-left mb-4">
-                            <img src={review.avatar} alt={review.name} className="w-25 h-25 rounded-full mr-3 object-cover" />
-                            <div>
-                                <p className="font-bold text-gray-800 mb-0 text-sm text-left">{review.name}</p>
-                                <p className="text-sm text-left text-gray-500">{review.date}</p>
+        <>
+            <div className="review slider-container mb-[80px]">
+                <Slider {...settings}>
+                    {reviews.map((review, index) => (
+                        <div key={index} className="p-2">
+                            <div className="bg-white border border-black font-[poppins] min-h-[400px] max-h-[400px] overflow-hidden">
+                                <div className='review_body p-4'>
+                                    <div className="flex items-center">
+                                        <img src={review.avatar} alt={review.name} className="w-13 h-13 rounded-full mr-4" />
+                                        <div>
+                                            <p className="!text-md poppins-semibold mb-0 mt-3">{review.name}</p>
+                                            <p className="text-gray-500">{review.date}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center mb-2">
+                                        {[...Array(review.rating)].map((_, i) => (
+                                            <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path d="M10 15.27L16.18 20l-1.64-7.03L19 8.24l-7.19-.61L10 .25 7.19 7.63 0 8.24l5.46 4.73L3.82 20z" />
+                                            </svg>
+                                        ))}
+                                        {[...Array(5 - review.rating)].map((_, i) => (
+                                            <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path d="M10 15.27L16.18 20l-1.64-7.03L19 8.24l-7.19-.61L10 .25 7.19 7.63 0 8.24l5.46 4.73L3.82 20z" />
+                                            </svg>
+                                        ))}
+                                    </div>
+                                    <p className="text-gray-700">{review.review}</p>
+                                    <p className="text-gray-500 mt-1">{review.itemType}</p>
+                                </div>
+                                <div className='review_img'>
+                                    <img src={review.image} alt={review.name} className="w-full max-h-[200px] object-cover" />
+                                </div>
                             </div>
                         </div>
-
-                        <div className="flex mb-2">
-                            {[...Array(review.rating)].map((_, i) => (
-                                <span key={i} className="text-yellow-500"><img src="/icons/star_yellow.png" alt="Star" className="w-4 h-4" /></span>
-                            ))}
-                        </div>
-
-                        <p className="text-gray-700 text-left text-sm mb-2">{review.review}</p>
-
-                        <div className="text-xs text-left text-gray-500 mb-4">
-                            <span className="font-semibold">Item type:</span> {review.itemType}
-                        </div>
-
-                        <img src={review.image} alt="Cake" className="mt-auto object-cover w-full max-h-40 rounded-md" />
-                    </div>
-                </SwiperSlide>
-            ))}
-        </Swiper>
+                    ))}
+                </Slider>
+            </div>
+        </>
     );
 }
