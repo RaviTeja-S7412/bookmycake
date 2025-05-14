@@ -6,13 +6,11 @@ import FrontFooter from '../components/front/FrontFooter'
 const DefaultFrontLayout = () => {
   return (
     <div>
-      <div className="wrapper d-flex flex-column min-vh-500">
         <FrontHeader />
         <div className="">
           <FrontContent />
         </div>
         <FrontFooter />
-      </div>
     </div>
   )
 }
