@@ -11,16 +11,23 @@ export default function CorporateCollections() {
   return (
     <div className="flex flex-col md:flex-row bg-black text-white">
       {/* Left Content Block */}
-      <div className="md:w-2/5 bg-[#2e1e1c] flex flex-col justify-center p-6 sm:p-8 md:p-10">
-        <div class="card">
-          <div class="title">
-            <span class="cake-icon"></span>
-            Corporate Collections
+      <div className="md:w-2/5 bg-[#2e1e1c] p-5">
+        <div className="border border-2 border-white rounded-xl p-5">
+          <div className="d-flex items-center">
+            <img
+              src="assets/images/candle-cake.png"
+              alt="Corporate Collection"
+              className=""
+            />
+            <h2 className="text-xl text-white poppins-semibold ml-5 mt-3">Corporate Collections</h2>
           </div>
-          <div class="description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices
-          </div>
-          <a href="#" class="button">Explore Now</a>
+
+          <p className="text-xl text-white poppins-regular mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
+            Lorem ipsum dolor sit amet.</p>
+
+          <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4">
+            Explore
+          </button>
         </div>
       </div>
 
