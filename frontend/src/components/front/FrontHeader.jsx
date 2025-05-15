@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import {
   Dialog,
   DialogPanel,
@@ -15,7 +16,7 @@ import {
 import {
   Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon
 } from '@heroicons/react/24/outline';
-import NavBarItems from "../../Data/NavMenu"
+import NavBarItems from "../../Data/NavMenu";
 import { useNavigate } from 'react-router-dom';
 import axiosIntance from '../axios';
 
@@ -23,6 +24,7 @@ export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuItems, setMenuitems] = useState([]);
   const navigate = useNavigate();
+   const [openPopover, setOpenPopover] = useState(null);
 
   useEffect(() => {
     const getMenuItems = async () => {
@@ -36,15 +38,10 @@ export default function HomeHeader() {
 
   return (
     <header className="bg-white border-b">
-      <div className="flex items-center justify-between px-6 py-4 gap-6 flex-wrap">
-        {/* Left: Logo + City */}
+      <div className="flex items-center justify-between px-2 py-1 gap-6 flex-wrap">
+        {/* Left: Logo */}
         <div className="flex items-center gap-4 min-w-[200px]">
           <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
-          <select className="border rounded px-2 py-1 text-sm">
-            <option>Select City</option>
-            <option>Delhi</option>
-            <option>Mumbai</option>
-          </select>
         </div>
 
         {/* Middle: Search */}
@@ -74,55 +71,62 @@ export default function HomeHeader() {
         </div>
       </div>
 
-      {/* Bottom Menu (Categories) */}
-      <nav className="flex justify-center gap-6 text-sm font-medium text-gray-700 px-6 py-3 border-t">
-        <PopoverGroup className="flex gap-4">
-          {menuItems.map((item) => (
-            <Popover key={item.id} className="relative">
-              <PopoverButton
-                className="flex items-center gap-1 hover:text-rose-600 focus:outline-none"
-                onClick={(e) => item.subItems.length === 0 && navigate('/collections/' + item.path)}
-              >
-                {item.label}
-                {item.subItems.length > 0 && (
-                  <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                )}
-              </PopoverButton>
-              {item.subItems.length > 0 && (
-                <PopoverPanel className="absolute top-full z-10 mt-2 bg-white shadow-md rounded p-2 w-48">
-                  {item.subItems.map((sub) => (
-                    <a
-                      key={sub.id}
-                      href="#"
-                      onClick={() => navigate('/collections/' + item.path + '/' + sub.path)}
-                      className="block px-3 py-1 text-sm hover:bg-gray-100"
-                    >
-                      {sub.label}
-                    </a>
-                  ))}
-                </PopoverPanel>
-              )}
-            </Popover>
-          ))}
-        </PopoverGroup>
-      </nav>
+      {/* Desktop navigation bar - only visible on large screens */}
+      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 py-2 border-t bg-[#75544D]">
+            <div className="flex gap-4">
+              {menuItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="relative"
+                  onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+                  onMouseLeave={() => setOpenPopover(null)}
+                >
+                  <button
+                    className="flex items-center gap-1 focus:outline-none hover:bg-black px-2 py-1"
+                    onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+                  >
+                    {item.label}
+                    {item.subItems.length > 0 && (
+                      <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                    )}
+                  </button>
+      
+                  {item.subItems.length > 0 && openPopover === item.id && (
+                    <div className="absolute top-full z-10 mt-2 bg-white shadow-md rounded p-2 w-48">
+                      {item.subItems.map((sub) => (
+                        <a
+                          key={sub.id}
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate('/collections/' + item.path + '/' + sub.path);
+                            setOpenPopover(null);
+                          }}
+                          className="block px-3 py-1 text-sm hover:bg-gray-100 leading-6"
+                          style={{ color: '#000000', textDecoration: 'none' }}
+                        >
+                          {sub.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </nav>
 
-      {/* Mobile Menu */}
+
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Book My Cake</span>
-              <img
-                alt="Logo"
-                src="assets/logo.jpg"
-                className="h-15 w-30"
-              />
+              <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
             </a>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700">
+              className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            >
               <XMarkIcon aria-hidden="true" className="size-6" />
             </button>
           </div>
@@ -137,7 +141,11 @@ export default function HomeHeader() {
                 {item.subItems && (
                   <DisclosurePanel className="mt-1 space-y-1 pl-4">
                     {item.subItems.map((sub) => (
-                      <a key={sub.id} href={sub.path} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 no-underline">
+                      <a
+                        key={sub.id}
+                        href={sub.path}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 no-underline" style={{ color: '#000000', textDecoration: 'none' }}
+                      >
                         {sub.label}
                       </a>
                     ))}
@@ -149,8 +157,8 @@ export default function HomeHeader() {
         </DialogPanel>
       </Dialog>
 
-      {/* Mobile menu icon for smaller screens */}
-      <div className="lg:hidden flex items-center justify-between px-6 py-4">
+      {/* Mobile menu toggle - only on small screens */}
+      <div className="flex lg:hidden items-center justify-between px-6 py-4">
         <button
           type="button"
           className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md"

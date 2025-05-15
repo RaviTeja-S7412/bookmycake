@@ -70,7 +70,7 @@ export default function Products() {
           <div className="w-full md:w-1/4 p-4 rounded-2xl bg-[#f9e8e6] mb-6 md:mb-0 " style={{height: 'fit-content'}}>
             <hr />
             {/* Price */}
-            <div onClick={() => setShowPrice(!showPrice)} className="flex justify-between items-center cursor-pointer mb-4">
+            <div onClick={() => setShowPrice(!showPrice)} className="flex justify-between items-center cursor-pointer mb-1">
               <h6 className="font-bold text-base hover:underline">Price</h6>
               <img src="/icons/uparrow.png" alt="arrow"
                 className={`transition-transform duration-300 ${showPrice ? 'rotate-0' : 'rotate-180'}`} />
@@ -78,14 +78,14 @@ export default function Products() {
 
             {showPrice && (
               <div className="flex space-x-2 mb-6">
-                <input type="text" placeholder="₹ From" className="w-1/2 border rounded bg-white px-2 py-1" />
+               <span>₹</span> <input type="text" placeholder="From" className="w-1/2 border rounded bg-white px-2 py-1" />
                 <input type="text" placeholder="To" className="w-1/2 border rounded bg-white px-2 py-1" />
               </div>
             )}
             <hr />
 
             {/* Flavor */}
-            <div onClick={() => setShowFlavor(!showFlavor)} className="flex justify-between items-center cursor-pointer mt-4">
+            <div onClick={() => setShowFlavor(!showFlavor)} className="flex justify-between items-center cursor-pointer mt-1">
               <h6 className="font-semibold text-base mb-4 hover:underline">Flavor</h6>
               <img src="/icons/uparrow.png" alt="arrow"
                 className={`transition-transform duration-300 ${showFlavor ? 'rotate-0' : 'rotate-180'}`} />
@@ -102,7 +102,7 @@ export default function Products() {
             <hr />
 
             {/* Ingredients */}
-            <div onClick={() => setShowIngredients(!showIngredients)} className="flex justify-between items-center cursor-pointer mt-4">
+            <div onClick={() => setShowIngredients(!showIngredients)} className="flex justify-between items-center cursor-pointer mt-1">
               <h6 className="font-semibold text-base mb-4 hover:underline">Ingredients</h6>
               <img src="/icons/uparrow.png" alt="arrow"
                 className={`transition-transform duration-300 ${showIngredients ? 'rotate-0' : 'rotate-180'}`} />
@@ -116,7 +116,7 @@ export default function Products() {
             <hr />
 
             {/* Weight */}
-            <div onClick={() => setShowWeight(!showWeight)} className="flex justify-between items-center cursor-pointer mt-4">
+            <div onClick={() => setShowWeight(!showWeight)} className="flex justify-between items-center cursor-pointer mt-1">
               <h6 className="font-bold text-base mb-4 hover:underline">Weight</h6>
               <img src="/icons/uparrow.png" alt="arrow"
                 className={`transition-transform duration-300 ${showWeight ? 'rotate-0' : 'rotate-180'}`} />
