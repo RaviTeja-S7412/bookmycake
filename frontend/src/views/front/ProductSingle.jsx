@@ -45,7 +45,7 @@ export default function ProductSingle() {
         <h1 className="text-4xl font-bold mb-2">Jungle Paradise Cake</h1>
         <p className="text-3xl font-bold text-black mb-2">₹1,499</p>
         <p className="text-sm text-gray-500 mb-4">Tax included.</p>
-        <p className="mb-4 text-lg">
+        <p className="mb-4 ">
           A jungle theme cake with base in blue, sides decorated with trees, grass, flowers and clouds. The top filled with animals just like in a jungle. Order cake online | Gurugram, Noida and Greater Noida. For any assistance or modification in cakes (in size or color or type) call at +91-9560804738. Available in 4 flavors: Chocolate Truffle, Black Forest, Pineapple and Caramel Butterscotch
         </p>
 
