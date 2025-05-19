@@ -62,11 +62,11 @@ const Products = () => {
                 selector: (row) => `${row.product_name}`,
                 sortable: true,
             },
-            {
+            /* {
                 name: 'Stock Available',
                 selector: (row) => `${row.stock}`,
                 sortable: true,
-            },
+            }, */
             {
                 name: "Action",
                 cell: (row) => (
