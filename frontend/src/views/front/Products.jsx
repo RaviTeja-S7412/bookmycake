@@ -60,7 +60,7 @@ export default function Products() {
   ];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen font-[Poppins]">
       <div className="container mx-auto px-4 py-10">
         <h2 className="text-3xl font-extrabold text-center mb-6 py-2">Jungle Theme Cakes</h2>
 
