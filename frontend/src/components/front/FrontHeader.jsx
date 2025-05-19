@@ -38,7 +38,7 @@ export default function HomeHeader() {
 
   return (
     <header className="bg-white border-b">
-      <div className="flex items-center justify-between px-2 py-1 gap-6 flex-wrap">
+      <div className="flex items-center justify-between px-5 py-1 gap-6 flex-wrap">
         {/* Left: Logo */}
         <div className="flex items-center gap-4 min-w-[200px]">
           <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
@@ -65,7 +65,7 @@ export default function HomeHeader() {
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             <div className="flex items-center gap-1 cursor-pointer">
               <UserIcon className="h-5 w-5 text-gray-600" />
-              <span className="text-xs text-rose-600 font-medium">Login/Signup</span>
+              {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>
         </div>
