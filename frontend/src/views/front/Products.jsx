@@ -1,230 +1,185 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
-import Products from "../../Data/Products"
-import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/24/outline"
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axiosIntance from "../../components/axios";
-import { useParams } from "react-router-dom"
-import { BsCartPlus } from "react-icons/bs";
+import { useState } from 'react';
+import React from "react";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-  export default function AllProducts() {
+export default function Products() {
 
-    const navigate = useNavigate();
-    const { category_id, sub_category_id } = useParams();
-    
-    const [sortOptions, setSortOptions] = useState([
-      { name: 'Featured', value: 'latest', current: true },
-      { name: 'Best selling', value: 'best-selling', current: false },
-      { name: 'Alphabetically, A-Z', value: 'alpha_asc', current: false },
-      { name: 'Alphabetically, Z-A', value: 'alpha_desc', current: false },
-      { name: 'Price, low to high', value: 'price_asc', current: false },
-      { name: 'Price, high to low', value: 'price_desc', current: false },
-      { name: 'Date, old to new', value: 'date_asc', current: false },
-      { name: 'Date, new to old', value: 'date_desc', current: false },
-    ]);
-    
-    const [availability, setAvailability] = useState([
-      { name: 'In Stock', value: 'in-stock', current: false },
-      { name: 'Out Of Stock', value: 'out-of-stock', current: false },
-    ]);
+  const [showPrice, setShowPrice] = useState(true);
+  const [showFlavor, setShowFlavor] = useState(true);
+  const [showIngredients, setShowIngredients] = useState(true);
+  const [showWeight, setShowWeight] = useState(true);
 
-    const [minPrice, setMinPrice] = useState(null);
-    const [maxPrice, setMaxPrice] = useState(null);
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
-   
-    const getProducts = async (sort_by = '', availability_by = '') => {
-      setLoading(true);
-   
-      const params = {
-        "sort_by": sort_by,
-        "availability_by" : availability_by,
-      }
-      if(sub_category_id){
-        params.sub_category_id = sub_category_id;
-      }else if(category_id){
-        params.category_id = category_id;
-      }
+  const cakes = [
+    {
+      name: "Jungle theme",
+      price: "₹1,499",
+      delivery: "Tomorrow",
+      rating: 4.5,
+      reviews: 120,
+      image: "/assets/images/jungle_cake.jpg",
+    },
+    {
+      name: "Jungle theme pink Cake",
+      price: "₹1,699",
+      delivery: "Tomorrow",
+      rating: 5.0,
+      reviews: 3,
+      image: "/assets/images/jungle-lion-cake.jpg",
+    },
+    {
+      name: "Lion King Sunet Cake",
+      price: "₹1,499",
+      delivery: "Tomorrow",
+      rating: 5.0,
+      reviews: 0,
+      image: "/assets/images/jungle-animals-cake.jpg",
+    },
+     {
+      name: "Lion King Sunet Cake",
+      price: "₹1,499",
+      delivery: "Tomorrow",
+      rating: 5.0,
+      reviews: 0,
+      image: "/assets/images/jungle-animals-cake.jpg",
+    },
+     {
+      name: "Jungle theme pink Cake",
+      price: "₹1,699",
+      delivery: "Tomorrow",
+      rating: 5.0,
+      reviews: 3,
+      image: "/assets/images/jungle-lion-cake.jpg",
+    },
+    {
+      name: "Jungle theme",
+      price: "₹1,499",
+      delivery: "Tomorrow",
+      rating: 4.5,
+      reviews: 120,
+      image: "/assets/images/jungle_cake.jpg",
+    },
+  ];
 
-      const res = await axiosIntance.get(`/admin/get_filterproducts`,{ params });
-      
-      if (res.status === 200) {
-        setProducts(res?.data?.products)
-      } else {
-        
-      }
-     
-    }
+  return (
+    <div className="bg-white min-h-screen font-[Poppins]">
+      <div className="container mx-auto px-4 py-10">
+        <h2 className="text-3xl font-extrabold text-center mb-6 py-2">Jungle Theme Cakes</h2>
 
-    useEffect(() => {
-      getProducts(sortOptions?.find((option) => option.current)?.value);
-    }, [category_id, sub_category_id]);
+        <div className="flex flex-wrap md:flex-nowrap">
+          
+          {/* Sidebar Filters */}
+          <div className="w-full md:w-1/4 p-4 rounded-2xl bg-[#f9e8e6] mb-6 md:mb-0 " style={{height: 'fit-content'}}>
+            <hr />
+            {/* Price */}
+            <div onClick={() => setShowPrice(!showPrice)} className="flex justify-between items-center cursor-pointer mb-1">
+              <h6 className="font-bold text-base hover:underline">Price</h6>
+              <img src="/icons/uparrow.png" alt="arrow"
+                className={`transition-transform duration-300 ${showPrice ? 'rotate-0' : 'rotate-180'}`} />
+            </div>
 
-    // console.log(products);
-    
-
-    return (
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 !py-10 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-        <h3 className="text-lg font-medium text-gray-900">All Products</h3>
-          <div className="items-baseline justify-between border-b border-gray-200 pt-10 pb-6">
-            <div className="flex items-center grid grid-cols-3 gap-x-4 gap-y-2">
-              <div className="flex text-left col-span-2 gap-x-5"> 
-                <Menu as="div" className="">
-                  <div>
-                    <MenuButton className="group inline-flex justify-center font-medium text-sm text-gray-700 hover:text-gray-900">
-                      Filter: <span className="w-26 text-right font-normal">Availability</span>
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="-mr-1 ml-1 mt-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                      />
-                    </MenuButton>
-                  </div>
-
-                  <MenuItems
-                    transition
-                    className="absolute ml-2 z-10 mt-2 w-40 origin-top-right rounded-md bg-white ring-1 shadow-2xl ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                  >
-                    <div className="py-1">
-                      {availability.map((option) => (
-                        <MenuItem key={option.name}>
-                          <a
-                            href={option.href}
-                            className={classNames(
-                              option.current ? 'font-medium !text-gray-900' : '!text-gray-500',
-                              'block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden !no-underline',
-                            )}
-                            onClick={() => {
-                              setAvailability(availability.map((item) => ({ ...item, current: item.name === option.name })));
-                              getProducts(sortOptions?.find((option) => option.current)?.value, option.value);
-                            }}
-                          >
-                            {option.name}
-                          </a>
-                        </MenuItem>
-                      ))}
-                    </div>
-                  </MenuItems>
-                </Menu>
-                <Menu as="div" className="">
-                  <div>
-                    <MenuButton className="group inline-flex justify-center font-normal text-sm text-gray-700 hover:text-gray-900">
-                      Price
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="-mr-1 ml-1 mt-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                      />
-                    </MenuButton>
-                  </div>
-
-                  <MenuItems
-                    transition
-                    className="absolute z-10 mt-2 w-80 origin-top-right rounded-md bg-white ring-1 shadow-2xl ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                  >
-                    <p className="text-sm font-medium text-gray-900 p-2">The Highest Price Is 1000 </p>
-                    <hr />
-                    <div className="py-1 flex gap-2 p-2">
-                      <div className="">
-                        <label className="text-sm font-medium text-gray-900">Min Price</label>
-                        <input type="number" value={minPrice || ''} onChange={(e) => setMinPrice(e.target.value)} className="border border-gray-300 rounded-md w-full p-1" />
-                      </div>
-                      <div className="">
-                        <label className="text-sm font-medium text-gray-900">Max Price</label>
-                        <input type="number" value={maxPrice || ''} onChange={(e) => setMaxPrice(e.target.value)} className="border border-gray-300 rounded-md w-full p-1" />
-                      </div>
-                    </div>
-                  </MenuItems>
-                </Menu>
-              </div>        
-              <div className="relative inline-block">      
-                <Menu as="div" className="">
-                  <div>
-                    <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                      Sort By:<span className="w-36 text-right font-normal"> {sortOptions.find((option) => option.current).name}</span>
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="-mr-1 ml-1 mt-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                      />
-                    </MenuButton>
-                  </div>
-
-                  <MenuItems
-                    transition
-                    className="absolute ml-10 z-10 mt-2 w-46 rounded-md bg-white ring-1 shadow-2xl ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                  >
-                    <div className="py-1">
-                      {sortOptions.map((option) => (
-                        <MenuItem key={option.name}>
-                          <a
-                            href={option.href}
-                            className={classNames(
-                              option.current ? 'font-medium !text-gray-900' : '!text-gray-500',
-                              'block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden !no-underline',
-                            )}
-                            onClick={() => {
-                              setSortOptions(sortOptions.map((item) => ({ ...item, current: item.name === option.name })));
-                              getProducts(option?.value, availability?.find((option) => option.current)?.value);
-                            }}
-                          >
-                            {option.name}
-                          </a>
-                        </MenuItem>
-                      ))}
-                    </div>
-                  </MenuItems>
-                </Menu>
-                <div className="absolute inset-y-0 right-0 text-right">
-                  {products?.length} Products
-                </div>
+            {showPrice && (
+              <div className="flex space-x-2 mb-6">
+               <span>₹</span> <input type="text" placeholder="From" className="w-1/2 border rounded bg-white px-2 py-1" />
+                <input type="text" placeholder="To" className="w-1/2 border rounded bg-white px-2 py-1" />
               </div>
+            )}
+            <hr />
+
+            {/* Flavor */}
+            <div onClick={() => setShowFlavor(!showFlavor)} className="flex justify-between items-center cursor-pointer mt-1">
+              <h6 className="font-semibold text-base mb-4 hover:underline">Flavor</h6>
+              <img src="/icons/uparrow.png" alt="arrow"
+                className={`transition-transform duration-300 ${showFlavor ? 'rotate-0' : 'rotate-180'}`} />
+            </div>
+            {showFlavor && (
+              <ul className="space-y-6 font-bold leading-tight text-sm">
+                <li><input type="checkbox" className="mr-6" /> Belgian Chocolate</li>
+                <li><input type="checkbox" className="mr-4" /> Black Forest</li>
+                <li><input type="checkbox" className="mr-4" /> Butterscotch</li>
+                <li><input type="checkbox" className="mr-4" /> Caramel Butterscotch</li>
+                <li><input type="checkbox" className="mr-4" /> Chocolate Hazelnut</li>
+              </ul>
+            )}
+            <hr />
+
+            {/* Ingredients */}
+            <div onClick={() => setShowIngredients(!showIngredients)} className="flex justify-between items-center cursor-pointer mt-1">
+              <h6 className="font-semibold text-base mb-4 hover:underline">Ingredients</h6>
+              <img src="/icons/uparrow.png" alt="arrow"
+                className={`transition-transform duration-300 ${showIngredients ? 'rotate-0' : 'rotate-180'}`} />
+            </div>
+            {showIngredients && (
+              <ul className="space-y-6 font-bold leading-tight text-sm">
+                <li><input type="checkbox" className="mr-6" /> Egg</li>
+                <li><input type="checkbox" className="mr-4" /> Eggless</li>
+              </ul>
+            )}
+            <hr />
+
+            {/* Weight */}
+            <div onClick={() => setShowWeight(!showWeight)} className="flex justify-between items-center cursor-pointer mt-1">
+              <h6 className="font-bold text-base mb-4 hover:underline">Weight</h6>
+              <img src="/icons/uparrow.png" alt="arrow"
+                className={`transition-transform duration-300 ${showWeight ? 'rotate-0' : 'rotate-180'}`} />
+            </div>
+            {showWeight && (
+              <ul className="space-y-6 font-bold leading-tight text-sm">
+                <li><input type="checkbox" className="mr-6" /> 500 Gms</li>
+                <li><input type="checkbox" className="mr-4" /> 0.5 kg</li>
+                <li><input type="checkbox" className="mr-4" /> 1 kg</li>
+                <li><input type="checkbox" className="mr-4" /> 1.5 kg</li>
+                <li><input type="checkbox" className="mr-4" /> 2 kg</li>
+              </ul>
+            )}
+          </div>
+
+          {/* Product Grid */}
+          <div className="w-full md:w-3/4 md:pl-6">
+            <div className="flex justify-between items-center mb-4 rounded-2xl bg-[#f9e8e6] p-2 sm:p-4">
+              <p className="text-sm font-medium">181 products</p>
+              <div>
+                <label className="mr-2 font-medium text-sm">Sort by:</label>
+                <select className="border rounded px-2 py-1">
+                  <option>Featured</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Newest</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+              {cakes.map((cake, index) => (
+                // <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                 <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <img src={cake.image} alt={cake.name} className="w-full h-auto object-cover" />
+                  <div className="p-4">
+                    <h6 className="text-lg font-bold">{cake.name}</h6>
+                    <p className="text-sm text-gray-600">
+                      Earliest delivery: <span className="font-sm font-bold">{cake.delivery}</span>
+                    </p>
+
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="text-lg font-bold">{cake.price}</p>
+                      <div className="flex items-center">
+                        {[...Array(4)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 text-yellow-300 ms-1" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                        ))}
+                        <svg className="w-4 h-4 ms-1 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
+                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                        <span className="ml-2 text-gray-600 text-sm">({cake.reviews})</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {products?.length > 0 ? products.map((product) => {
-                // Parse the product_size JSON to get available sizes
-                const productSizes = JSON.parse(product.product_size);
-
-                // Find the size with the minimum kg value (smallest size)
-                const startingSize = productSizes.reduce((min, size) => {
-                  return parseFloat(size.kg) < parseFloat(min.kg) ? size : min;
-                });
-                return (
-                  <div key={product.id} className="group relative shadow-md rounded-lg overflow-hidden group-hover:shadow-lg" onClick={() => navigate('/products/'+product.route)}>
-                    <img
-                      alt={product.imageAlt}
-                      src={import.meta.env.VITE_APIBASE_URL + product.product_image}
-                      className="aspect-square w-full bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80 object-fill"
-                    />
-                    <div className="mt-4 flex justify-between p-2">
-                      <div>
-                        <p className="text-md">
-                          <a href={'javascript:void(0)'} className="!text-gray-900 font-medium !no-underline">
-                            <span aria-hidden="true" className="absolute inset-0" />
-                            {product.product_name}
-                          </a>
-                        </p>
-                        {/* <p className="mt-1 text-gray-500">{product.flavour}</p> */}
-                      </div>
-                      {/* Display the price of the smallest size */}
-                      <p className="font-medium !text-gray-900">₹ {startingSize.price}</p>
-                      <BsCartPlus />
-                    </div>
-                  </div>
-                );
-              })
-              : (
-                  <div className="col-span-4 text-center">
-                    <p className="text-lg font-medium text-gray-900">No Products Found</p>
-                  </div>
-                )
-              }
-            </div>
         </div>
       </div>
-    )
-  }
-  
+    </div>
+  );
+}
