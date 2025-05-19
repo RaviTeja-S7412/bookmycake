@@ -70,8 +70,8 @@ export default function Home() {
           </div>
         </section> */}
 
-        <section className="w-4/5 mx-auto my-3">
-          <h2 className="text-2xl font-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
+        <section className="default-width mx-auto my-3">
+          <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
           <div className="mt-6">
             <Reviews />
           </div>

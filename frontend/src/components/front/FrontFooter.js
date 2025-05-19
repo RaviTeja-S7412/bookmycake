@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 const FrontFooter = () => {
   return (
     <footer className="text-black py-8">
-      <div className="container mx-auto px-4">
+      <div className="default-width font-[poppins]">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Section 1: BookMyCake Logo & Copyright */}
           <div className="md:col-span-1">
@@ -18,20 +18,20 @@ const FrontFooter = () => {
             <div className="text-sm">
               <p>© 2023</p> {/* As seen in the image */}
               <div className="mt-1">
-              {/* <h6 className="font-semibold mb-2">Show Us Some Love  & Connect with us</h6> */}
+                {/* <h6 className="font-semibold mb-2">Show Us Some Love  & Connect with us</h6> */}
                 <span className="mr-2">Show us some love & Connect with us</span>
                 <div className='flex'>
-                <a href="#" className="mr-1"><img src="/icons/facebook.png" alt="Facebook" className="h-5 w-5" /></a>
-                <a href="#" className="mr-1"><img src="/icons/instagram.png" alt="Instagram" className="h-5 w-5" /></a>
-                <a href="#" className="mr-1"><img src="/icons/youtube.png" alt="Youtube" className="h-5 w-5" /></a>
-                <a href="#" className="mr-1"><img src="/icons/linkedin.png" alt="linkedin" className="h-5 w-5" /></a>
-                <a href="#" className="mr-1"><img src="/icons/twitter.png" alt="twitter" className="h-5 w-5" /></a>
-                <a href="#" className="mr-1"><img src="/icons/pinterest.png" alt="pinterest" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/facebook.png" alt="Facebook" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/instagram.png" alt="Instagram" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/youtube.png" alt="Youtube" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/linkedin.png" alt="linkedin" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/twitter.png" alt="twitter" className="h-5 w-5" /></a>
+                  <a href="#" className="mr-1"><img src="/icons/pinterest.png" alt="pinterest" className="h-5 w-5" /></a>
                 </div>
               </div>
             </div>
           </div>
-        
+
           {/* Section 3: Know Us */}
           <div>
             <h6 className="font-semibold mb-2">Know Us</h6>
@@ -70,24 +70,25 @@ const FrontFooter = () => {
 
           {/* Section 6: App Links */}
           <div className="lg:col-span-2">
-           <h6 className="font-semibold mb-2">Experience Better, App on Mobile</h6>
-           <div className="flex items-start">
-           <img src="/icons/qrcode.png" alt="App QR Code" className="h-16 mt-0 mr-1" />
-           {/* googleplay icon and app store */ }
-           <div className="flex flex-col items-start">
-            <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
-            <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
-            {/* <a href="#"><img src="/icons/appstore_download.png" alt="App Store" className="h-10" /></a> */}
+            <h6 className="font-semibold mb-2">Experience Better, App on Mobile</h6>
+            <div className="flex items-start">
+              <img src="/icons/qrcode.png" alt="App QR Code" className="h-16 mt-0 mr-1" />
+              {/* googleplay icon and app store */}
+              <div className="flex flex-col items-start">
+                <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
+                <a href="#"><img src="/icons/google-play-download-icon-0.jpg" alt="Google Play" className="h-8 mb-0" /></a>
+                {/* <a href="#"><img src="/icons/appstore_download.png" alt="App Store" className="h-10" /></a> */}
+              </div>
+              {/* googleplay icon and app store */}
+            </div>
           </div>
-          {/* googleplay icon and app store */ }
-        </div>
-      </div>
-        </div>
-      </div>
-      
 
-      <div className="container mx-auto px-4 text-center mt-8">
-        <p>© <span>Copyright</span><strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
+        </div>
+      </div>
+
+
+      <div className="container mx-auto px-4 text-center mt-8 font-[poppins]">
+        <p>© <span>Copyright</span> <strong className="px-1">BookMyCake</strong> <span>All Rights Reserved</span></p>
       </div>
 
       <a href="#" id="scroll-top" className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700">

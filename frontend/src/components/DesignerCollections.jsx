@@ -1,67 +1,74 @@
 // components/DesignerCollections.jsx
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
+import Slider from "react-slick";
 
 const cakes = [
   { title: "Elsa Frozen Cake", image: "/assets/images/wallpaperflare.com_wallpaper.jpg" },
   { title: "Real Madrid Cake", image: "/assets/images/real_madrid.jpg" },
   { title: "Avengers Cake", image: "/assets/images/avengers.jpg" },
+  { title: "Elsa Frozen Cake", image: "/assets/images/wallpaperflare.com_wallpaper.jpg" },
+  { title: "Avengers Cake", image: "/assets/images/avengers.jpg" },
 ];
 
 export default function DesignerCollections() {
-  return (
-    <section className="bg-[#b18658] py-8 px-4 md:px-10">
-      <h4 className="text-xl md:text-2xl font-semibold text-white mb-6 py-2 md:mb-8">Designer Collections</h4>
-      <Swiper
-        slidesPerView={1}
-        spaceBetween={20}
-        pagination={{ clickable: true }}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-        }}
-        modules={[Pagination]}
-        className="pb-10"
-      >
-        {cakes.map((cake, index) => (
-          <SwiperSlide key={index} className="bg-transparent">
-            <div className="flex flex-col items-center bg-transparent">
-              <div className="w-full h-52 sm:h-60 md:h-64 overflow-hidden rounded-md shadow-md">
-                <img
-                  src={cake.image}
-                  alt={cake.title}
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-              <div className="mt-[-18px] z-10 w-[80%] bg-[#1f1f1f] text-[#ffb14f] text-center py-2 font-medium shadow-md rounded-sm text-sm md:text-base">
-                {cake.title}
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
 
-      <style jsx>{`
-        .swiper {
-          background: transparent !important;
+  const settings = {
+    dots: true,
+    arrows: false,
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
         }
-        .swiper-pagination {
-          bottom: 0px !important;
-          text-align: center;
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
         }
-        .swiper-pagination-bullet {
-          background: white;
-          opacity: 1;
-          width: 8px;
-          height: 8px;
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
         }
-        .swiper-pagination-bullet-active {
-          background: #000;
-        }
-      `}</style>
+      }
+    ]
+  };
+
+  return (
+    <section className='bg-[url(/assets/images/designer-bg.jpg)] bg-cover bg-no-repeat bg-center'>
+      <div className="default-width py-10">
+        <h4 className="!text-4xl poppins-semibold text-gray-800 mb-4 text-white">Designer Collections</h4>
+        <div className="slider-container">
+          <Slider {...settings}>
+            {cakes.map((cake, index) => (
+              <div key={index} className="p-2">
+                <div className="border border-[#b5b6b8] overflow-hidden relative">
+                  <img src={cake.image} alt={cake.title} className="w-full max-h-[290px] object-cover" />
+                </div>
+                <div className="bg-[#1f1f1f] text-[#ffb14f] text-center py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-xl mb-[30px]">
+                  {cake.title}
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </div>
     </section>
   );
 }

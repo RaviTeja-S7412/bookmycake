@@ -37,9 +37,9 @@ export default function HomeHeader() {
   }, []);
 
   return (
-    <header className="bg-white border-b">
-      <div className="flex items-center justify-between px-2 py-1 gap-6 flex-wrap">
-        {/* Left: Logo */}
+    <header className="bg-white">
+      <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
+        {/* Left: Logo + City */}
         <div className="flex items-center gap-4 min-w-[200px]">
           <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
         </div>
