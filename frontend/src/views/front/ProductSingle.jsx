@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-
+ 
 export default function ProductSingle() {
   const images = [
-    "/assets/images/jungle-lion-cake.jpg", // Thumbnail 
+    "/assets/images/jungle-lion-cake.jpg", // Thumbnail
     "/assets/images/jungle-lion-cake.jpg", // Main Image
   ];
-
+ 
   const [selectedImage, setSelectedImage] = useState(images[1]);
   const [selectedFlavor, setSelectedFlavor] = useState("Chocolate Truffle");
   const [selectedWeight, setSelectedWeight] = useState("1kg");
   const [selectedEggoption, setSelectedEggoption] = useState("Egg");
-
+ 
   return (
-    <div className="max-w-8xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="max-w-8xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8 font-[poppins]">
       {/* Image Gallery Section */}
       <div className="flex gap-4">
         {/* Left thumbnails */}
@@ -29,7 +29,7 @@ export default function ProductSingle() {
             />
           ))}
         </div>
-
+ 
         {/* Main image */}
         <div className="flex-1">
           <img
@@ -39,16 +39,16 @@ export default function ProductSingle() {
           />
         </div>
       </div>
-
+ 
       {/* Product Info Section */}
       <div>
         <h1 className="text-4xl font-bold mb-2">Jungle Paradise Cake</h1>
         <p className="text-3xl font-bold text-black mb-2">₹1,499</p>
         <p className="text-sm text-gray-500 mb-4">Tax included.</p>
-        <p className="mb-4 ">
+        <p className="mb-4 text-lg">
           A jungle theme cake with base in blue, sides decorated with trees, grass, flowers and clouds. The top filled with animals just like in a jungle. Order cake online | Gurugram, Noida and Greater Noida. For any assistance or modification in cakes (in size or color or type) call at +91-9560804738. Available in 4 flavors: Chocolate Truffle, Black Forest, Pineapple and Caramel Butterscotch
         </p>
-
+ 
         {/* Flavor */}
         <div className="mb-4">
           <p className="font-semibold mb-1">Flavor</p>
@@ -68,7 +68,7 @@ export default function ProductSingle() {
             ))}
           </div>
         </div>
-
+ 
         {/* Weight */}
         <div className="mb-4">
           <p className="font-semibold mb-1">Weight</p>
@@ -88,7 +88,7 @@ export default function ProductSingle() {
             ))}
           </div>
         </div>
-
+ 
         {/* Egg Option */}
         <div className="mb-4">
           <p className="font-semibold mb-1">Egg Option</p>
