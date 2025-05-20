@@ -65,7 +65,7 @@ export default function HomeHeader() {
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             <div className="flex items-center gap-1 cursor-pointer">
               <UserIcon className="h-5 w-5 text-gray-600" />
-              <span className="text-xs text-rose-600 font-medium">Login/Signup</span>
+              {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>
         </div>
