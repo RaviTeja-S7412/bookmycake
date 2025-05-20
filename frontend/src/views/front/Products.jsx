@@ -59,6 +59,19 @@ export default function Products() {
     },
   ];
 
+  const filters = [
+    {
+      name: "Jungle theme",
+      price: "₹1,499",
+      delivery: "Tomorrow",
+    },
+    {
+      name: "Jungle theme pink Cake",
+      price: "₹1,699",
+      delivery: "Tomorrow",
+    },
+  ];
+
   return (
     <div className="default-width font-[Poppins]">
       <h2 className="text-3xl poppins-bold my-3 py-2">Products</h2>

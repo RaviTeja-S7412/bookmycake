@@ -12,23 +12,9 @@ export default function ProductSingle() {
   const [selectedEggoption, setSelectedEggoption] = useState("Egg");
 
   return (
-    <div className="max-w-8xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8 font-[poppins]">
+    <div className="default-width mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-8 font-[poppins]">
       {/* Image Gallery Section */}
-      <div className="flex gap-4">
-        {/* Left thumbnails */}
-        <div className="flex flex-col gap-4">
-          {images.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Thumbnail ${index}`}
-              className={`w-16 h-16 object-cover rounded-lg border cursor-pointer ${selectedImage === img ? "ring-2 ring-black" : ""
-                }`}
-              onClick={() => setSelectedImage(img)}
-            />
-          ))}
-        </div>
-
+      <div>
         {/* Main image */}
         <div className="flex-1">
           <img
@@ -36,6 +22,20 @@ export default function ProductSingle() {
             alt="Selected Cake"
             className="w-full rounded-2xl shadow-lg"
           />
+        </div>
+
+        {/* Down thumbnails */}
+        <div className="flex gap-3 mt-3">
+          {images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Thumbnail ${index}`}
+              className={`w-16 h-16 object-cover rounded-lg border cursor-pointer ${selectedImage === img ? "" : ""
+                }`}
+              onClick={() => setSelectedImage(img)}
+            />
+          ))}
         </div>
       </div>
 
@@ -57,8 +57,8 @@ export default function ProductSingle() {
                 key={flavor}
                 onClick={() => setSelectedFlavor(flavor)}
                 className={`px-4 py-2 border rounded-full ${selectedFlavor === flavor
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
                   }`}
               >
                 {flavor}
@@ -76,8 +76,8 @@ export default function ProductSingle() {
                 key={weight}
                 onClick={() => setSelectedWeight(weight)}
                 className={`px-4 py-2 border rounded-full ${selectedWeight === weight
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
                   }`}
               >
                 {weight}
@@ -95,8 +95,8 @@ export default function ProductSingle() {
                 key={eggoption}
                 onClick={() => setSelectedEggoption(eggoption)}
                 className={`px-4 py-2 border rounded-full ${selectedEggoption === eggoption
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
                   }`}
               >
                 {eggoption}
