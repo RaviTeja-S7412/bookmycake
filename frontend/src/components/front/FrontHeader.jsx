@@ -37,7 +37,7 @@ export default function HomeHeader() {
   }, []);
 
   return (
-    <header className="bg-white">
+    <header className="bg-white font-[Poppins]">
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
         <div className="flex items-center gap-4 min-w-[200px]">
@@ -65,14 +65,14 @@ export default function HomeHeader() {
             <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
             <div className="flex items-center gap-1 cursor-pointer">
               <UserIcon className="h-5 w-5 text-gray-600" />
-              <span className="text-xs text-rose-600 font-medium">Login/Signup</span>
+              {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Desktop navigation bar - only visible on large screens */}
-      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 py-2 border-t bg-[#75544D]">
+      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 py-2 border-t bg-[#910f3f]">
             <div className="flex gap-4">
               {menuItems.map((item) => (
                 <div
@@ -82,12 +82,12 @@ export default function HomeHeader() {
                   onMouseLeave={() => setOpenPopover(null)}
                 >
                   <button
-                    className="flex items-center gap-1 focus:outline-none hover:bg-black px-2 py-1"
+                    className="flex items-center gap-1 focus:outline-none px-2 py-1"
                     onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
                   >
                     {item.label}
                     {item.subItems.length > 0 && (
-                      <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                      <ChevronDownIcon className="h-4 w-4 text-white" />
                     )}
                   </button>
       
