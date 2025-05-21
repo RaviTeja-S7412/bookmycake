@@ -54,12 +54,12 @@ const Products = () => {
             },
             {
                 name: 'Category',
-                selector: (row) => `${row.product_name}`,
+                selector: (row) => `${row.category_name}`,
                 sortable: true,
             },
             {
                 name: 'Sub Category',
-                selector: (row) => `${row.product_name}`,
+                selector: (row) => `${row.sub_category_name}`,
                 sortable: true,
             },
             /* {

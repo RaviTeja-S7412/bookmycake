@@ -22,7 +22,7 @@ const Login = () => {
 
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('')
-  
+
   const auth = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ const Login = () => {
     dispatch(login(user))
   }
 
-  if(auth.authenticate){
+  if (auth.authenticate) {
     return <Navigate to={`/admin/dashboard`} />
   }
 
@@ -47,11 +47,11 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
+                  <div className='w-full text-center'>
+                    <img src='/assets/logo.jpg' className='mx-auto' />
+                    <h4 className='mb-4'><strong>Admin Login</strong></h4>
+                  </div>
                   <CForm onSubmit={userLogin}>
-                    <div className='text-center'>
-                      <img src='/assets/logo.jpg' height={100} />
-                      <h4><strong>Admin Login</strong></h4>
-                    </div>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />

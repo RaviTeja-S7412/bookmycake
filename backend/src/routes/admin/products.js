@@ -6,7 +6,6 @@ const { get_allproducts, create_product, create_productoption, update_product, g
 //category routes
 router.get('/admin/get_products', requireSignin, get_allproducts);
 router.post('/admin/create_product', requireSignin, create_product);
-router.post('/admin/create_productoption', create_productoption);
 router.put('/admin/update_product', requireSignin, update_product);
 router.post('/admin/get_singleproduct', get_singleproduct);
 router.delete('/admin/delete_product/:id', requireSignin, deleteproduct);

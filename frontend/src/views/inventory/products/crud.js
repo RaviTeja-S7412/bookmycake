@@ -57,16 +57,17 @@ const ProductCrud = () => {
     const [isFlavor, setIsflavor] = useState(false)
     const [isEggtype, setIseggtype] = useState(false)
     const [sku, setSku] = useState('')
-    const [sizes, setSizes] = useState([{ kg: '', unit: '', price: '' }]);
-    const [flavors, setFlavors] = useState([""]);
-    const [eggtypes, setEggtypes] = useState([""]);
+    const [sizes, setSizes] = useState([{ kg: '', unit: 'kg', price: '' }]);
+    const [flavors, setFlavors] = useState([{flavor: ''}]);
+    const [eggtypes, setEggtypes] = useState([{eggoption: ''}]);
     const [categoriesList, setCategories] = useState([])
     const [subcategoriesList, setSubCategories] = useState([])
-    const [items, setItems] = useState([
-        { kg: '', unit: 'kg', price: '', flavor: '', eggtype: '' }
-      ]);
+    const [customer_type, setCustomertype] = useState("retail");
+    const [customer_types, setCustomertypes] = useState([
+        { label: 'Retail', value: 'retail' },
+        { label: 'Corporate', value: 'corporate' }
+    ])
       
-    
     useEffect(() => {
         dispatch({type: productConstants.PRODUCTS_RESET})
     }, [])
@@ -80,6 +81,7 @@ const ProductCrud = () => {
 
     const resetValues = () => {
         setCategoryName("");
+        setCustomertype("retail");
         setSubCategoryName("");
         setproductName("");
         setproductImage("");
@@ -92,9 +94,9 @@ const ProductCrud = () => {
         setIssize(false);
         setIsflavor(false);
         setIseggtype(false);
-        setSizes([{ kg: '', unit: '' , price: '' }]);
-        setFlavors([""]);
-        setEggtypes([""]);
+        setSizes([{ kg: '', unit: 'kg' , price: '' }]);
+        setFlavors([{flavor: ''}]);
+        setEggtypes([{eggoption: ''}]);
     }
 
     const handleSubmit = (e) => {
@@ -106,6 +108,7 @@ const ProductCrud = () => {
         if (isEggtype) selectedOptions.push('egg');
 
         const formData = new FormData()
+        formData.append('customer_type', customer_type)
         formData.append('category_id', category_name)
         formData.append('sub_category_id', subcategory_name)
         formData.append('product_name', product_name)
@@ -114,17 +117,12 @@ const ProductCrud = () => {
         formData.append('ingredients', ingredeints)
         formData.append('nutritional_info', nutritional_info)
         formData.append('shipping', shipping_info)
+
         formData.append('product_size', JSON.stringify(sizes))
         formData.append('product_flavor', JSON.stringify(flavors))
         formData.append('product_eggtype', JSON.stringify(eggtypes))
-        formData.append('is_size', isSize)
-        formData.append('is_flavor', isFlavor)
-        formData.append('is_eggtype', isEggtype);
-        formData.append('stock', stock);
-        formData.append('sku', sku)
-
-          // Append the formatted options
-    formData.append('options', JSON.stringify(selectedOptions));
+        // Append the formatted options
+        formData.append('options', selectedOptions?.length > 0 ? JSON.stringify(selectedOptions) : "");
 
         if(queryParams.get("id")){
             formData.append('id', queryParams.get("id"))
@@ -151,6 +149,7 @@ const ProductCrud = () => {
             if(Object.keys(products.product_data).length > 0){
                 getSubcategories(products.product_data ? products.product_data.category_id : '')
                 setCategoryName(products.product_data ? products.product_data.category_id : '')
+                setCustomertype(products.product_data ? products.product_data.customer_type : '')
                 setSubCategoryName(products.product_data ? products.product_data.sub_category_id : '')
                 setproductName(products.product_data ? products.product_data.product_name : '')
                 setProductdesc(products.product_data ? products.product_data.product_description : '')
@@ -161,21 +160,37 @@ const ProductCrud = () => {
                 setSizes(products.product_data ? products.product_data.product_size && JSON.parse(products.product_data.product_size) : '')
                 setFlavors(products.product_data ? products.product_data.product_flavor && JSON.parse(products.product_data.product_flavor) : '')
                 setEggtypes(products.product_data ? products.product_data.product_eggtype && JSON.parse(products.product_data.product_eggtype) : '')
-                setIssize(products.product_data ? products.product_data.is_size : '')
-                setIsflavor(products.product_data ? products.product_data.is_flavor : '')
-                setIseggtype(products.product_data ? products.product_data.is_eggtype : '')
-                setStock(products.product_data ? products.product_data.stock : '')
-                setSku(products.product_data ? products.product_data.sku : '')
+
+                const options = products.product_data ? products.product_data.options : '';
+                if (options) {
+                    const parsedOptions = JSON.parse(options);
+                    setIssize(parsedOptions.includes('weight'));
+                    setIsflavor(parsedOptions.includes('flavor'));
+                    setIseggtype(parsedOptions.includes('egg'));
+
+                    const product_options = products?.product_data?.product_options;
+                    console.log('product_options: ', product_options);
+                    if (parsedOptions.includes('weight')) {
+                        const formattedSizes = product_options.map(item => ({
+                            id: item.id || '',
+                            kg: item.weight || '',
+                            unit: item.unit || 'kg',
+                            price: item.price || ''
+                        }));
+                        setSizes(formattedSizes);
+                    }
+                    if (parsedOptions.includes('flavor')) {
+                        const formattedflavors = product_options.map(item => ({ id: item.id, flavor: item.flavor || ''}));
+                        setFlavors(formattedflavors);
+                    }
+                    if (parsedOptions.includes('egg')) {
+                        const formattedEggtypes = product_options.map(item => ({ id: item.id, eggoption: item.eggoption || ''}));
+                        setEggtypes(formattedEggtypes);
+                    }
+                }
             }
         }
     }, [queryParams.get("id"), products.get_singleproduct])
-    
-    const handleSizeChange = (index, event) => {
-        const { name, value } = event.target;
-        const updatedInputs = [...sizes];
-        updatedInputs[index][name] = value;
-        setSizes(updatedInputs);
-    };
 
     const handleSizeDelete = (index) => {
         const updatedList = sizes.filter((_, i) => i !== index);
@@ -221,6 +236,16 @@ const ProductCrud = () => {
         }
     }, [categories.get_sub_categories_categoryid])
 
+    const handleSizeChange = (index, event) => {
+        const { name, value } = event.target;
+        const updatedInputs = [...sizes];
+        updatedInputs[index][name] = value;
+        setSizes(updatedInputs);
+    };
+
+    console.log(sizes, flavors, eggtypes);
+    
+
     return (
         <CRow>
             <CCol xs={12}>
@@ -230,6 +255,14 @@ const ProductCrud = () => {
                     </CCardHeader>
                     <CCardBody>
                         <CForm className="row g-3" onSubmit={(e) => handleSubmit(e)}>
+                            <CCol md={4}>
+                                <CFormSelect label="Customer Type" className="mb-3" aria-label="Small select example" onChange={(e) => setCustomertype(e.target.value)} defaultValue={customer_type}>
+                                    <option>Select Customer Type</option>
+                                    {customer_types.map((ctype, index2) => (
+                                        <option key={index2} value={ctype.value} selected={ctype.value == customer_type ? true : false}>{ctype.label}</option>
+                                    ))}
+                                </CFormSelect>
+                            </CCol>
                             <CCol md={4}>
                                 <CFormSelect label="Category Name" className="mb-3" aria-label="Small select example" onChange={(e) => {
                                     setCategoryName(e.target.value);
@@ -249,7 +282,6 @@ const ProductCrud = () => {
                                     ))}
                                 </CFormSelect>
                             </CCol>
-                            <CCol md={4}></CCol>
                             <CCol md={4}>
                                 <CFormInput
                                     type="text"
@@ -267,17 +299,6 @@ const ProductCrud = () => {
                                     label="Product Image"
                                     onChange={(e) => setproductImage(e.target.files[0])}
                                     required={queryParams.get("id") ? false : true}
-                                />
-                            </CCol>
-                            <CCol md={4}>
-                                <CFormInput
-                                    type="number"
-                                    id="validationDefault03"
-                                    label="Stock"
-                                    onChange={(e) => setStock(e.target.value)}
-                                    value={stock}
-                                    min={0}
-                                    required
                                 />
                             </CCol>
                             <CCol md={6}>
@@ -352,16 +373,16 @@ const ProductCrud = () => {
                                 <CRow key={index} className="mb-3">
                                     {isSize && sizes[index] && (
                                     <>
-                                    <CCol xs={12} md={2}>
+                                    {/*<CCol xs={12} md={1}>
                                         <CFormInput
                                             type="text"
                                             name="sku"
-                                            label="Sku"
+                                            label="Sku:"
                                             onChange={(e) => setSku(e.target.value)}
-                                            value={sku}
+                                            value={sizes[index].sku}
                                         />
-                                        </CCol>
-                                        <CCol xs={12} md={2}>
+                                    </CCol>*/}
+                                    <CCol xs={12} md={1}>
                                         <CFormInput
                                             type="number"
                                             name="kg"
@@ -369,8 +390,8 @@ const ProductCrud = () => {
                                             onChange={(e) => handleSizeChange(index, e)}
                                             value={sizes[index].kg}
                                         />
-                                        </CCol>
-                                        <CCol xs={12} md={1}>
+                                    </CCol>
+                                    <CCol xs={12} md={1}>
                                         <CFormSelect
                                             name="unit"
                                             label="Unit"
@@ -381,7 +402,7 @@ const ProductCrud = () => {
                                             <option value="ml">ml</option>
                                         </CFormSelect>
                                         </CCol>
-                                        <CCol xs={12} md={2}>
+                                        <CCol xs={12} md={1}>
                                         <CFormInput
                                             type="number"
                                             name="price"
@@ -394,7 +415,8 @@ const ProductCrud = () => {
                                     )}
 
                                     {isFlavor && flavors[index] !== undefined && (
-                                    <CCol xs={12} md={3}>
+                                    <CCol xs={12} md={2}>
+                                        <label className='mb-2'>Flavor:</label>
                                         <CreatableSelect
                                         isClearable
                                         options={[
@@ -405,10 +427,10 @@ const ProductCrud = () => {
                                             { value: 'Blue Berry', label: 'Blue Berry' },
                                             { value: 'Pineapple', label: 'Pineapple' }
                                         ]}
-                                        value={flavors[index] ? { label: flavors[index], value: flavors[index] } : null}
+                                        value={flavors[index] ? { label: flavors[index]["flavor"], value: flavors[index]["flavor"] } : null}
                                         onChange={(newValue) => {
                                             const updated = [...flavors];
-                                            updated[index] = newValue ? newValue.value : '';
+                                            updated[index]["flavor"] = newValue ? newValue.value : '';
                                             setFlavors(updated);
                                         }}
                                         />
@@ -417,16 +439,17 @@ const ProductCrud = () => {
 
                                     {isEggtype && eggtypes[index] !== undefined && (
                                     <CCol xs={12} md={2}>
+                                        <label className='mb-2'>Egg/Eggless:</label>
                                         <CreatableSelect
                                         isClearable
                                         options={[
                                             { value: 'Egg', label: 'Egg' },
                                             { value: 'Eggless', label: 'Eggless' }
                                         ]}
-                                        value={eggtypes[index] ? { label: eggtypes[index], value: eggtypes[index] } : null}
+                                        value={eggtypes[index] ? { label: eggtypes[index]["eggoption"], value: eggtypes[index]["eggoption"] } : null}
                                         onChange={(newValue) => {
                                             const updated = [...eggtypes];
-                                            updated[index] = newValue ? newValue.value : '';
+                                            updated[index]["eggoption"] = newValue ? newValue.value : '';
                                             setEggtypes(updated);
                                         }}
                                         />
@@ -453,13 +476,13 @@ const ProductCrud = () => {
                                 <CRow className="mb-3">
                                 <CCol xs={12} md={2}>
                                     <CButton
-                                    color="info"
-                                    type="button"
-                                    onClick={() => {
-                                        if (isSize) setSizes([...sizes, { kg: '', unit: 'kg', price: '' }]);
-                                        if (isFlavor) setFlavors([...flavors, '']);
-                                        if (isEggtype) setEggtypes([...eggtypes, '']);
-                                    }}
+                                        color="primary"
+                                        type="button"
+                                        onClick={() => {
+                                            if (isSize) setSizes([...sizes, { kg: '', unit: 'kg', price: '' }]);
+                                            if (isFlavor) setFlavors([...flavors, {flavor: ''}]);
+                                            if (isEggtype) setEggtypes([...eggtypes, {eggoption: ''}]);
+                                        }}
                                     >
                                     Add
                                     </CButton>
