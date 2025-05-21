@@ -102,13 +102,62 @@ export default function Products() {
               className={`transition-transform duration-300 ${showFlavor ? 'rotate-0' : 'rotate-180'}`} />
           </div>
           {showFlavor && (
-            <ul className="space-y-6 leading-tight text-sm mt-3">
-              <li><input type="checkbox" className="mr-4" /> Belgian Chocolate</li>
-              <li><input type="checkbox" className="mr-4" /> Black Forest</li>
-              <li><input type="checkbox" className="mr-4" /> Butterscotch</li>
-              <li><input type="checkbox" className="mr-4" /> Caramel Butterscotch</li>
-              <li><input type="checkbox" className="mr-4" /> Chocolate Hazelnut</li>
-            </ul>
+            // <ul className="space-y-6 leading-tight text-sm mt-3">
+            //   <li><input type="checkbox" className="mr-4" /> Belgian Chocolate</li>
+            //   <li><input type="checkbox" className="mr-4" /> Black Forest</li>
+            //   <li><input type="checkbox" className="mr-4" /> Butterscotch</li>
+            //   <li><input type="checkbox" className="mr-4" /> Caramel Butterscotch</li>
+            //   <li><input type="checkbox" className="mr-4" /> Chocolate Hazelnut</li>
+            // </ul>
+            <>
+              <div class="checkbox-wrapper">
+                <label for="cbk1-1">
+                  <input type="checkbox" id="cbk1-1" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Belgian Chocolate</span>
+                </label>
+                <label for="cbk1-2">
+                  <input type="checkbox" id="cbk1-2" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Black Forest</span>
+                </label>
+                <label for="cbk1-3">
+                  <input type="checkbox" id="cbk1-3" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Butterscotch</span>
+                </label>
+                <label for="cbk1-4">
+                  <input type="checkbox" id="cbk1-4" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Caramel Butterscotch</span>
+                </label>
+                <label for="cbk1-5">
+                  <input type="checkbox" id="cbk1-5" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Chocolate Hazelnut</span>
+                </label>
+              </div>
+            </>
           )}
           <hr />
 
@@ -119,10 +168,26 @@ export default function Products() {
               className={`transition-transform duration-300 ${showIngredients ? 'rotate-0' : 'rotate-180'}`} />
           </div>
           {showIngredients && (
-            <ul className="space-y-6 leading-tight text-sm mt-3">
-              <li><input type="checkbox" className="mr-4" /> Egg</li>
-              <li><input type="checkbox" className="mr-4" /> Eggless</li>
-            </ul>
+            <div class="checkbox-wrapper">
+                <label for="cbk1-6">
+                  <input type="checkbox" id="cbk1-6" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Egg</span>
+                </label>
+                <label for="cbk1-7">
+                  <input type="checkbox" id="cbk1-7" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>Eggless</span>
+                </label>
+              </div>
           )}
           <hr />
 
@@ -133,13 +198,60 @@ export default function Products() {
               className={`transition-transform duration-300 ${showWeight ? 'rotate-0' : 'rotate-180'}`} />
           </div>
           {showWeight && (
-            <ul className="space-y-6 leading-tight text-sm mt-3">
-              <li><input type="checkbox" className="mr-4" /> 500 Gms</li>
-              <li><input type="checkbox" className="mr-4" /> 0.5 kg</li>
-              <li><input type="checkbox" className="mr-4" /> 1 kg</li>
-              <li><input type="checkbox" className="mr-4" /> 1.5 kg</li>
-              <li><input type="checkbox" className="mr-4" /> 2 kg</li>
-            </ul>
+            // <ul className="space-y-6 leading-tight text-sm mt-3">
+            //   <li><input type="checkbox" className="mr-4" /> 500 Gms</li>
+            //   <li><input type="checkbox" className="mr-4" /> 0.5 kg</li>
+            //   <li><input type="checkbox" className="mr-4" /> 1 kg</li>
+            //   <li><input type="checkbox" className="mr-4" /> 1.5 kg</li>
+            //   <li><input type="checkbox" className="mr-4" /> 2 kg</li>
+            // </ul>
+            <div class="checkbox-wrapper">
+                <label for="cbk1-8">
+                  <input type="checkbox" id="cbk1-8" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>500 Gms</span>
+                </label>
+                <label for="cbk1-9">
+                  <input type="checkbox" id="cbk1-9" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>0.5 Kg</span>
+                </label>
+                <label for="cbk1-10">
+                  <input type="checkbox" id="cbk1-10" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>1 Kg</span>
+                </label>
+                <label for="cbk1-11">
+                  <input type="checkbox" id="cbk1-11" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>1.5 Kg</span>
+                </label>
+                <label for="cbk1-12">
+                  <input type="checkbox" id="cbk1-12" />
+                    <span class="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>2 Kg</span>
+                </label>
+              </div>
           )}
         </div>
 
