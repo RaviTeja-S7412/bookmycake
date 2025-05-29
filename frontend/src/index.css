@@ -237,3 +237,20 @@
     stroke-dashoffset: 0;
     transition: all 0.15s ease;
 }
+
+.ins-brdr {
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: 1px solid white;
+    outline-offset: -14px;
+}
+
+.ins-brdr img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-origin: center;
+}
+
+.ins-brdr img:hover {
+    transform: scale(1.05) rotate(1deg);
+}
