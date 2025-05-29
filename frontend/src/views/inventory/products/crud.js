@@ -63,6 +63,7 @@ const ProductCrud = () => {
     const [categoriesList, setCategories] = useState([])
     const [subcategoriesList, setSubCategories] = useState([])
     const [customer_type, setCustomertype] = useState("retail");
+    const [optionsLength, setOptionsLength] = useState(1);
     const [customer_types, setCustomertypes] = useState([
         { label: 'Retail', value: 'retail' },
         { label: 'Corporate', value: 'corporate' }
@@ -243,7 +244,19 @@ const ProductCrud = () => {
         setSizes(updatedInputs);
     };
 
+    useEffect(() => {
+        if (isSize) {
+            setOptionsLength(sizes?.length);
+        } else if (isFlavor) {
+            setOptionsLength(flavors?.length);
+        } else if (isEggtype) {
+            setOptionsLength(eggtypes?.length);
+        }
+    }, [sizes, flavors, eggtypes])
+
     console.log(sizes, flavors, eggtypes);
+
+
     
 
     return (
@@ -369,7 +382,7 @@ const ProductCrud = () => {
 
                             {(isSize || isFlavor || isEggtype) && (
                             <>
-                                {Array.from({ length: Math.max(sizes.length, flavors.length, eggtypes.length) }).map((_, index) => (
+                                {Array.from({ length: optionsLength }).map((_, index) => (
                                 <CRow key={index} className="mb-3">
                                     {isSize && sizes[index] && (
                                     <>
