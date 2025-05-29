@@ -10,7 +10,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="min-h-screen px-6 py-10 bg-white">
+    <div className="default-width px-6 py-10 bg-white font-[poppins]">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-3xl font-bold">Your Cart</h2>
         <button className="text-sm text-gray-600 hover:underline">
