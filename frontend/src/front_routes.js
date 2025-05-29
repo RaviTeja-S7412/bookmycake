@@ -6,7 +6,7 @@ const Services = React.lazy(() => import('./views/front/Services'));
 const AllProducts = React.lazy(() => import('./views/front/Products'));
 const ProductSingle = React.lazy(() => import('./views/front/ProductSingle'));
 const Props = React.lazy(() => import('./views/front/props'));
-const Cart = React.lazy(() => import('./views/front/cart'));
+const Cart = React.lazy(() => import('./views/front/Cart'));
 const Login = React.lazy(() => import('./views/front/Login'));
 const Register = React.lazy(() => import('./views/front/Register'));
 const Profile = React.lazy(() => import('./views/front/profile'));
