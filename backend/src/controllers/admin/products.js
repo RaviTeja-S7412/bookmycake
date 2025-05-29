@@ -302,34 +302,74 @@ exports.get_singleproduct = (req, res) => {
 
             return res.status(200).json({ product_data });
         } else {
-            return res.status(202).json({ message: "Category Not Found." });
+            return res.status(202).json({ message: "Product Not Found." });
         }
     });
 
 }
 
-exports.get_singleproduct_by_route = (req, res) => {
+exports.get_singleproduct_by_route = async (req, res) => {
     
     const route = req.query.route;
     if(!route){
         return res.status(202).json({ message: "Product Route is Required." });
     }
 
-    const checkCategoryQuery = 'SELECT * FROM tbl_products WHERE route =?';
+    const checkCategoryQuery = 
+        `SELECT p.*, 
+               o.id as option_id, o.weight, o.unit, o.price, o.flavor, o.eggoption
+        FROM tbl_products p
+        LEFT JOIN tbl_product_option o ON p.id = o.product_id
+        WHERE p.route =?`;
+    const areas = await new Promise((resolve, reject) => {
+        db.query("select * from tbl_areas where city_id=1", (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
     db.query(checkCategoryQuery, [route], (err, result) => {
         if (err) {
             return callback(err);
         }
 
         if (result.length > 0) {
-            return res.status(200).json({ product_data: result[0] });
-        }else{
+
+            // Extract product data from the first row
+            const {
+                id, category_id, sub_category_id, customer_type, product_name, product_image,
+                product_description, ingredients, nutritional_info, shipping, options, route,
+                status, deleted, created_date, updated_date, product_size, product_flavor, stock,
+                is_size, is_flavor
+            } = result[0];
+
+            // Build options array
+            const product_options = result
+                .filter(row => row.option_id !== null)
+                .map(row => ({
+                    id: row.option_id,
+                    weight: row.weight,
+                    unit: row.unit,
+                    price: row.price,
+                    flavor: row.flavor,
+                    eggoption: row.eggoption
+                }));
+
+            // Build product object without option columns
+            const product_data = {
+                id, category_id, sub_category_id, customer_type, product_name, product_image,
+                product_description, ingredients, nutritional_info, shipping, options, route,
+                status, deleted, created_date, updated_date, product_size, product_flavor, stock,
+                is_size, is_flavor,
+                product_options
+            };
+
+            return res.status(200).json({ product_data, areas });
+        } else {
             return res.status(202).json({ message: "Product Not Found." });
         }
 
     });
 }
-
 
 exports.get_allproducts = (req, res) => {
 
@@ -351,49 +391,40 @@ exports.get_filter_products = async (req, res) => {
     const category_id = req.query.category_id;  
     const sub_category_id = req.query.sub_category_id;
     const sort_by = req.query.sort_by;
-    const availability_by = req.query.availability_by;
     const min_price = req.query.min_price;
     const max_price = req.query.max_price;
 
     let conditions = [];
     let values = [];
-    let orderBy = "id desc";
+    let orderBy = "";
 
+    if(sort_by === "latest" || sort_by === "best-selling") {
+        orderBy = "tp.id desc";
+    }
     if (sort_by === "alpha_asc") {
-        orderBy = "product_name asc";
+        orderBy = "tp.product_name asc";
     }
-
     if (sort_by === "alpha_desc") {
-        orderBy = "LOWER(product_name) desc";
+        orderBy = "LOWER(tp.product_name) desc";
     }
-
     if (sort_by === "price_asc") {
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
     }
     if (sort_by === "price_desc") {
         orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
     }
-
     if (sort_by === "date_asc") {
-        orderBy = "created_date asc";
+        orderBy = "tp.created_date asc";
     }
     if (sort_by === "date_desc") {
-        orderBy = "created_date desc";
+        orderBy = "tp.created_date desc";
     }
-
-    if (availability_by === "in-stock") {
-        conditions.push("stock > 0");
-    }
-    if (availability_by === "out-of-stock") {
-        conditions.push("stock = 0");
-    }
-
     if (min_price && max_price) {
         conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
         values.push(min_price, max_price);
     }
 
-    let query = "SELECT * FROM tbl_products WHERE status=1 and deleted=0";
+    let query = "SELECT tp.id as product_id,tp.category_id, tp.sub_category_id, tp.customer_type, tp.product_name, tp.product_image, tp.options, tp.route, tp.status, tp.deleted, tp.created_date, tp.updated_date, tpo.id as option_id, tpo.weight, tpo.unit, tpo.price, tpo.flavor FROM tbl_products as tp LEFT join tbl_product_option as tpo on tpo.product_id = tp.id WHERE tp.status=1 and tp.deleted=0";
 
     if (category_id) {
         const categoryQuery = "SELECT id FROM tbl_categories WHERE route = ?";
@@ -403,7 +434,7 @@ exports.get_filter_products = async (req, res) => {
                 resolve(result[0]?.id);
             });
         });
-        conditions.push("category_id = ?");
+        conditions.push("tp.category_id = ?");
         values.push(categoryId);
     }
 
@@ -415,21 +446,70 @@ exports.get_filter_products = async (req, res) => {
                 resolve(result[0]?.id);
             });
         });
-        conditions.push("sub_category_id = ?");
+        conditions.push("tp.sub_category_id = ?");
         values.push(subcategoryId);
     }
     
     if (conditions.length > 0) {
         query += " AND (" + conditions.join(" AND ") + ")";
     }
-
     db.query(query + " order by " + orderBy, values, function (error, result) {
         if (error) {
             return res.status(500).json({ message: "Database error", error });
         }
 
+            // Group products by product id and aggregate their options
+            const productsMap = {};
+            const flavors = [];
+            const weights = [];
+
+            result.forEach(row => {
+                console.log(productsMap[row.product_id]);
+                
+                if (!productsMap[row.product_id]) {
+                    productsMap[row.product_id] = {
+                        id: row.product_id,
+                        category_id: row.category_id,
+                        sub_category_id: row.sub_category_id,
+                        customer_type: row.customer_type,
+                        product_name: row.product_name,
+                        product_image: row.product_image,
+                        options: row.options,
+                        route: row.route,
+                        status: row.status,
+                        deleted: row.deleted,
+                        created_date: row.created_date,
+                        updated_date: row.updated_date,
+                        is_size: row.is_size,
+                        is_flavor: row.is_flavor,
+                        product_options: []
+                    };
+                }
+                if (row.option_id) {
+                    productsMap[row.product_id].product_options.push({
+                        id: row.option_id,
+                        weight: row.weight,
+                        unit: row.unit,
+                        price: row.price,
+                        flavor: row.flavor,
+                        eggoption: row.eggoption
+                    });
+                    if (row.flavor && !flavors.includes(row.flavor)) {
+                        flavors.push(row.flavor);
+                    }
+                    if (row.weight && !weights.includes(row.weight)) {
+                        weights.push(row.weight);
+                    }
+                }
+            });
+
+            // Convert map to array
+            const products = Object.values(productsMap);
+
         return res.status(200).json({
-            products: result,
+            products: products,
+            flavors: flavors,
+            weights: weights
         });
     });
 };

@@ -40,7 +40,7 @@ export default function HomeHeader() {
     <header className="bg-white font-[Poppins]">
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
-        <div className="flex items-center gap-4 min-w-[200px]">
+        <div className="flex items-center gap-4 min-w-[200px] cursor-pointer" onClick={() => navigate('/')}>
           <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
         </div>
 
