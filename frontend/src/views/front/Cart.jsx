@@ -25,7 +25,7 @@ export default function Cart() {
           <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
             {/* <!-- Product Details --> */}
             <div class="lg:flex items-start space-x-4 w-2/3">
-              <img src="src/assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
+              <img src="./assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
               <div>
                 <p class="text-lg font-semibold mb-1">Jungle Theme</p>
                 <p class="text-sm mb-1"><span class="font-semibold">Price:</span> ₹1,599</p>
@@ -45,7 +45,7 @@ export default function Cart() {
 
               {/* <!-- Delete Icon --> */}
               <button class="text-gray-500 hover:text-red-600 lg:!mr-5">
-                <img className="h-5 w-5" src="src/assets/delte_icon.png" alt="Delete" />
+                <img className="h-5 w-5" src="./assets/delte_icon.png" alt="Delete" />
               </button>
 
               {/* <!-- Total Price --> */}
@@ -59,7 +59,7 @@ export default function Cart() {
           <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
             {/* <!-- Product Details --> */}
             <div class="lg:flex items-start space-x-4 w-2/3">
-              <img src="src/assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
+              <img src="./assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
               <div>
                 <p class="text-lg font-semibold mb-1">Jungle Theme</p>
                 <p class="text-sm mb-1"><span class="font-semibold">Price:</span> ₹1,599</p>
@@ -79,7 +79,7 @@ export default function Cart() {
 
               {/* <!-- Delete Icon --> */}
               <button class="text-gray-500 hover:text-red-600 lg:!mr-5">
-                <img className="h-5 w-5" src="src/assets/delte_icon.png" alt="Delete" />
+                <img className="h-5 w-5" src="./assets/delte_icon.png" alt="Delete" />
               </button>
 
               {/* <!-- Total Price --> */}

@@ -7,52 +7,52 @@ const products = [
   {
     name: "1 Number Candle",
     price: 79,
-    image: "src/assets/props/one_candle.jpg",
+    image: "./assets/props/one_candle.jpg",
   },
   {
     name: "Curly Candles",
     price: 99,
-    image: "src/assets/props/curly_candle.jpg",
+    image: "./assets/props/curly_candle.jpg",
   },
   {
     name: "Magic Candles",
     price: 79,
-    image: "src/assets/props/magic_candle.jpg",
+    image: "./assets/props/magic_candle.jpg",
   },
   {
     name: "Party Popper",
     price: 99,
-    image: "src/assets/props/party_papers.jpg",
+    image: "./assets/props/party_papers.jpg",
   },
   {
     name: "Flower Candle",
     price: 99,
-    image: "src/assets/props/flower_candle.jpg",
+    image: "./assets/props/flower_candle.jpg",
   },
   {
     name: "Birthday Cap",
     price: 79,
-    image: "src/assets/props/birthday_cap.jpg",
+    image: "./assets/props/birthday_cap.jpg",
   },
   {
     name: "Balloons",
     price: 99,
-    image: "src/assets/props/baloons.jpg",
+    image: "./assets/props/baloons.jpg",
   },
   {
     name: "Happy B'Day Banner",
     price: 79,
-    image: "src/assets/props/happy_bday_banner.jpg",
+    image: "./assets/props/happy_bday_banner.jpg",
   },
   {
     name: "Anniversary Banner",
     price: 99,
-    image: "src/assets/props/happy_anniversary.jpg",
+    image: "./assets/props/happy_anniversary.jpg",
   },
   {
     name: "Congrats Banner",
     price: 99,
-    image: "src/assets/props/congratulation_banner.jpg",
+    image: "./assets/props/congratulation_banner.jpg",
   },
 ];
 
