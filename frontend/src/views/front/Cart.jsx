@@ -21,7 +21,7 @@ export default function Cart() {
       </div>
 
       <div className="grid lg:grid-cols-1 gap-2">
-        <div className="bg-gray-100 p-2 rounded-lg">
+        <div className="p-2 rounded-lg">
           <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
             {/* <!-- Product Details --> */}
             <div class="lg:flex items-start space-x-4 w-2/3">
@@ -55,7 +55,7 @@ export default function Cart() {
         </div>
       </div>
       <div className="grid lg:grid-cols-1 gap-2">
-        <div className="bg-gray-100 p-2 rounded-lg">
+        <div className="p-2 rounded-lg">
           <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
             {/* <!-- Product Details --> */}
             <div class="lg:flex items-start space-x-4 w-2/3">
