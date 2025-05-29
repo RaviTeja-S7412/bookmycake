@@ -72,7 +72,7 @@ export default function HomeHeader() {
       </div>
 
       {/* Desktop navigation bar - only visible on large screens */}
-      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 py-2 border-t bg-[#910f3f]">
+      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#910f3f]">
             <div className="flex gap-4">
               {menuItems.map((item) => (
                 <div
@@ -82,7 +82,7 @@ export default function HomeHeader() {
                   onMouseLeave={() => setOpenPopover(null)}
                 >
                   <button
-                    className="flex items-center gap-1 focus:outline-none px-2 py-1"
+                    className="flex items-center gap-1 focus:outline-none px-2 py-3"
                     onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
                   >
                     {item.label}
@@ -92,7 +92,7 @@ export default function HomeHeader() {
                   </button>
       
                   {item.subItems.length > 0 && openPopover === item.id && (
-                    <div className="absolute top-full z-10 mt-2 bg-white shadow-md rounded p-2 w-48">
+                    <div className="absolute top-full z-10 mt-0 bg-white shadow-md rounded p-2 w-48">
                       {item.subItems.map((sub) => (
                         <a
                           key={sub.id}
