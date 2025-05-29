@@ -1,5 +1,5 @@
 const categories = [
-  { title: "Christmas Specials", icon: "/icons/christmas.png" },
+  { title: "Fathers Day Specials", icon: "/icons/christmas.png" },
   { title: "Birthday Cakes", icon: "/icons/birthday.png" },
   { title: "Desserts", icon: "/icons/dessert.png" },
   { title: "Anniversary Cakes", icon: "/icons/anniversary.png" },

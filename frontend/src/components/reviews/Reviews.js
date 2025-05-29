@@ -3,40 +3,40 @@ import Slider from "react-slick";
 
 const reviews = [
     {
-        name: "Ashok K.",
+        name: "Ashwini B.",
         date: "1/20/2025",
         rating: 5,
         review: "Good.",
-        itemType: "Chocolate Indulgence Pastry",
-        avatar: "/assets/images/avatars/3.jpg",
+        itemType: "Real Madrid Cake",
+        avatar: "/assets/images/avatars/1.jpg",
         image: "/assets/images/real_madrid.jpg"
     },
     {
         name: "Amarendra Swain",
         date: "1/20/2025",
         rating: 5,
-        review: "Good.",
-        itemType: "Chocolate Indulgence Pastry",
-        avatar: "/assets/images/avatars/3.jpg",
-        image: "/assets/images/real_madrid.jpg"
+        review: "Great Taste.",
+        itemType: "Chocolate Cake with Biscuits",
+        avatar: "/assets/images/avatars/2.jpg",
+        image: "/assets/images/delicious-cake-with-biscuits.jpg"
     },
     {
         name: "Manoj",
         date: "1/20/2025",
         rating: 5,
-        review: "Good.",
-        itemType: "Chocolate Indulgence Pastry",
+        review: "Awesome.",
+        itemType: "Creamy with Blueberry Cake",
         avatar: "/assets/images/avatars/3.jpg",
-        image: "/assets/images/real_madrid.jpg"
+        image: "/assets/images/high-angle-delicious-chocolate-cake-concept.jpg"
     },
     {
-        name: "Melisa Khan",
+        name: "Rashi Khanna",
         date: "1/20/2025",
         rating: 4,
-        review: "Good.",
-        itemType: "Chocolate Indulgence Pastry",
-        avatar: "/assets/images/avatars/3.jpg",
-        image: "/assets/images/real_madrid.jpg",
+        review: "Delicious.",
+        itemType: "Chocolate Indulgence Cake",
+        avatar: "/assets/images/avatars/4.jpg",
+        image: "/assets/images/front-view-round-chocolate-cake-stand.jpg",
     },
 
 ];
