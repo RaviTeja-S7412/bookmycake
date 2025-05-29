@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosIntance from "../../components/axios";
 
 export default function ProductSingle() {
   const images = [
@@ -6,6 +8,8 @@ export default function ProductSingle() {
     "/assets/images/jungle-lion-cake-details.jpg", // Main Image
   ];
 
+  const { product_id } = useParams();
+  const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(images[1]);
   const [selectedFlavor, setSelectedFlavor] = useState("Chocolate Truffle");
   const [selectedWeight, setSelectedWeight] = useState("1kg");
@@ -13,9 +17,14 @@ export default function ProductSingle() {
 
   const [selectedDay, setSelectedDay] = useState('Today');
   const [fixTime, setFixTime] = useState(true);
+  const [product, setProduct] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [flavors, setFlavors] = useState([]);
+  const [weights, setWeights] = useState([]);
+  const [areas, setAreas] = useState([]);
 
   const days = ['Today', 'Tomorrow', 'Calender'];
 
@@ -50,19 +59,43 @@ export default function ProductSingle() {
     setSelectedDate(e.target.value);
   };
 
-  const areas = [
-    'Panagutta',
-    'Somajiguda',
-    'Khairatabad',
-    'Nampally',
-    'Koti',
-    'Dilsukhnagar',
-    'Banjarahills',
-    'Jublee Hills',
-    'Hitech-city',
-    'Madhapur',
-    'Gachibowli',
-  ];
+  const get_singleproductroute = async () => {
+    setLoading(true);
+
+    const params = {
+      route: product_id
+    };
+
+    try {
+      const res = await axiosIntance.get(`/admin/get_singleproductroute`, { params });
+
+      if (res.status === 200) {
+        const fetchedProduct = res.data.product_data;
+        console.log('fetchedProduct: ', fetchedProduct?.product_options);
+        setProduct(fetchedProduct);
+        const uniqueFlavors = [...new Set(fetchedProduct?.product_options.map(product => product.flavor))]
+        setFlavors(uniqueFlavors);
+        setSelectedFlavor(uniqueFlavors?.[0]);
+        const weights = fetchedProduct?.product_options.filter(product => product.flavor === uniqueFlavors?.[0]);
+        setSelectedWeight(weights?.[0]?.weight);
+        setWeights(weights);
+        setAreas(res.data.areas || []);
+      } else {
+      }
+    } catch (error) {
+      // console.error('Error fetching product:', error);
+      // Handle API error
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  useEffect(() => {
+    if (product_id) {
+      get_singleproductroute();
+    }
+  }, [product_id]);
 
   return (
     <div className="default-width mx-auto p-4 grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
@@ -71,21 +104,20 @@ export default function ProductSingle() {
         {/* Main image */}
         <div className="flex">
           <div>
-            {images.map((img, index) => (
+            {/* {images.map((img, index) => ( */}
               <img
-                key={index}
-                src={img}
-                alt={`Thumbnail ${index}`}
-                className={`w-20 h-20 object-cover rounded-lg mr-7 mb-2 border cursor-pointer ${selectedImage === img ? "" : ""
-                  }`}
-                onClick={() => setSelectedImage(img)}
+                // key={index}
+                src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+                alt={product?.product_name}
+                className={`w-20 h-20 object-cover rounded-lg mr-7 mb-2 border cursor-pointer `}
+                // onClick={() => setSelectedImage(img)}
               />
-            ))}
+            {/* ))} */}
           </div>
           <img
-            src={selectedImage}
-            alt="Selected Cake"
-            className="w-full rounded-2xl shadow-lg"
+            alt={product?.product_name}
+            src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+            className="rounded-2xl shadow-lg w-[80%]"
           />
         </div>
 
@@ -97,21 +129,26 @@ export default function ProductSingle() {
 
       {/* Product Info Section */}
       <div className="col-span-2">
-        <h1 className="text-4xl font-bold mb-2">Jungle Paradise Cake</h1>
-        <p className="text-3xl font-bold text-black mb-2">₹1,499</p>
+        <h1 className="text-4xl font-bold mb-2">{product?.product_name}</h1>
+        <p className="text-3xl font-bold text-black mb-2">₹ {weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price}</p>
         <p className="text-sm text-gray-500 mb-4">Tax included.</p>
         <p className="mb-4 text-lg">
-          A jungle theme cake with base in blue, sides decorated with trees, grass, flowers and clouds. The top filled with animals just like in a jungle. Order cake online | Gurugram, Noida and Greater Noida. For any assistance or modification in cakes (in size or color or type) call at +91-9560804738. Available in 4 flavors: Chocolate Truffle, Black Forest, Pineapple and Caramel Butterscotch
+          {product?.product_description}  
         </p>
 
         {/* Flavor */}
         <div className="mb-4">
           <p className="font-semibold mb-1">Flavor</p>
           <div className="flex flex-wrap gap-2">
-            {["Chocolate Truffle", "Exotic Pineapple", "Black Forest", "Caramel Butterscotch"].map((flavor) => (
+            {flavors.map((flavor) => (
               <button
                 key={flavor}
-                onClick={() => setSelectedFlavor(flavor)}
+                onClick={() => {
+                  setSelectedFlavor(flavor);
+                  const weights = product?.product_options.filter(product => product.flavor === flavor);
+                  setSelectedWeight(weights?.[0]?.weight);
+                  setWeights(weights);
+                }}
                 className={`px-4 py-2 border rounded-full ${selectedFlavor === flavor
                   ? "bg-black text-white"
                   : "bg-white text-black"
@@ -128,22 +165,22 @@ export default function ProductSingle() {
           <div>
             <p className="font-semibold mb-1">Weight</p>
             <div className="flex flex-wrap gap-2">
-              {["1kg", "1.5kg", "2kg"].map((weight) => (
+              {weights.map((weight) => (
                 <button
-                  key={weight}
-                  onClick={() => setSelectedWeight(weight)}
-                  className={`px-4 py-2 border rounded-full ${selectedWeight === weight
+                  key={weight?.weight}
+                  onClick={() => setSelectedWeight(weight?.weight)}
+                  className={`px-4 py-2 border rounded-full ${selectedWeight === weight?.weight
                     ? "bg-black text-white"
                     : "bg-white text-black"
                     }`}
                 >
-                  {weight}
+                  {weight?.weight / 1000} Kg
                 </button>
               ))}
             </div>
           </div>
 
-          <div>
+          <div className="ml-8">
             <p className="font-semibold mb-1">Select Area</p>
             <select
               id="area"
@@ -152,9 +189,9 @@ export default function ProductSingle() {
               className="border border-gray-300 rounded-md p-2 w-full"
             >
               <option value="">Choose an area</option>
-              {areas.map((area, index) => (
-                <option key={index} value={area}>
-                  {area}
+              {areas?.map((area, index) => (
+                <option key={index} value={area?.area_name}>
+                  {area?.area_name}
                 </option>
               ))}
             </select>
@@ -199,7 +236,7 @@ export default function ProductSingle() {
               )}
             </div>
           </div>
-          <div className="ml-5">
+          <div className="ml-8">
             {fixTime && (
               <div className="mb-2">
                 <div className="font-semibold mb-1">Fixed Time Delivery:</div>
@@ -238,6 +275,7 @@ export default function ProductSingle() {
           <div className="w-1/2">
             <button
               className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
+              onClick={() => navigate('/props')}
             >
               Add to Cart
             </button>

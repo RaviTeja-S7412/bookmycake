@@ -40,7 +40,7 @@ export default function HomeHeader() {
     <header className="bg-white font-[Poppins]">
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
-        <div className="flex items-center gap-4 min-w-[200px]">
+        <div className="flex items-center gap-4 min-w-[200px] cursor-pointer" onClick={() => navigate('/')}>
           <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
         </div>
 
@@ -62,9 +62,9 @@ export default function HomeHeader() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
-            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
             <div className="flex items-center gap-1 cursor-pointer">
-              <UserIcon className="h-5 w-5 text-gray-600" />
+              <UserIcon className="h-5 w-5 text-gray-600" onClick={() => navigate('/login')} />
               {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>
