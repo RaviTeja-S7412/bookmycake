@@ -62,9 +62,9 @@ export default function HomeHeader() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
-            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" />
+            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
             <div className="flex items-center gap-1 cursor-pointer">
-              <UserIcon className="h-5 w-5 text-gray-600" />
+              <UserIcon className="h-5 w-5 text-gray-600" onClick={() => navigate('/login')} />
               {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>

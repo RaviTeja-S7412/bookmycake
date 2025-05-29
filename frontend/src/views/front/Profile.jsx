@@ -1,4 +1,6 @@
 import React from "react";
+import { CIcon } from '@coreui/icons-react';
+import { cilEnvelopeLetter, cilPhone, cilUser } from '@coreui/icons';
 
 export default function UserProfile() {
     const [activeSection, setActiveSection] = React.useState("My Profile");
@@ -90,14 +92,14 @@ export default function UserProfile() {
         <div className="min-h-screen bg-gray-100 flex flex-col items-center">
             <header className="w-full bg-white shadow p-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <img src="/assets/logo.jpg" alt="avatar" className="w-10 h-10 rounded-full" />
-                    <span className="text-lg font-bold">sai</span>
+                    <CIcon icon={cilUser} size="xl"/>
+                    <span className="text-lg font-bold">John Doe</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
-                    <img src="/assets/logo.jpg" alt="email" className="w-5 h-5 mr-1"/>
-                    <span className="mr-4">pscsherry5@gmail.com</span>
-                    <img src="/assets/logo.jpg" alt="phone" className="w-5 h-5 mr-1" />
-                    <span> 8019291105</span>
+                    <CIcon icon={cilEnvelopeLetter} size="l" className="w-5 h-5 mr-1"/>
+                    <span className="mr-4">johndoe@gmail.com</span>
+                    <CIcon icon={cilPhone} size="l" className="w-5 h-5 mr-1"/>
+                    <span> 9632587410</span>
                 </div>
             </header>
             <main className="flex w-full max-w-6xl mt-6 gap-4">

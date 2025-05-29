@@ -130,7 +130,7 @@ export default function ProductSingle() {
       {/* Product Info Section */}
       <div className="col-span-2">
         <h1 className="text-4xl font-bold mb-2">{product?.product_name}</h1>
-        <p className="text-3xl font-bold text-black mb-2">₹1,499</p>
+        <p className="text-3xl font-bold text-black mb-2">₹ {weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price}</p>
         <p className="text-sm text-gray-500 mb-4">Tax included.</p>
         <p className="mb-4 text-lg">
           {product?.product_description}  
@@ -180,7 +180,7 @@ export default function ProductSingle() {
             </div>
           </div>
 
-          <div>
+          <div className="ml-8">
             <p className="font-semibold mb-1">Select Area</p>
             <select
               id="area"
@@ -236,7 +236,7 @@ export default function ProductSingle() {
               )}
             </div>
           </div>
-          <div className="ml-5">
+          <div className="ml-8">
             {fixTime && (
               <div className="mb-2">
                 <div className="font-semibold mb-1">Fixed Time Delivery:</div>

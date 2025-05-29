@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate();
  
     return (
         <div className="flex items-center justify-center min-h-24 mt-5 mb-5 bg-gray-100">
@@ -26,7 +28,7 @@ export default function Login() {
                         />
                     </div>
                     <div className="mb-4 text-right">
-                        <a href="#" className="text-sm text-blue-600 hover:underline">
+                        <a href="#" className="text-sm text-blue-600 hover:underline" onClick={() => navigate('/forgot-password')}>
                             Forgot password?
                         </a>
                     </div>
@@ -37,11 +39,11 @@ export default function Login() {
                     </button>
                 </form>
                 <div className="mb-4 text-center mt-4">
-                        <span className="text-sm text-gray-600">Don't have an account? </span>
-                        <a href="#" className="text-sm text-blue-600 hover:underline">
-                           Create account?
-                        </a>
-                    </div>
+                    <span className="text-sm text-gray-600">Don't have an account? </span>
+                    <a href="#" className="text-sm text-blue-600 hover:underline" onClick={() => navigate('/sign-up')}>
+                        Create account?
+                    </a>
+                </div>
             </div>
         </div>
     );

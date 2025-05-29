@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const categories = ["Popular", "Cake Toppers", "Desserts"];
 
@@ -57,6 +58,7 @@ const products = [
 
 export default function Props() {
   const [activeCategory, setActiveCategory] = useState("Popular");
+  const navigate = useNavigate();
 
 return (
     <div className="p-4 sm:p-6 bg-pink-50 min-h-screen font-[poppins]">
@@ -103,8 +105,8 @@ return (
 
         {/* Footer Actions */}
       <div className="flex justify-center gap-8 my-5">
-        <button className="text-gray-600 underline">Skip</button>
-        <button className="bg-[#910f3f] text-white px-6 py-2 rounded-md font-medium hover:bg-[#57132c]">
+        <button className="text-gray-600 underline" onClick={() => navigate('/cart')}>Skip</button>
+        <button className="bg-[#910f3f] text-white px-6 py-2 rounded-md font-medium hover:bg-[#57132c]" onClick={() => navigate('/cart')}>
           Continue
         </button>
       </div>

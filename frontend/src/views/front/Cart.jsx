@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const [quantity, setQuantity] = useState(1);
   const price = 1599;
+  const navigate = useNavigate();
 
   const increment = () => setQuantity(quantity + 1);
   const decrement = () => {
@@ -13,7 +15,7 @@ export default function Cart() {
     <div className="default-width px-6 py-10 bg-white font-[poppins]">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-3xl font-bold">Your Cart</h2>
-        <button className="text-sm text-gray-600 hover:underline">
+        <button className="text-sm text-gray-600 hover:underline" onClick={() => navigate('/')}>
           Continue shopping
         </button>
       </div>
