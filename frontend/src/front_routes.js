@@ -7,6 +7,7 @@ const AllProducts = React.lazy(() => import('./views/front/Products'));
 const ProductSingle = React.lazy(() => import('./views/front/ProductSingle'));
 const Props = React.lazy(() => import('./views/front/props'));
 const Cart = React.lazy(() => import('./views/front/cart'));
+const Checkout = React.lazy(() => import('./views/front/Checkout'));
 
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -15,6 +16,7 @@ const front_routes = [
   { path: '/products/:product_id', exact: true, name: 'Products', element: ProductSingle },
   { path: '/props', exact: true, name: 'Props', element: Props },
   {path: '/cart', exact: true, name: 'Cart', element: Cart},
+  {path: '/checkout', exact: true, name: 'Checkout', element: Checkout},
 ]
 
 export default front_routes
