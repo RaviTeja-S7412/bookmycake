@@ -93,35 +93,14 @@ const Cities = () => {
     return (
         <CRow>
             <CCol xs={12}>
-                <CTabs activeItemKey={1}>
-                    <CTabList variant="underline-border">
-                        <CTab aria-controls="home-tab-pane" itemKey={1}>Cities</CTab>
-                        <CTab aria-controls="profile-tab-pane" itemKey={2}>Areas</CTab>
-                      
-                    </CTabList>
-                    <CTabContent>
-                        <CTabPanel className="p-3" aria-labelledby="home-tab-pane" itemKey={1}>
-                            <CCard className="mb-4">
-                                <CCardHeader>
-                                    <strong>List Of Cities</strong>
-                                </CCardHeader>
-                                <CCardBody>
-                                    {cities?.cities.length > 0 && <ReactDatatable columns={columns} data={cities?.cities} actions={true} actionTarget={'/admin/settings/create-cities'} />}
-                                </CCardBody>
-                            </CCard>
-                        </CTabPanel>
-                        <CTabPanel className="p-3" aria-labelledby="home-tab-pane" itemKey={2}>
-                            <CCard className="mb-4">
-                                <CCardHeader>
-                                    <strong>List Of Areas</strong>
-                                </CCardHeader>
-                                <CCardBody>
-                                    {cities?.cities.length > 0 && <ReactDatatable columns={columns} data={cities?.cities} actions={true} actionTarget={'/admin/settings/create-cities'} />}
-                                </CCardBody>
-                            </CCard>
-                        </CTabPanel>
-                    </CTabContent>
-                </CTabs>
+                <CCard className="mb-4">
+                    <CCardHeader>
+                        <strong>List Of Cities</strong>
+                    </CCardHeader>
+                    <CCardBody>
+                        {cities?.cities.length > 0 && <ReactDatatable columns={columns} data={cities?.cities} actions={true} actionTarget={'/admin/settings/create-cities'} />}
+                    </CCardBody>
+                </CCard>
             </CCol>
         </CRow>
     )

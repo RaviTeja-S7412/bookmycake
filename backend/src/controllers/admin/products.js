@@ -169,6 +169,32 @@ exports.update_product = [upload.single("file"),function(req,res){
                             "created_at": new Date(),
                         })
                     })
+
+                    const updateOrInsertOption = (data) => {
+                        return new Promise((resolve, reject) => {
+                            let query = "";
+                            let values = [];
+                            if (data.id) {
+                                query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ?, eggoption = ? WHERE id = ?";
+                                values = [data.weight, data.unit, data.price, data.flavor, data.eggoption, data.id];
+                            } else {
+                                query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, eggoption, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                                values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.eggoption, data.created_at];
+                            }
+                            db.query(query, values, (err, result) => {
+                                if (err) return reject(err);
+                                resolve(result);
+                            });
+                        });
+                    };
+
+                    Promise.all(options_array.map(updateOrInsertOption))
+                        .then(() => {
+                            // All options updated/inserted
+                        })
+                        .catch(err => {
+                            return res.status(500).json({ message: err });
+                        });
                     /* options_array.forEach(async (data) => {
 
                         var query = "";

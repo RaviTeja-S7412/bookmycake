@@ -100,25 +100,14 @@ const Areas = () => {
     return (
         <CRow>
             <CCol xs={12}>
-                <CTabs activeItemKey={1}>
-                    <CTabList variant="underline-border">
-                        <CTab aria-controls="home-tab-pane" itemKey={1}>Areas</CTab>
-                       
-                    </CTabList>
-                    <CTabContent>
-                        <CTabPanel className="p-3" aria-labelledby="home-tab-pane" itemKey={1}>
-                            <CCard className="mb-4">
-                                <CCardHeader>
-                                    <strong>List Of Areas</strong>
-                                </CCardHeader>
-                                <CCardBody>
-                                    {areas?.areas.length > 0 && <ReactDatatable columns={columns} data={areas?.areas} actions={true} actionTarget={'/admin/settings/create-areas'} />}
-                                </CCardBody>
-                            </CCard>
-                        </CTabPanel>
-                        
-                    </CTabContent>
-                </CTabs>
+                <CCard className="mb-4">
+                    <CCardHeader>
+                        <strong>List Of Areas</strong>
+                    </CCardHeader>
+                    <CCardBody>
+                        {areas?.areas.length > 0 && <ReactDatatable columns={columns} data={areas?.areas} actions={true} actionTarget={'/admin/settings/create-areas'} />}
+                    </CCardBody>
+                </CCard>
             </CCol>
         </CRow>
     )
