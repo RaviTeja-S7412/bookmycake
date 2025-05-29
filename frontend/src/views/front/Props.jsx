@@ -59,20 +59,20 @@ export default function Props() {
   const [activeCategory, setActiveCategory] = useState("Popular");
 
 return (
-    <div className="p-4 sm:p-6 bg-pink-50 min-h-screen">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+    <div className="p-4 sm:p-6 bg-pink-50 min-h-screen font-[poppins]">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center">
             Add More Fun To Celebration.....
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 mt-4">
             {categories.map((category) => (
                 <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                         activeCategory === category
-                            ? "bg-orange-400 text-white"
-                            : "border border-orange-400 text-orange-400"
+                            ? "bg-[#910f3f] text-white"
+                            : "border border-orange-400 text-[#910f3f]"
                     }`}
                 >
                     {category}
@@ -91,7 +91,7 @@ return (
                             <h6 className="text-md font-semibold">{product.name}</h6>
                             <div className="flex mt-3 items-center justify-between">
                                 <p className="text-lg font-bold text-gray-800">₹{product.price}</p>
-                                <button className="bg-orange-500 hover:bg-orange-600 text-white rounded-full p-2 text-lg">
+                                <button className="bg-[#910f3f] hover:bg-[#57132c] text-white rounded-full p-2 text-lg">
                                     +
                                 </button>
                             </div>
@@ -100,6 +100,14 @@ return (
                 </div>
             </div>
         </div>
+
+        {/* Footer Actions */}
+      <div className="flex justify-center gap-8 my-5">
+        <button className="text-gray-600 underline">Skip</button>
+        <button className="bg-[#910f3f] text-white px-6 py-2 rounded-md font-medium hover:bg-[#57132c]">
+          Continue
+        </button>
+      </div>
     </div>
 );
 }

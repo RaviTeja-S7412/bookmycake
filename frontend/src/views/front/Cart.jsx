@@ -18,78 +18,91 @@ export default function Cart() {
         </button>
       </div>
 
-      {/* Header Row */}
-      <div className="hidden sm:grid grid-cols-12 font-semibold text-sm text-gray-400 border-b pb-2 mb-4">
-        <div className="col-span-6">PRODUCT</div>
-        <div className="col-span-3 text-center">QUANTITY</div>
-        <div className="col-span-3 text-right">TOTAL</div>
-      </div>
+      <div className="grid lg:grid-cols-1 gap-2">
+        <div className="bg-gray-100 p-2 rounded-lg">
+          <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
+            {/* <!-- Product Details --> */}
+            <div class="lg:flex items-start space-x-4 w-2/3">
+              <img src="src/assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
+              <div>
+                <p class="text-lg font-semibold mb-1">Jungle Theme</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Price:</span> ₹1,599</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Flavor:</span> Chocolate Truffle</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Weight:</span> 1 Kg</p>
+              </div>
+            </div>
 
-      {/* Cart Item */}
-      <div className="grid grid-cols-1 sm:grid-cols-12 items-center gap-6 border-b py-4">
-        {/* Product Info */}
-        <div className="col-span-6 flex items-start gap-4">
-          <img
-            src="src/assets/products/jungle_cake.jpg"
-            alt="Jungle theme cake"
-            className="w-32 h-32 object-cover rounded-lg shadow"
-          />
-          <div>
-            <h3 className="text-lg font-semibold">Jungle theme</h3>
-            <p className="text-base font-bold text-gray-800 mt-1">₹1,599</p>
-            <ul className="text-sm text-gray-700 mt-2 space-y-1">
-              <li><strong>Flavor:</strong> Chocolate Truffle</li>
-              <li><strong>Egg Option:</strong> Egg</li>
-              <li><strong>Weight:</strong> 1 Kg</li>
-              <li><strong>Day:</strong> Today</li>
-              <li><strong>Time:</strong> 5PM–7PM</li>
-              <li><strong>Delivery:</strong> Fixed Time Delivery</li>
-              <li><strong>City:</strong> Gurgaon</li>
-              <li><strong>Area/Sector:</strong> Sector 3</li>
-            </ul>
+            {/* <!-- Quantity & Total --> */}
+            <div class="lg:flex items-center space-x-6 w-1/3 justify-end">
+              {/* <!-- Quantity Control --> */}
+              <div class="lg:flex items-center border rounded overflow-hidden">
+                <button class="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={decrement}>-</button>
+                <span class="px-4 py-1 text-base">{quantity}</span>
+                <button class="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={increment}>+</button>
+              </div>
+
+              {/* <!-- Delete Icon --> */}
+              <button class="text-gray-500 hover:text-red-600 lg:!mr-5">
+                <img className="h-5 w-5" src="src/assets/delte_icon.png" alt="Delete" />
+              </button>
+
+              {/* <!-- Total Price --> */}
+              <div class="text-lg font-semibold lg:text-right">₹{(price * quantity).toLocaleString()}</div>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="grid lg:grid-cols-1 gap-2">
+        <div className="bg-gray-100 p-2 rounded-lg">
+          <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
+            {/* <!-- Product Details --> */}
+            <div class="lg:flex items-start space-x-4 w-2/3">
+              <img src="src/assets/products/jungle_cake.jpg" alt="Jungle Theme Cake" class="w-24 h-24 object-cover rounded-md border" />
+              <div>
+                <p class="text-lg font-semibold mb-1">Jungle Theme</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Price:</span> ₹1,599</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Flavor:</span> Chocolate Truffle</p>
+                <p class="text-sm mb-1"><span class="font-semibold">Weight:</span> 1 Kg</p>
+              </div>
+            </div>
 
-        {/* Quantity */}
-        <div className="col-span-3 flex justify-center">
-          <div className="flex border border-gray-300 rounded">
-            <button
-              onClick={decrement}
-              className="px-3 py-1 text-lg font-bold text-gray-600"
-            >−</button>
-            <span className="px-4 py-1 text-lg">{quantity}</span>
-            <button
-              onClick={increment}
-              className="px-3 py-1 text-lg font-bold text-gray-600"
-            >+</button>
+            {/* <!-- Quantity & Total --> */}
+            <div class="lg:flex items-center space-x-6 w-1/3 justify-end">
+              {/* <!-- Quantity Control --> */}
+              <div class="lg:flex items-center border rounded overflow-hidden">
+                <button class="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={decrement}>-</button>
+                <span class="px-4 py-1 text-base">{quantity}</span>
+                <button class="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={increment}>+</button>
+              </div>
+
+              {/* <!-- Delete Icon --> */}
+              <button class="text-gray-500 hover:text-red-600 lg:!mr-5">
+                <img className="h-5 w-5" src="src/assets/delte_icon.png" alt="Delete" />
+              </button>
+
+              {/* <!-- Total Price --> */}
+              <div class="text-lg font-semibold lg:text-right">₹{(price * quantity).toLocaleString()}</div>
+            </div>
           </div>
-            <button className="text-red-600 hover:text-red-800">
-            <img src="../icons/delte_icon.png" alt="Delete" className="w-5 h-5" />
-            </button>
-        </div>
-
-        {/* Total Price */}
-        <div className="col-span-3 text-right text-lg font-semibold">
-          ₹{(price * quantity).toLocaleString()}
         </div>
       </div>
-     {/*SubTotal */}
-    <div className="flex flex-col items-end mt-8">
-        <div className="rounded-lg p-6 w-full max-w-sm">
+
+      <div className="grid lg:grid-cols-1 gap-2">
+        <div className="w-full max-w-5xl mx-auto flex items-center justify-between">
+          <div className="rounded-lg w-full max-w-sm ml-auto mt-2">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-lg font-semibold">Subtotal</span>
-                <span className="text-2xl font-bold">₹{(price * quantity).toLocaleString()}</span>
+              <span className="text-lg font-semibold">Subtotal</span>
+              <span className="text-2xl font-bold">₹{(price * quantity).toLocaleString()}</span>
             </div>
             <p className="text-sm text-gray-500 mb-4">
-                Tax included and shipping calculated at checkout
+              Tax included and shipping calculated at checkout
             </p>
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold py-3 rounded-full transition" style={{ borderRadius: "24px"}}>
-                Checkout
+            <button className="px-4 py-2 border rounded-full bg-black text-white w-full mt-0">
+              Checkout
             </button>
+          </div>
         </div>
-    </div>
-    
-     
+      </div>
     </div>
   );
 }
