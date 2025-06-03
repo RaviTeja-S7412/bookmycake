@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 import Swal from 'sweetalert2'
+import InnerImageZoom from 'react-inner-image-zoom'
+import 'react-inner-image-zoom/lib/styles.min.css'
 
 export default function ProductSingle() {
   const images = [
@@ -162,11 +164,13 @@ export default function ProductSingle() {
       <div>
         {/* Main image */}
         <div>
-          <img
-            alt={product?.product_name}
-            src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
-            className="rounded-2xl shadow-lg w-[80%]"
-          />
+          {/* <img
+            
+          /> */}
+          <InnerImageZoom 
+          alt={product?.product_name}
+          src={import.meta.env.VITE_APIBASE_URL + product?.product_image} zoomSrc={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+          className="rounded-2xl shadow-lg" />
         </div>
 
         {/* Down thumbnails */}
