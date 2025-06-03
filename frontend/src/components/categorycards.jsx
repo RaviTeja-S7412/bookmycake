@@ -10,7 +10,7 @@ export default function CategoryCards() {
   return (
     <section className="default-width py-10">
       <h5 className="!text-4xl poppins-semibold text-gray-800 mb-4">Shop by Categories</h5>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 cursor-pointer">
+      <div className="grid lg:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 cursor-pointer">
         {categories.map((cat, index) => (
           <div
             key={index}
