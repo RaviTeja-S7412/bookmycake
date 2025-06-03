@@ -36,6 +36,15 @@ const App = () => {
       // dispatch(get_categories())
     }
   },[auth.authenticate]);
+
+  // front end login check
+  useEffect(() => {
+    if(!localStorage.getItem('user_id')){
+      if(!localStorage.getItem('guest_user_id')){
+        localStorage.setItem('guest_user_id', "GUEST_"+ Math.floor(Math.random() * 10000));
+      }
+    }
+  },[])
   
   return (
     <BrowserRouter>

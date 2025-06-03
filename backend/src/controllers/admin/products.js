@@ -396,33 +396,6 @@ exports.get_filter_products = async (req, res) => {
 
     let conditions = [];
     let values = [];
-    let orderBy = "";
-
-    if(sort_by === "latest" || sort_by === "best-selling") {
-        orderBy = "tp.id desc";
-    }
-    if (sort_by === "alpha_asc") {
-        orderBy = "tp.product_name asc";
-    }
-    if (sort_by === "alpha_desc") {
-        orderBy = "LOWER(tp.product_name) desc";
-    }
-    if (sort_by === "price_asc") {
-        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) asc";
-    }
-    if (sort_by === "price_desc") {
-        orderBy = "JSON_UNQUOTE(JSON_EXTRACT(product_size,'$[*].price')) desc";
-    }
-    if (sort_by === "date_asc") {
-        orderBy = "tp.created_date asc";
-    }
-    if (sort_by === "date_desc") {
-        orderBy = "tp.created_date desc";
-    }
-    if (min_price && max_price) {
-        conditions.push("CAST(JSON_UNQUOTE(JSON_EXTRACT(product_size, '$[0].price')) AS DECIMAL(10,2)) BETWEEN ? AND ?");
-        values.push(min_price, max_price);
-    }
 
     let query = "SELECT tp.id as product_id,tp.category_id, tp.sub_category_id, tp.customer_type, tp.product_name, tp.product_image, tp.options, tp.route, tp.status, tp.deleted, tp.created_date, tp.updated_date, tpo.id as option_id, tpo.weight, tpo.unit, tpo.price, tpo.flavor FROM tbl_products as tp LEFT join tbl_product_option as tpo on tpo.product_id = tp.id WHERE tp.status=1 and tp.deleted=0";
 
@@ -453,27 +426,27 @@ exports.get_filter_products = async (req, res) => {
     if (conditions.length > 0) {
         query += " AND (" + conditions.join(" AND ") + ")";
     }
-    db.query(query + " order by " + orderBy, values, function (error, result) {
+    
+    db.query(query, values, function (error, result) {
         if (error) {
             return res.status(500).json({ message: "Database error", error });
         }
-
-            // Group products by product id and aggregate their options
-            const productsMap = {};
-            const flavors = [];
-            const weights = [];
-
-            result.forEach(row => {
-                console.log(productsMap[row.product_id]);
-                
-                if (!productsMap[row.product_id]) {
-                    productsMap[row.product_id] = {
-                        id: row.product_id,
-                        category_id: row.category_id,
-                        sub_category_id: row.sub_category_id,
-                        customer_type: row.customer_type,
-                        product_name: row.product_name,
-                        product_image: row.product_image,
+        
+        // Group products by product id and aggregate their options
+        const productsMap = {};
+        const flavors = [];
+        const weights = [];
+        var highestPrice = 0;
+        
+        result.forEach(row => {
+            if (!productsMap[row.product_id]) {
+                productsMap[row.product_id] = {
+                    id: row.product_id,
+                    category_id: row.category_id,
+                    sub_category_id: row.sub_category_id,
+                    customer_type: row.customer_type,
+                    product_name: row.product_name,
+                    product_image: row.product_image,
                         options: row.options,
                         route: row.route,
                         status: row.status,
@@ -502,14 +475,45 @@ exports.get_filter_products = async (req, res) => {
                     }
                 }
             });
-
+            
             // Convert map to array
-            const products = Object.values(productsMap);
+            var products = Object.values(productsMap);
+            if(sort_by === "latest" || sort_by === "best-selling") {
+                products = products.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+            }
+            if (sort_by === "alpha_asc") {
+                products = products.sort((a, b) => a.product_name.localeCompare(b.product_name));
+            }
+            if (sort_by === "alpha_desc") {
+                products = products.sort((a, b) => b.product_name.localeCompare(a.product_name));
+            }
+            if (sort_by === "date_asc") {
+                products = products.sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
+            }
+            if (sort_by === "date_desc") {
+                products = products.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+            }
+            /* if (min_price && max_price) {
+                const filteredProducts = products.map(product => {
+                    const filteredOptions = product.product_options.filter(option => option.price >= min_price && option.price <= max_price);
+                    if (filteredOptions.length > 0) {
+                        return { ...product, product_options: filteredOptions };
+                    }
+                    return null;
+                }).filter(product => product !== null);
+                products = filteredProducts;
+            }
 
+            if (Array.isArray(products) && products.length) {
+                const allPrices = products.flatMap(p => (p.product_options || []).map(o => Number(o.price) || 0));
+                highestPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
+            } */
+            
         return res.status(200).json({
             products: products,
             flavors: flavors,
-            weights: weights
+            weights: weights,
+            highestPrice: highestPrice
         });
     });
 };

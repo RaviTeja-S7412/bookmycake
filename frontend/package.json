@@ -50,7 +50,7 @@
     "simplebar-react": "^3.2.6",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.13",
-    "sweetalert2": "^11.6.13",
+    "sweetalert2": "^11.22.0",
     "swiper": "^11.2.4",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",

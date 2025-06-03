@@ -15,37 +15,28 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [flavors, setFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
+  const [minPrice, setMinprice] = useState(0);
+  const [maxPrice, setMaxprice] = useState(0);
+  const [highestPrice, setHighestprice] = useState(0);
 
   const [sortOptions, setSortOptions] = useState([
     { name: 'Featured', value: 'latest', current: true },
     { name: 'Best selling', value: 'best-selling', current: false },
     { name: 'Alphabetically, A-Z', value: 'alpha_asc', current: false },
     { name: 'Alphabetically, Z-A', value: 'alpha_desc', current: false },
-    { name: 'Price, low to high', value: 'price_asc', current: false },
-    { name: 'Price, high to low', value: 'price_desc', current: false },
+    // { name: 'Price, low to high', value: 'price_asc', current: false },
+    // { name: 'Price, high to low', value: 'price_desc', current: false },
     { name: 'Date, old to new', value: 'date_asc', current: false },
     { name: 'Date, new to old', value: 'date_desc', current: false },
   ]);
 
-  const filters = [
-    {
-      name: "Jungle theme",
-      price: "₹1,499",
-      delivery: "Tomorrow",
-    },
-    {
-      name: "Jungle theme pink Cake",
-      price: "₹1,699",
-      delivery: "Tomorrow",
-    },
-  ];
-
-  const getProducts = async (sort_by='') => {
+  const getProducts = async (sort_by='', min_price='', max_price='') => {
     setLoading(true);
   
     const params = {
       "sort_by": sort_by,
-      // "availability_by" : availability_by,
+      "min_price": Number(min_price),
+      "max_price": Number(max_price),
     }
     if(sub_category_id){
       params.sub_category_id = sub_category_id;
@@ -59,15 +50,18 @@ export default function Products() {
       setProducts(res?.data?.products)
       setFlavors(res?.data?.flavors)
       setWeights(res?.data?.weights)
+      setHighestprice(res?.data?.highestPrice)
     } else {
       
     }
-    
   }
 
   useEffect(() => {
-    getProducts(sortOptions?.find((option) => option.current)?.value);
-  }, [category_id, sub_category_id]);
+    const min_price = minPrice ? Number(minPrice) : Number(0);
+    const max_price = maxPrice ? Number(maxPrice) : Number(highestPrice);
+    getProducts(sortOptions?.find((option) => option.current)?.value, min_price, max_price);
+  }, [category_id, sub_category_id, minPrice, maxPrice]);
+  
 
   return (
     <div className="default-width font-[Poppins]">
@@ -86,8 +80,8 @@ export default function Products() {
 
           {showPrice && (
             <div className="grid grid-cols-2 gap-4 mb-2 text-black">
-              <input type="text" placeholder="From" className="border bg-white px-2 py-1 mt-1" />
-              <input type="text" placeholder="To" className="border bg-white px-2 py-1 mt-1" />
+              <input type="number" placeholder="From" onChange={(e) => setMinprice(e.target.value)} className="border bg-white px-2 py-1 mt-1" />
+              <input type="number" placeholder="To" onChange={(e) => setMaxprice(e.target.value)} className="border bg-white px-2 py-1 mt-1" />
             </div>
           )}
           <hr />
