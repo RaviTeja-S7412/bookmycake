@@ -161,18 +161,7 @@ export default function ProductSingle() {
       {/* Image Gallery Section */}
       <div>
         {/* Main image */}
-        <div className="flex">
-          <div>
-            {/* {images.map((img, index) => ( */}
-              <img
-                // key={index}
-                src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
-                alt={product?.product_name}
-                className={`w-20 h-20 object-cover rounded-lg mr-7 mb-2 border cursor-pointer `}
-                // onClick={() => setSelectedImage(img)}
-              />
-            {/* ))} */}
-          </div>
+        <div>
           <img
             alt={product?.product_name}
             src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
