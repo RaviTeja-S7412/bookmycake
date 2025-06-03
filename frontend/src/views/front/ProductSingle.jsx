@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
+import Swal from 'sweetalert2'
 
 export default function ProductSingle() {
   const images = [
@@ -25,6 +26,7 @@ export default function ProductSingle() {
   const [flavors, setFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
   const [areas, setAreas] = useState([]);
+  const [message, setMessage] = useState('');
 
   const days = ['Today', 'Tomorrow', 'Calender'];
 
@@ -44,15 +46,20 @@ export default function ProductSingle() {
     const currentHour = now.getHours();
 
     if (selectedDay === 'Today') {
-      const futureSlots = allSlots.filter(slot => slot.start > currentHour);
+      const futureSlots = allSlots.filter(slot => slot.start > (currentHour+1));
       setAvailableSlots(futureSlots);
+      setSelectedSlot(futureSlots.length > 0 ? futureSlots?.[0]?.label : '');
+      setSelectedDate(now.toISOString().split('T')[0]);
     } else {
       // For Tomorrow or Calendar, show all slots
+      if(selectedDay === 'Tomorrow') {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setSelectedDate(tomorrow.toISOString().split('T')[0]);
+      }
       setAvailableSlots(allSlots);
+      setSelectedSlot(allSlots.length > 0 ? allSlots?.[0]?.label : '');
     }
-
-    // Reset selectedSlot when available slots change
-    setSelectedSlot('');
   }, [selectedDay]);
 
   const handleDateChange = (e) => {
@@ -89,13 +96,65 @@ export default function ProductSingle() {
       setLoading(false);
     }
   };
-  
+
+  const addTocart = async () => {
+    setLoading(true);
+    if(selectedArea === '') {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please select an area',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      setLoading(false);
+      return;
+    }
+    const params = {
+      product_id: product?.id,
+      flavor: selectedFlavor,
+      weight: selectedWeight,
+      area: selectedArea,
+      delivery_date: selectedDate,
+      delivery_time: selectedSlot,
+      qty: 1,
+      type: 'product',
+      product_price: weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price,
+      user_id: localStorage.getItem('user_id') ? localStorage.getItem('user_id') : localStorage.getItem('guest_user_id'),
+      message: message, // Add message from textarea if needed
+      user_type: localStorage.getItem('user_type') ? 'user' : 'guest'
+    };
+
+    try {
+      const res = await axiosIntance.post(`/admin/addcart`, params);
+      if (res.status === 200) {
+        setTimeout(() => {
+          navigate('/props');  
+        }, 2000);
+        
+      } else {    
+        Swal.fire({
+          title: 'Error!',
+          text: res.data.message || 'Failed to add product to cart.',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        });
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      // Handle API error
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (product_id) {
       get_singleproductroute();
     }
   }, [product_id]);
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
     <div className="default-width mx-auto p-4 grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
@@ -190,7 +249,7 @@ export default function ProductSingle() {
             >
               <option value="">Choose an area</option>
               {areas?.map((area, index) => (
-                <option key={index} value={area?.area_name}>
+                <option key={index} value={area?.id}>
                   {area?.area_name}
                 </option>
               ))}
@@ -228,9 +287,12 @@ export default function ProductSingle() {
                   <label className="text-sm font-bold">Choose a date:</label>
                   <input
                     type="date"
-                    value={selectedDate || ''}
+                    value={tomorrow.toISOString().split('T')[0]}
                     onChange={handleDateChange}
                     className="ml-2 p-2 border rounded"
+                    min={
+                      tomorrow.toISOString().split('T')[0]
+                    } // Disable past dates
                   />
                 </div>
               )}
@@ -268,6 +330,8 @@ export default function ProductSingle() {
             <p className="font-semibold mb-1">Message on Cake</p>
             <textarea
               rows="3"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message here..."
               className="w-full border border-gray-300 rounded-md p-2"
               maxLength="50"></textarea>
@@ -275,7 +339,7 @@ export default function ProductSingle() {
           <div className="w-1/2">
             <button
               className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
-              onClick={() => navigate('/props')}
+              onClick={() => addTocart()}
             >
               Add to Cart
             </button>
