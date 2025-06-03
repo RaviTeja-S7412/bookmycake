@@ -24,7 +24,7 @@ export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuItems, setMenuitems] = useState([]);
   const navigate = useNavigate();
-   const [openPopover, setOpenPopover] = useState(null);
+  const [openPopover, setOpenPopover] = useState(null);
 
   useEffect(() => {
     const getMenuItems = async () => {
@@ -62,9 +62,12 @@ export default function HomeHeader() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
-            <ShoppingBagIcon className="h-5 w-5 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
+            <div className='relative'>
+              <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
+            <span class="badge bg-danger absolute left-5 bottom-[17px]">2</span>
+            </div>
             <div className="flex items-center gap-1 cursor-pointer">
-              <UserIcon className="h-5 w-5 text-gray-600" onClick={() => navigate('/login')} />
+              <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />
               {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
             </div>
           </div>
@@ -73,47 +76,47 @@ export default function HomeHeader() {
 
       {/* Desktop navigation bar - only visible on large screens */}
       <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#910f3f]">
-            <div className="flex gap-4">
-              {menuItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="relative"
-                  onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
-                  onMouseLeave={() => setOpenPopover(null)}
-                >
-                  <button
-                    className="flex items-center gap-1 focus:outline-none px-2 py-3"
-                    onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
-                  >
-                    {item.label}
-                    {item.subItems.length > 0 && (
-                      <ChevronDownIcon className="h-4 w-4 text-white" />
-                    )}
-                  </button>
-      
-                  {item.subItems.length > 0 && openPopover === item.id && (
-                    <div className="absolute top-full z-10 mt-0 bg-white shadow-md rounded p-2 w-48">
-                      {item.subItems.map((sub) => (
-                        <a
-                          key={sub.id}
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            navigate('/collections/' + item.path + '/' + sub.path);
-                            setOpenPopover(null);
-                          }}
-                          className="block px-3 py-1 text-sm hover:bg-gray-100 leading-6"
-                          style={{ color: '#000000', textDecoration: 'none' }}
-                        >
-                          {sub.label}
-                        </a>
-                      ))}
-                    </div>
-                  )}
+        <div className="flex gap-4">
+          {menuItems.map((item) => (
+            <div
+              key={item.id}
+              className="relative"
+              onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+              onMouseLeave={() => setOpenPopover(null)}
+            >
+              <button
+                className="flex items-center gap-1 focus:outline-none px-2 py-3"
+                onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+              >
+                {item.label}
+                {item.subItems.length > 0 && (
+                  <ChevronDownIcon className="h-4 w-4 text-white" />
+                )}
+              </button>
+
+              {item.subItems.length > 0 && openPopover === item.id && (
+                <div className="absolute top-full z-10 mt-0 bg-white shadow-md rounded p-2 w-48">
+                  {item.subItems.map((sub) => (
+                    <a
+                      key={sub.id}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate('/collections/' + item.path + '/' + sub.path);
+                        setOpenPopover(null);
+                      }}
+                      className="block px-3 py-1 text-sm hover:bg-gray-100 leading-6"
+                      style={{ color: '#000000', textDecoration: 'none' }}
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          </nav>
+          ))}
+        </div>
+      </nav>
 
 
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
