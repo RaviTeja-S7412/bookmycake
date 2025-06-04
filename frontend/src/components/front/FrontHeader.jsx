@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 import {
   Dialog,
@@ -19,12 +19,16 @@ import {
 import NavBarItems from "../../Data/NavMenu";
 import { useNavigate } from 'react-router-dom';
 import axiosIntance from '../axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCart } from '../../redux/actions/front/cart.actions';
 
 export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuItems, setMenuitems] = useState([]);
-  const navigate = useNavigate();
   const [openPopover, setOpenPopover] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart)
 
   useEffect(() => {
     const getMenuItems = async () => {
@@ -35,6 +39,12 @@ export default function HomeHeader() {
     };
     getMenuItems();
   }, []);
+
+  useEffect(() => {
+    if(cart?.get_cart) {
+      dispatch(getCart())
+    }
+  },[cart?.get_cart]);
 
   return (
     <header className="bg-white font-[Poppins]">
@@ -64,7 +74,7 @@ export default function HomeHeader() {
             <span className="text-xs">Track Order</span>
             <div className='relative'>
               <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
-            <span class="badge bg-danger absolute left-5 bottom-[17px]">2</span>
+            <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
             <div className="flex items-center gap-1 cursor-pointer">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />

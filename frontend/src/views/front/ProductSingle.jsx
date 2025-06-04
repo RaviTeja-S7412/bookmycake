@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 import Swal from 'sweetalert2'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTocart } from "../../redux/actions/front/cart.actions";
 import InnerImageZoom from 'react-inner-image-zoom'
 import 'react-inner-image-zoom/lib/styles.min.css'
 
@@ -13,6 +15,9 @@ export default function ProductSingle() {
 
   const { product_id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart)
+
   const [selectedImage, setSelectedImage] = useState(images[1]);
   const [selectedFlavor, setSelectedFlavor] = useState("Chocolate Truffle");
   const [selectedWeight, setSelectedWeight] = useState("1kg");
@@ -99,8 +104,8 @@ export default function ProductSingle() {
     }
   };
 
-  const addTocart = async () => {
-    setLoading(true);
+  const add_cart = () => {
+    
     if(selectedArea === '') {
       Swal.fire({
         title: 'Error!',
@@ -108,7 +113,6 @@ export default function ProductSingle() {
         icon: 'error',
         confirmButtonText: 'Ok'
       })
-      setLoading(false);
       return;
     }
     const params = {
@@ -125,28 +129,10 @@ export default function ProductSingle() {
       message: message, // Add message from textarea if needed
       user_type: localStorage.getItem('user_type') ? 'user' : 'guest'
     };
-
-    try {
-      const res = await axiosIntance.post(`/admin/addcart`, params);
-      if (res.status === 200) {
-        setTimeout(() => {
-          navigate('/props');  
-        }, 2000);
-        
-      } else {    
-        Swal.fire({
-          title: 'Error!',
-          text: res.data.message || 'Failed to add product to cart.',
-          icon: 'error',
-          confirmButtonText: 'Ok'
-        });
-      }
-    } catch (error) {
-      console.error('Error adding product to cart:', error);
-      // Handle API error
-    } finally {
-      setLoading(false);
-    }
+    dispatch(addTocart(params));
+    setTimeout(() => {
+      navigate('/props');
+    }, 1000);
   };
 
   useEffect(() => {
@@ -332,7 +318,7 @@ export default function ProductSingle() {
           <div className="w-1/2">
             <button
               className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
-              onClick={() => addTocart()}
+              onClick={() => add_cart()}
             >
               Add to Cart
             </button>

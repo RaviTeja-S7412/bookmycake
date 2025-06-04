@@ -22,67 +22,147 @@ var upload = multer({storage: storage})
 
 exports.signup = (req, res) => {
     
+    if(!req.body.user_type){
+        return res.status(202).json({ message: "User Type is Required." });
+    }
+    if(!req.body.first_name){
+        return res.status(202).json({ message: "First Name is Required." });
+    }
+    if(!req.body.email){
+        return res.status(202).json({ message: "Email is Required." });
+    }
+    if(!req.body.mobile_number){
+        return res.status(202).json({ message: "Mobile Number is Required." });
+    }
     if(!req.body.password){
         return res.status(202).json({ message: "Password is Required." });
     }
-    
-    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-    const query = "INSERT INTO tbl_users (first_name, last_name, email, mobile_number, password, role, status, deleted, registered_date, last_logged_in) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = ['Super Admin', 'Admin', 'superadmin@bmc.com', 0, hashedPassword, 1, 'Active', 0, '2024-12-22T18:30:00.000Z', '2024-12-22T21:50:09.000Z'];
-    
-    db.query(query, values, function (error, result) {
 
-        if (error) {
-            return res.status(202).json({
-                message: 'error occured'
+    // Check if email or mobile number already registered
+    db.query(
+        "SELECT * FROM tbl_users WHERE email = ? OR mobile_number = ?",
+        [req.body.email, req.body.mobile_number],
+        function (err, results) {
+            if (err) {
+                return res.status(202).json({ message: "Error occured while checking user." });
+            }
+            if (results.length > 0) {
+                // Check which field is duplicated
+                const emailExists = results.some(user => user.email == req.body.email);
+                const mobileExists = results.some(user => user.mobile_number == req.body.mobile_number);
+                let message = "";
+                if (emailExists && mobileExists) {
+                    message = "Email and Mobile Number already registered.";
+                } else if (emailExists) {
+                    message = "Email already registered.";
+                } else if (mobileExists) {
+                    message = "Mobile Number already registered.";
+                }
+                return res.status(202).json({ message, status: 202 });
+            }
+
+            // Proceed with registration
+            const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+            const query = "INSERT INTO tbl_users (first_name, last_name, email, mobile_number, password, role, status, user_type, deleted, registered_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            const values = [
+                req.body.first_name,
+                req.body.last_name,
+                req.body.email,
+                req.body.mobile_number,
+                hashedPassword,
+                1,
+                'Active',
+                req.body.user_type,
+                0,
+                new Date(),
+            ];
+
+            db.query(query, values, function (error, result) {
+                if (error) {
+                    return res.status(202).json({
+                        message: 'error occured'
+                    });
+                }
+
+                if (result) {
+                    return res.status(200).json({
+                        message: "Registered Successfully", status: 200
+                    })
+                }
             });
         }
-
-        if (result) {
-            return res.status(200).json({
-                message: "Registered Successfully"
-            })
-        }
-    });
+    );
 }
 
 exports.signin = (req, res) => {
 
     var email = req.body.email;
+    var user_id = req.body.user_id;
     var password = req.body.password;
 
-    db.query("SELECT * FROM tbl_users WHERE email = ?", email, function (error, result) {
-    
+    db.query("SELECT * FROM tbl_users WHERE email = ? and role=2", email, function (error, result) {
         if (error) {
             return res.status(202).json({ message: error });
         }
 
         if (result[0]) {
-
             var user = result[0];
             var data = bcrypt.compareSync(password, user.password);
-            
+
             if (data) {
                 const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
                 res.cookie("token", token, { expiresIn: "1d" });
-                res.status(200).json({
-                    token,
-                    user: user,
-                    role: user.role,
-                    message : "Logged in successfully"
+
+                // Check if any items are in the cart for this user
+                db.query("SELECT * FROM tbl_cart WHERE user_id = ?", [user_id], function(cartErr, cartResult) {
+                    if (cartErr) {
+                        return res.status(202).json({ message: "Error checking cart items." });
+                    }
+                    let cartHasItems = false;
+                    let cartCount = 0;
+
+                    if (cartResult.length > 0) {
+                        cartHasItems = true;
+                        cartCount = cartResult.length;
+
+                        // If any cart items found, update their user_id to the logged in user's id
+                        db.query("UPDATE tbl_cart SET user_id = ? WHERE user_id = ?", [user.id, user_id], function(updateErr) {
+                            if (updateErr) {
+                                return res.status(202).json({ message: "Error updating cart user_id." });
+                            }
+                            return res.status(200).json({
+                                token,
+                                user: user,
+                                role: user.role,
+                                cartHasItems,
+                                cartCount,
+                                message: "Logged in successfully",
+                                status: 200
+                            });
+                        });
+                    } else {
+                        return res.status(200).json({
+                            token,
+                            user: user,
+                            role: user.role,
+                            cartHasItems,
+                            cartCount,
+                            message: "Logged in successfully",
+                            status: 200
+                        });
+                    }
                 });
             } else {
                 return res.status(202).json({
-                    message: "Invalid Password"
+                    message: "Invalid Password", status: 202
                 });
             }
-
         } else {
             return res.status(202).json({
-                message: "User not registered with us."
+                message: "User not registered with us.", status: 202
             });
         }
-    })
+    });
 
 }
 

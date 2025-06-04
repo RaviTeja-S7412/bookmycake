@@ -1,63 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosIntance from "../../components/axios";
 import { cilCheckAlt, cilPlus } from '@coreui/icons';
 import CIcon from "@coreui/icons-react";
 import Spinner from "../../components/front/Spinner";
+import { addTocartProp, getCart, getProps } from "../../redux/actions/front/cart.actions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Props() {
   const [activeCategory, setActiveCategory] = useState();
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [props, setProps] = useState([]);
   const [cartItems, setCartitems] = useState([]);
   const navigate = useNavigate();
-
-  const getProps = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosIntance.get(`/admin/getProps`);
-
-      if (res.status === 200) {
-        // Fetch cart items first, then set props and categories
-        await getcartitems();
-        setProps(res.data.props);
-        setCategories(res.data.categories);
-        // Set active category only if categories exist
-        if (res.data.categories && res.data.categories.length > 0) {
-          setActiveCategory(res.data.categories[0]?.id);
-        }
-      }
-    } catch (error) {
-      // console.error('Error fetching product:', error);
-      // Handle API error
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  const getcartitems = async () => {
-    try {
-      const user_id = localStorage.getItem('user_id') ? localStorage.getItem('user_id') : localStorage.getItem('guest_user_id');
-      const res = await axiosIntance.post(`/admin/getcartitems`, { user_id });
-
-      if (res.status === 200) {
-        setCartitems(res.data.cart_data?.filter(item => item.type === 'prop') || []);
-      }
-    } catch (error) {
-      // console.error('Error fetching product:', error);
-      // Handle API error
-    } finally {
-      // setLoading(false);
-    }
-  };
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart);
 
   useEffect(() => {
-    getProps();
-  }, []);
+    if(cart?.get_cart){
+      dispatch(getCart());
+    }else{
+      setCartitems(cart?.cart_data?.filter(item => item.type === 'prop') || []);
+    }
+    if(cart?.get_props) {
+      dispatch(getProps());
+    }else{
+      setActiveCategory(cart?.prop_categories[0]?.id);
+    }
+  }, [cart?.get_cart, cart?.get_props]);
 
   const addProp = (prop_id) => {
-    const prop = props.find((p) => p.id === prop_id);
+    const prop = cart?.props.find((p) => p.id === prop_id);
     
     // Check if the product is already in the cart
     const exists = cartItems.some(item => item.product_id === prop.id);
@@ -80,18 +51,14 @@ export default function Props() {
     setCartitems(cart);
   }
 
-  const saveCartItems = async () => {
-    try {
-      const res = await axiosIntance.post('/admin/addprop', { cartItems, user_id: localStorage.getItem('user_id') ? localStorage.getItem('user_id') : localStorage.getItem('guest_user_id') });
-      if (res.status === 200) {
-        setTimeout(() => {
-          navigate('/cart');  
-        }, 2000);
-      }
-    } catch (error) {
-      console.error('Error saving cart items:', error);
-      // Handle API error
-    }
+  const saveCartItems = () => {
+    const user_id = localStorage.getItem('user_id') ? localStorage.getItem('user_id') : localStorage.getItem('guest_user_id');
+    dispatch(addTocartProp({ cartItems, user_id }))
+    
+    setTimeout(() => {
+      navigate('/cart');
+    }, 1000);
+    
   }
 
   return (
@@ -101,7 +68,7 @@ export default function Props() {
           </h2>
 
           <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 mt-4">
-              {categories.map((category) => (
+              {cart?.prop_categories?.map((category) => (
                   <button
                       key={category?.id}
                       onClick={() => setActiveCategory(category?.id)}
@@ -122,7 +89,7 @@ export default function Props() {
                   <Spinner />
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                      {props?.length > 0 && props.filter((p) => p.prop_cat_id == activeCategory)?.map((product, index) => (
+                      {cart?.props?.length > 0 && cart?.props.filter((p) => p.prop_cat_id == activeCategory)?.map((product, index) => (
                           <div key={`${product.prop_name}-${index}`}
                               className="bg-white shadow rounded-xl overflow-hidden text-center p-4 flex flex-col justify-between h-[22rem]">
                               <img src={import.meta.env.VITE_APIBASE_URL + product.prop_image} alt={product.prop_name}
