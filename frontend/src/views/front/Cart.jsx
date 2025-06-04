@@ -21,9 +21,9 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    if(cart?.get_cart){
+    if (cart?.get_cart) {
       dispatch(getCart());
-    }else{
+    } else {
       setCarttotal(cart?.cart_data?.reduce((total, item) => {
         return total + (item.product_price * item.qty);
       }, 0));
