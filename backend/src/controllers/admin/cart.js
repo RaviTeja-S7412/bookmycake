@@ -188,7 +188,6 @@ exports.deletecartitem = (req,res) => {
     
     const { id } = req.body;
     
-
     if(!id){
         return res.status(202).json({message : "id is required"});
     }
@@ -200,10 +199,10 @@ exports.deletecartitem = (req,res) => {
             return res.status(500).json({ message : 'Database error' });
         }
         if(result.affectedRows === 0){
-            return res.status(202).json({ message : 'cart not found' });
+            return res.status(202).json({ message : 'Product not found' });
         }
         
-        return res.status(200).json({ message: 'Cart Deleted Successfully'});
+        return res.status(200).json({ message: 'Product removed from cart successfully.'  });
     });
 }
 
