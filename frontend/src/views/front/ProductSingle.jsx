@@ -128,12 +128,9 @@ export default function ProductSingle() {
       user_type: localStorage.getItem('user_type') ? 'user' : 'guest'
     };
     dispatch(addTocart(params));
-
-    if(cart.is_cart_added) {
-      setTimeout(() => {
-        navigate('/props');
-      }, 1000);
-    }
+    setTimeout(() => {
+      navigate('/props');
+    }, 1000);
   };
 
   useEffect(() => {
