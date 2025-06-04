@@ -43,10 +43,10 @@ export default function Cart() {
         {cart?.cart_data?.map((item, index) => (
           <div className="grid lg:grid-cols-1 gap-2" key={index}>
             <div className="p-2 rounded-lg">
-              <div className="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
+              <div className="w-full max-w-5xl mx-auto border p-4 sm:flex items-center justify-between">
                 {/* <!-- Product Details --> */}
                 <div className="lg:flex items-start space-x-4 w-2/3">
-                  <img src={item?.type === "product" ? import.meta.env.VITE_APIBASE_URL + item?.product_data?.product_image : import.meta.env.VITE_APIBASE_URL + item?.product_data?.prop_image} alt={item?.type === "product" ? item?.product_data?.product_name : item?.product_data?.prop_name} class={"w-24 h-24 object-cover rounded-md border"} />
+                  <img src={item?.type === "product" ? import.meta.env.VITE_APIBASE_URL + item?.product_data?.product_image : import.meta.env.VITE_APIBASE_URL + item?.product_data?.prop_image} alt={item?.type === "product" ? item?.product_data?.product_name : item?.product_data?.prop_name} className={"w-24 h-24 object-cover rounded-md border"} />
                   <div>
                     <p className={`text-lg font-semibold mb-1 ${item?.type === "product" ? 'cursor-pointer' : ''}`} onClick={() => item?.type === "product" ? navigate('/products/' + item?.product_data?.route) : ''}>{item?.type === "product" ? item?.product_data?.product_name : item?.product_data?.prop_name}</p>
                     <p className="text-sm mb-1"><span className="font-semibold">Price:</span> ₹{item?.product_price}</p>
@@ -60,9 +60,9 @@ export default function Cart() {
                 </div>
 
                 {/* <!-- Quantity & Total --> */}
-                <div className="lg:flex items-center space-x-6 w-1/3 justify-end">
+                <div className="sm:flex items-center space-x-6 sm:w-1/3 justify-end">
                   {/* <!-- Quantity Control --> */}
-                  <div className="lg:flex items-center border rounded overflow-hidden">
+                  <div className="flex items-center border rounded overflow-hidden justify-between">
                     <button className="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={() => {
                       if (item?.qty > 1) {
                         update_cart(item?.product_id, item?.qty - 1, item?.id);
