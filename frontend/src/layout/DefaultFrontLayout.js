@@ -7,7 +7,7 @@ const DefaultFrontLayout = () => {
   return (
     <div>
         <FrontHeader />
-        <div className="">
+        <div>
           <FrontContent />
         </div>
         <FrontFooter />

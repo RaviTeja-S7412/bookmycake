@@ -40,8 +40,8 @@ export default function HomeHeader() {
     <header className="bg-white font-[Poppins]">
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
-        <div className="flex items-center gap-4 min-w-[200px] cursor-pointer" onClick={() => navigate('/')}>
-          <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
+        <div className="flex justify-center w-full sm:w-[unset] items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
+          <img src="/assets/logo.jpg" alt="Logo" />
         </div>
 
         {/* Middle: Search */}
@@ -161,7 +161,7 @@ export default function HomeHeader() {
       </Dialog>
 
       {/* Mobile menu toggle - only on small screens */}
-      <div className="flex lg:hidden items-center justify-between px-6 py-4">
+      <div className="flex lg:hidden items-center justify-between px-6 lg:py-4">
         <button
           type="button"
           className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md"

@@ -66,9 +66,9 @@ export default function Cart() {
         cartItems.map((item, index) => (
           <div className="grid lg:grid-cols-1 gap-2" key={index}>
             <div className="p-2 rounded-lg">
-              <div class="w-full max-w-5xl mx-auto border p-4 flex items-center justify-between">
+              <div class="w-full max-w-5xl mx-auto border p-4 sm:flex items-center justify-between">
                 {/* <!-- Product Details --> */}
-                <div class="lg:flex items-start space-x-4 w-2/3">
+                <div class="lg:flex items-start space-x-4 sm:w-2/3">
                   <img src={item?.type === "product" ? import.meta.env.VITE_APIBASE_URL + item?.product_data?.product_image : import.meta.env.VITE_APIBASE_URL + item?.product_data?.prop_image} alt={item?.type === "product" ? item?.product_data?.product_name : item?.product_data?.prop_name} class={"w-24 h-24 object-cover rounded-md border"} />
                   <div>
                     <p class={`text-lg font-semibold mb-1 ${item?.type === "product" ? 'cursor-pointer' : ''}`} onClick={() => item?.type === "product" ? navigate('/products/'+item?.product_data?.route) : ''}>{item?.type === "product" ? item?.product_data?.product_name : item?.product_data?.prop_name}</p>
@@ -83,9 +83,9 @@ export default function Cart() {
                 </div>
 
                 {/* <!-- Quantity & Total --> */}
-                <div class="lg:flex items-center space-x-6 w-1/3 justify-end">
+                <div class="sm:flex items-center space-x-6 sm:w-1/3 justify-end">
                   {/* <!-- Quantity Control --> */}
-                  <div class="lg:flex items-center border rounded overflow-hidden">
+                  <div class="flex items-center border rounded overflow-hidden justify-between">
                     <button class="px-3 py-1 text-lg font-semibold text-gray-700 hover:bg-gray-100" onClick={() => {
                       if (item?.qty > 1) {
                         updateCart(item?.product_id, item?.qty - 1, item?.id);
@@ -96,7 +96,7 @@ export default function Cart() {
                   </div>
 
                   {/* <!-- Delete Icon --> */}
-                  <button class="text-gray-500 hover:text-red-600 lg:!mr-5">
+                  <button class="text-gray-500 hover:text-red-600 lg:!mr-5 my-3">
                     <img className="h-5 w-5" src="./assets/delte_icon.png" alt="Delete" />
                   </button>
 

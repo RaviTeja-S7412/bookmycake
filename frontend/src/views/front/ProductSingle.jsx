@@ -159,7 +159,7 @@ export default function ProductSingle() {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
-    <div className="default-width mx-auto p-4 grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
+    <div className="default-width mx-auto p-4 lg:grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
       {/* Image Gallery Section */}
       <div>
         {/* Main image */}
@@ -212,7 +212,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-3 gap-4">
+        <div className="mb-4 lg:grid grid-cols-3 gap-4">
           {/* Weight */}
           <div>
             <p className="font-semibold mb-1">Weight</p>
@@ -250,7 +250,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-3 gap-4">
+        <div className="mb-4 lg:grid grid-cols-3 gap-4">
           <div>
             <p className="font-semibold mb-1">Select Date & Time</p>
             <div className="flex gap-2 mb-3">
@@ -319,7 +319,7 @@ export default function ProductSingle() {
         </div>
 
         <div className="mb-4">
-          <div className="w-1/2">
+          <div className="lg:w-1/2">
             <p className="font-semibold mb-1">Message on Cake</p>
             <textarea
               rows="3"

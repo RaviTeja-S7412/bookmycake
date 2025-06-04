@@ -34,7 +34,7 @@ export default function Carousel() {
         {
           Banners.map(image => (
             <SwiperSlide className='relative'>
-              <img src={image.imageSrc} alt={image.name} className='w-full' /> <span className='absolute bottom-0 left-0 right-0 font-bold text-gray-100 text-[50px]'>{image.name}</span>
+              <img src={image.imageSrc} alt={image.name} className='w-full' /> <span className='absolute bottom-0 left-0 right-0 font-bold text-gray-100 lg:text-[50px]'>{image.name}</span>
             </SwiperSlide>
           ))
         }
