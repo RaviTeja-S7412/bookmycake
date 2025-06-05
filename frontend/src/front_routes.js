@@ -12,6 +12,7 @@ const ForgotPassword = React.lazy(() => import('./views/front/ForgotPassword'));
 const Register = React.lazy(() => import('./views/front/Register'));
 const Profile = React.lazy(() => import('./views/front/profile'));
 const Checkout = React.lazy(() => import('./views/front/Checkout'));
+const OrderStatus = React.lazy(() => import('./views/front/OrderStatus'));
 
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -24,8 +25,8 @@ const front_routes = [
   {path: '/login', exact: true, name: 'Login', element: Login},
   {path: '/sign-up', exact: true, name: 'Register', element: Register},
   {path: '/my-profile', exact: true, name: 'Profile', element: Profile},
+  {path: '/order-status', exact: true, name: 'Profile', element: OrderStatus},
   {path: '/forgot-password', exact: true, name: 'Forgot Password', element: ForgotPassword},
-
 ]
 
 export default front_routes
