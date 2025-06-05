@@ -53,7 +53,7 @@ export default function DesignerCollections() {
   return (
     <section className='bg-[url(/assets/images/designer-bg.jpg)] bg-cover bg-no-repeat bg-center'>
       <div className="default-width py-10">
-        <h4 className="!text-4xl poppins-semibold text-gray-800 mb-4 text-white">Designer Collections</h4>
+        <h4 className="sm:!text-4xl poppins-semibold text-gray-800 mb-4 text-white">Designer Collections</h4>
         <div className="slider-container">
           <Slider {...settings}>
             {cakes.map((cake, index) => (
