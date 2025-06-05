@@ -76,13 +76,19 @@ export default function HomeHeader() {
               <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
               <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
-            <div className="flex items-center gap-1 cursor-pointer">
+            <div className="cursor-pointer icon-user">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />
-              {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
+              <ul className="profil-drop">
+                <li className='block'>Profile</li>
+                <hr className='!m-2' />
+                <li className='block'>Logout</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+
+
 
       {/* Desktop navigation bar - only visible on large screens */}
       <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#910f3f]">
