@@ -41,10 +41,10 @@ export default function HomeHeader() {
   }, []);
 
   useEffect(() => {
-    if(cart?.get_cart) {
+    if (cart?.get_cart) {
       dispatch(getCart())
     }
-  },[cart?.get_cart]);
+  }, [cart?.get_cart]);
 
   return (
     <header className="bg-white font-[Poppins]">
@@ -74,7 +74,7 @@ export default function HomeHeader() {
             <span className="text-xs">Track Order</span>
             <div className='relative'>
               <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
-            <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
+              <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
             <div className="flex items-center gap-1 cursor-pointer">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />
@@ -145,9 +145,14 @@ export default function HomeHeader() {
           </div>
 
           <div className="mt-6">
-            {NavBarItems.map((item) => (
-              <Disclosure key={item.id} as="div" className="mb-2">
-                <DisclosureButton className="flex w-full justify-between px-4 py-2 text-left text-sm font-semibold text-gray-900 hover:bg-gray-100">
+            {menuItems.map((item) => (
+              <Disclosure key={item.id} as="div" className="mb-2"
+                onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+                onMouseLeave={() => setOpenPopover(null)}
+              >
+                <DisclosureButton className="flex w-full justify-between px-4 py-2 text-left text-sm font-semibold text-gray-900 hover:bg-gray-100"
+                  onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+                >
                   {item.label}
                   {item.subItems && <ChevronDownIcon className="size-5 text-gray-400" />}
                 </DisclosureButton>
