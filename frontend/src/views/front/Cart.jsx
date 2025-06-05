@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/front/Spinner";
 import { deleteCart, getCart, updateCart } from "../../redux/actions/front/cart.actions";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import axiosIntance from "../../components/axios";
 
 export default function Cart() {
   const [cartTotal, setCarttotal] = useState(0);
@@ -29,6 +31,62 @@ export default function Cart() {
       }, 0));
     }
   }, [cart?.get_cart]);
+
+  const insertOrder = async () => {
+    setLoading(true);
+
+    const params = {
+      user_id: localStorage.getItem("user_id")
+    };
+   
+    try {
+      const res = await axiosIntance.post(`/front/insertOrder`, params);
+
+      if (res.status === 200) {
+        updateStatus(res.data.order_id);
+        Swal.fire({
+          title: res.data.message
+        })
+      } else {
+        Swal.fire({
+          title: res.data.message
+        })
+      }
+    } catch (error) {
+      // console.error('Error fetching product:', error);
+      // Handle API error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateStatus = async (order_id) => {
+
+    const params = {
+      user_id: localStorage.getItem("user_id"),
+      order_id: order_id,
+      status: "success"
+    };
+   
+    try {
+      const res = await axiosIntance.post(`/front/updatePaymentStatus`, params);
+
+      if (res.status === 200) {
+        
+        Swal.fire({
+          title: res.data.message
+        })
+      } else {
+        Swal.fire({
+          title: res.data.message
+        })
+      }
+    } catch (error) {
+      // console.error('Error fetching product:', error);
+      // Handle API error
+    } finally {
+    }
+  };
 
   return (
     loading ? <Spinner /> : cart?.cart_data?.length > 0 ? (
@@ -101,7 +159,7 @@ export default function Cart() {
               <button className="px-4 py-2 border rounded-full bg-black text-white w-full mt-0" onClick={() => {
                 const user_id = localStorage.getItem('user_id');
                 if (user_id) {
-                  navigate('/checkout');
+                  insertOrder();
                 } else {
                   navigate('/login');
                 }

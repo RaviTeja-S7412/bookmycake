@@ -12,7 +12,8 @@ exports.addcart = (req, res) => {
         delivery_time,
         message,
         type,
-        user_type
+        user_type,
+        area
     } = req.body;
 
     // Input validation
@@ -31,9 +32,9 @@ exports.addcart = (req, res) => {
         if (err) return res.status(500).json({ message: "Failed to retrieve product options." });
 
         const product_info = JSON.stringify(optionsResult); // Convert to JSON string
-        const insertQuery = `INSERT INTO tbl_cart (product_id, user_id, product_info, product_price, weight,qty, flavor, delivery_date, delivery_time,message, user_type, type, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const insertQuery = `INSERT INTO tbl_cart (product_id, user_id, product_info, product_price, weight,qty, flavor, delivery_date, delivery_time,message, user_type, type, area, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        const values = [product_id, user_id, product_info, product_price, weight,qty, flavor, delivery_date, delivery_time,message, user_type, type, new Date()];
+        const values = [product_id, user_id, product_info, product_price, weight,qty, flavor, delivery_date, delivery_time,message, user_type, type, area, new Date()];
 
         db.query(insertQuery, values, (insertErr, result) => {
             if (insertErr) {
@@ -227,7 +228,119 @@ exports.getProps = (req, res) => {
     });
 }
 
+exports.insertOrder = (req, res) => {
+    
+    const user_id = req.body.user_id;
 
+    const cartQuery = "SELECT * FROM tbl_cart WHERE user_id = ?";
+    db.query(cartQuery, [user_id], async (err, cresult) => {
+        if (err) return res.status(500).json({ message: "Failed to retrieve cart data." });
+        if (cresult.length > 0) {
+            const cartData = await new Promise((resolve, reject) => {
+                db.query("SELECT * FROM tbl_cart WHERE user_id = ? and type='product' order by id desc", [user_id], (err, result) => {
+                    if (err) return reject(err);
+                    resolve(result[0]);
+                });
+            });
 
+            const total_amount = cresult.reduce((total, item) => total + (item.product_price * item.qty), 0);
+            
+            const order_id = "ORD_" + new Date().toLocaleTimeString('en-US', { hour12: false }).replace(/:/g, '');
+            const insertQuery = `INSERT INTO tbl_orders (order_id, payment_type, total_amount, total_order_amount, discount_amount, area,user_id, date_of_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            const values = [order_id, "online", total_amount, total_amount, 0, cartData?.area, user_id, new Date()];
 
+            db.query(insertQuery, values, (insertErr) => {
+                if (insertErr) {
+                    return res.status(500).json({ message: insertErr });
+                }
+
+                // Ensure the order of fields matches the values
+                const productsQuery = `INSERT INTO tbl_order_products (order_id, product_id, user_id, price, weight, qty, flavor, delivery_date, delivery_time, user_type, type, area, message, created_date) VALUES ?`;
+
+                const product_values = cresult.map(item => [
+                    order_id,
+                    item.product_id,
+                    item.user_id,
+                    item.product_price,
+                    item.weight,
+                    item.qty,
+                    item.flavor,
+                    item.delivery_date,
+                    item.delivery_time,
+                    item.user_type,
+                    item.type,
+                    item.area,
+                    item.message,
+                    new Date()
+                ]);
+
+                db.query(productsQuery, [product_values], (oinsertErr) => {
+                    if (oinsertErr) {
+                        return res.status(500).json({ message: oinsertErr });
+                    }
+
+                    return res.status(200).json({ message: "Order Processed successfully.", order_id });
+                });
+            });
+        }else{
+            return res.status(500).json({ message: 'Error Occured' });
+        }
+    });
+};
+
+exports.updatePaymentStatus = (req, res) => {
+    
+    const {
+        order_id,
+        user_id,
+        status,
+        txn_id,
+        bank_ref_no,
+        payment_mode
+    } = req.body;
+
+    if(order_id == ""){
+        return res.status(202).json({ message: "Order ID is Required." });
+    }
+
+    if(user_id == ""){
+        return res.status(202).json({ message: "User ID is Required." });
+    }
+
+    if(status == ""){
+        return res.status(202).json({ message: "Status is Required." });
+    }
+
+    if(status === "success"){
+        const updateQuery = "UPDATE tbl_orders SET order_status=?, payment_status=?, txn_id=?, payment_mode=?, bank_ref_no=?, date_of_payment=? where order_id=?";
+        const values = ["success", "success", Date.now(), "UPI", "BA1234564654", new Date(), order_id];
+        db.query(updateQuery, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: err });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Order not found." });
+            }
+
+            db.query("delete from tbl_cart where user_id = "+user_id, (cerr, cres) => {
+                if (cerr) {
+                    return res.status(500).json({ message: cerr });
+                }   
+                return res.status(200).json({ message: "Payment successfully Done" });
+            })
+                
+        });
+    }else{
+        const updateQuery = 'UPDATE tbl_orders SET order_status=?, payment_status=? where order_id=?';
+        const values = ["cancelled", "failed", order_id];
+        db.query(updateQuery, [values], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: 'Database error' });
+            }
+            return res.status(200).json({ message: "Payment failed" });    
+        })
+    }
+
+}
 

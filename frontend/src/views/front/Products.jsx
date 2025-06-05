@@ -14,10 +14,13 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [flavors, setFlavors] = useState([]);
+  const [selectedFlavors, setselectedFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
+  const [selectedWeights, setselectedWeights] = useState([]);
   const [minPrice, setMinprice] = useState(0);
   const [maxPrice, setMaxprice] = useState(0);
   const [highestPrice, setHighestprice] = useState(0);
+  const [filter, setFilter] = useState(false);
 
   const [sortOptions, setSortOptions] = useState([
     { name: 'Featured', value: 'latest', current: true },
@@ -30,14 +33,26 @@ export default function Products() {
     { name: 'Date, new to old', value: 'date_desc', current: false },
   ]);
 
-  const getProducts = async (sort_by='', min_price='', max_price='') => {
+  const getProducts = async (sort_by='', min_price='', max_price='', selected_flavors=[], selected_weights=[]) => {
     setLoading(true);
   
     const params = {
-      "sort_by": sort_by,
-      "min_price": Number(min_price),
-      "max_price": Number(max_price),
+      "sort_by": sort_by
     }
+
+    if(min_price && max_price){
+      params.min_price = Number(min_price);
+      params.max_price = Number(max_price);
+    }
+
+    if(selected_flavors.length > 0){
+      params.flavors = selected_flavors;
+    }
+
+    if(selected_weights.length > 0){
+      params.weights = selected_weights;
+    }
+
     if(sub_category_id){
       params.sub_category_id = sub_category_id;
     }else if(category_id){
@@ -57,11 +72,41 @@ export default function Products() {
   }
 
   useEffect(() => {
+    getProducts(sortOptions?.find((option) => option.current)?.value);
+  }, [category_id, sub_category_id]);
+  
+  const filterProducts = () => {
     const min_price = minPrice ? Number(minPrice) : Number(0);
     const max_price = maxPrice ? Number(maxPrice) : Number(highestPrice);
-    getProducts(sortOptions?.find((option) => option.current)?.value, min_price, max_price);
-  }, [category_id, sub_category_id, minPrice, maxPrice]);
-  
+    const selected_flavors = selectedFlavors.length > 0 ? selectedFlavors : [];
+    const selected_weights = selectedWeights.length > 0 ? selectedWeights : [];
+    getProducts(sortOptions?.find((option) => option.current)?.value, min_price, max_price, selected_flavors, selected_weights);
+  }
+
+  useEffect(() => {
+    if (filter) {
+      filterProducts();
+      setFilter(false);
+    }
+  }, [filter]);
+
+  const handleFlavorchange = (flavor) => {
+    if (selectedFlavors.includes(flavor)) {
+      setselectedFlavors(selectedFlavors.filter((item) => item !== flavor));
+    } else {
+      setselectedFlavors([...selectedFlavors, flavor]);
+    }
+    setFilter(true);
+  };
+
+  const handleWeightchange = (weight) => {
+    if (selectedWeights.includes(Number(weight))) {
+      setselectedWeights(selectedWeights.filter((item) => Number(item) !== Number(weight)));
+    } else {
+      setselectedWeights([...selectedWeights, Number(weight)]);
+    }
+    setFilter(true);
+  };
 
   return (
     <div className="default-width font-[Poppins]">
@@ -80,8 +125,14 @@ export default function Products() {
 
           {showPrice && (
             <div className="grid grid-cols-2 gap-4 mb-2 text-black">
-              <input type="number" placeholder="From" onChange={(e) => setMinprice(e.target.value)} className="border bg-white px-2 py-1 mt-1" />
-              <input type="number" placeholder="To" onChange={(e) => setMaxprice(e.target.value)} className="border bg-white px-2 py-1 mt-1" />
+              <input type="number" placeholder="From" onChange={(e) => {
+                setMinprice(e.target.value)
+                setFilter(true);
+              }} className="border bg-white px-2 py-1 mt-1" />
+              <input type="number" placeholder="To" onChange={(e) => {
+                setMaxprice(e.target.value)
+                setFilter(true);
+              }} className="border bg-white px-2 py-1 mt-1" />
             </div>
           )}
           <hr />
@@ -98,7 +149,7 @@ export default function Products() {
                 {flavors?.length > 0 ? (
                   flavors.map((flavor, index) => (
                     <label for={`cbk1-${index}`} key={index}>
-                      <input type="checkbox" id={`cbk1-${index}`} />
+                      <input type="checkbox" id={`cbk1-${index}`} onChange={(e) => handleFlavorchange(e.target.value)} value={flavor} />
                         <span className="cbx">
                           <svg width="12px" height="11px" viewBox="0 0 12 11">
                             <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -123,8 +174,8 @@ export default function Products() {
             <div className="checkbox-wrapper">
               {weights?.length > 0 ? (
                   weights?.sort((a, b) => a - b)?.map((weight, index) => (
-                    <label for="cbk1-8">
-                      <input type="checkbox" id="cbk1-8" />
+                    <label for={`cbk-${index}`} key={'w'+index}>
+                      <input type="checkbox" id={`cbk-${index}`} onChange={(e) => handleWeightchange(e.target.value)} value={weight} />
                         <span className="cbx">
                           <svg width="12px" height="11px" viewBox="0 0 12 11">
                             <polyline points="1 6.29411765 4.5 10 11 1"></polyline>

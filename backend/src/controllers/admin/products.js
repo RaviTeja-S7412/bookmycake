@@ -393,6 +393,8 @@ exports.get_filter_products = async (req, res) => {
     const sort_by = req.query.sort_by;
     const min_price = req.query.min_price;
     const max_price = req.query.max_price;
+    const filterFlavors = req.query.flavors;
+    const filterWeights = req.query.weights;
 
     let conditions = [];
     let values = [];
@@ -478,6 +480,10 @@ exports.get_filter_products = async (req, res) => {
             
             // Convert map to array
             var products = Object.values(productsMap);
+            if (Array.isArray(products) && products.length) {
+                const allPrices = products.flatMap(p => (p.product_options || []).map(o => Number(o.price) || 0));
+                highestPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
+            }
             if(sort_by === "latest" || sort_by === "best-selling") {
                 products = products.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
             }
@@ -493,7 +499,8 @@ exports.get_filter_products = async (req, res) => {
             if (sort_by === "date_desc") {
                 products = products.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
             }
-            /* if (min_price && max_price) {
+            
+            if (min_price && max_price) {
                 const filteredProducts = products.map(product => {
                     const filteredOptions = product.product_options.filter(option => option.price >= min_price && option.price <= max_price);
                     if (filteredOptions.length > 0) {
@@ -504,10 +511,29 @@ exports.get_filter_products = async (req, res) => {
                 products = filteredProducts;
             }
 
-            if (Array.isArray(products) && products.length) {
-                const allPrices = products.flatMap(p => (p.product_options || []).map(o => Number(o.price) || 0));
-                highestPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
-            } */
+            if(filterFlavors && filterFlavors.length > 0) {
+                const filteredProducts = products.map(product => {
+                    const filteredOptions = product.product_options.filter(option => filterFlavors.includes(option.flavor));
+                    if (filteredOptions.length > 0) {
+                        return { ...product, product_options: filteredOptions };
+                    }
+                    return null;
+                }).filter(product => product !== null);
+                products = filteredProducts;
+            }
+
+            if(filterWeights && filterWeights.length > 0) {
+                const sWeights = filterWeights?.map(item => Number(item));
+                const filteredProducts = products.map(product => {
+                    const filteredOptions = product.product_options.filter(option => sWeights.includes(Number(option.weight)));
+                    if (filteredOptions.length > 0) {
+                        return { ...product, product_options: filteredOptions };
+                    }
+                    return null;
+                }).filter(product => product !== null);
+                products = filteredProducts;
+            }
+            
             
         return res.status(200).json({
             products: products,

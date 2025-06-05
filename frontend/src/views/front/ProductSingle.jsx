@@ -85,7 +85,6 @@ export default function ProductSingle() {
 
       if (res.status === 200) {
         const fetchedProduct = res.data.product_data;
-        console.log('fetchedProduct: ', fetchedProduct?.product_options);
         setProduct(fetchedProduct);
         const uniqueFlavors = [...new Set(fetchedProduct?.product_options.map(product => product.flavor))]
         setFlavors(uniqueFlavors);
