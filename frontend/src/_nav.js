@@ -61,32 +61,21 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Today Orders',
-        to: '/base/accordion',
+        to: '/admin/orders/today-orders',
       },
       {
         component: CNavItem,
-        name: 'Pending Orders',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: 'Cancelled Orders',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: 'Success Orders',
-        to: '/base/breadcrumbs',
+        name: 'All Orders',
+        to: '/admin/orders/all-orders',
       }
     ],
   },
-
-  {
+  /* {
     component: CNavItem,
     name: 'Payments',
     to: '/theme/colors',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
-  },
+  }, */
   {
     component: CNavGroup,
     name: 'Settings',

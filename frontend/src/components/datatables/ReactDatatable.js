@@ -76,7 +76,7 @@ const ReactDatatable = ({ columns, data, actions, actionTarget }) => {
       <DataTable
           columns={columns}
           data={filteredData}
-          // progressPending={loading}
+          progressPending={loading}
           // progressComponent={<CustomLoader />}
           pagination
           // paginationServer

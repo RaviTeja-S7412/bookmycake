@@ -357,91 +357,16 @@ exports.signout = (req, res) => {
 
 exports.getUsers = (req, res) => {
     
-    var perPage = req.body.perPage ? req.body.perPage : 10,
-    page = req.body.page-1
-    var search = req.body.search
-    var ref = req.body.ref
-    const usersData = []
-
-    var cby = ''; 
-    var role = ''; 
-    if(req.body.role == 1){
-        cby = {$ne: ""};
-    }else{
-        cby = req.body.user_id;
-    }
-
-    if(ref == 'teamleads'){
-        role = 4
-    }else if(ref == 'ams'){
-        role = 3
-    }else{
-        role = {$ne:1}
-    }
-
-    users.aggregate([
-        { "$sort": { '_id' : -1 } },
-        {$match: 
-            {role:role,created_by: cby,
-                $or: 
-                [ 
-                    { admin_name: { "$regex": search, "$options": "i"} }, 
-                    { email: { "$regex": search, "$options": "i"} }, 
-                    { mobile: { "$regex": search, "$options": "i"} }, 
-                    { designation: { "$regex": search, "$options": "i"} },
-                ] 
-            },
-        },
-        { $lookup: {
-                from:'tbl_roles',
-                localField: "role",
-                foreignField: "id",
-                as: "role_data"                                                                  
-            }
-        },
-        { "$limit": perPage * req.body.page },
-        { "$skip": perPage * page },
-    ])
-    .toArray(function (err, users_data) {
-
-            if(err){
-                return res.status(202).json({message:err});
-            }
-
-            if(users_data.length > 0){
-                users_data.forEach((element) => {
-                  
-                    usersData.push({
-                        "id": element._id,
-                        "admin_name": element.admin_name,
-                        "mobile": element.mobile,
-                        "email": element.email,
-                        "designation": element.designation,
-                        "role_name": element.role_data.length > 0 ?  element.role_data[0].role : '',
-                        "created_date": new Date(element.created_date).toLocaleDateString('en-US'),
-                    })
-
-                });
-            }
-
-            users.find({role:role,created_by: cby, $or: 
-                [ 
-                    { admin_name: { "$regex": search, "$options": "i"} }, 
-                    { email: { "$regex": search, "$options": "i"} }, 
-                    { mobile: { "$regex": search, "$options": "i"} }, 
-                    { designation: { "$regex": search, "$options": "i"} } 
-                ] 
-            }).count(function (err, count) {
-                return res.status(200).json({
-                    total_users: usersData,
-                    pageIndex: req.body.page,
-                    total_pages: Math.ceil(count / perPage),
-                    total_users_count: count,
-                    prevPage: page > 0 ? true : false,
-                    nextPage: Math.ceil(count / perPage) === req.body.page ? false : true
-                });   
-            })
-        })
+    let query = `select * from tbl_users where role=2 order by id desc`;
+    
+    db.query(query, function (err, result) {
+        if (err) {
+            return res.status(500).json({ message: err });
+        }
+        return res.status(200).json({
+            users: result
+        });
+    });
 
 }
 

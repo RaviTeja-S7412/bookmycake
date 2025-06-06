@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireSignin } = require('../../controllers/admin/auth');
-const { addcart, updatecart, deletecartitem, getcartitems, getProps, addprop, insertOrder, updatePaymentStatus} = require('../../controllers/admin/cart');
+const { addcart, updatecart, deletecartitem, getcartitems, getProps, addprop, insertOrder, updatePaymentStatus, cashfreepay} = require('../../controllers/admin/cart');
 
 //category routes
 router.post('/admin/addcart', addcart);
@@ -12,5 +12,6 @@ router.get('/admin/getProps', getProps);
 router.post('/admin/addprop', addprop);
 router.post('/front/insertOrder', insertOrder);
 router.post('/front/updatePaymentStatus', updatePaymentStatus);
+router.post('/front/cashfreepay', cashfreepay);
 
 module.exports = router;

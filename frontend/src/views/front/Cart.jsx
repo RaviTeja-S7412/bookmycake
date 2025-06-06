@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import axiosIntance from "../../components/axios";
 
 export default function Cart() {
+
   const [cartTotal, setCarttotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -86,6 +87,39 @@ export default function Cart() {
     }
   };
 
+  const makePayment = async () => {
+
+    const rand = Math.floor(1000000000 + Math.random() * 9000000000); // 10 digit random number
+    const params = {
+      orderId: 'order_' + rand,
+      orderAmount: 100,
+      customerDetails: {
+      customer_id: 'cust_001',
+      customer_email: 'test@example.com',
+      customer_phone: '9999999999'
+      }
+    }
+    const res = await axiosIntance.post(`/front/cashfreepay`, params);
+    console.log('res: ', res);
+
+    if (res.data.success) {
+      
+      const cashfree = Cashfree({
+        mode: "production",
+      }); 
+
+      let checkoutOptions = {
+          paymentSessionId: res.data.payment_session_id,
+          redirectTarget: "_self",
+      };
+      cashfree.checkout(checkoutOptions);
+
+    } else {
+      alert("Failed to create order");
+    }
+  };
+
+
   return (
     loading ? <Spinner /> : cart?.cart_data?.length > 0 ? (
       <div className="default-width px-6 py-10 bg-white font-[poppins]">
@@ -95,6 +129,7 @@ export default function Cart() {
             Continue shopping
           </button>
         </div>
+        <button onClick={() => makePayment()}>Pay</button>
 
         {cart?.cart_data?.map((item, index) => (
           <div className="grid lg:grid-cols-1 gap-2" key={index}>

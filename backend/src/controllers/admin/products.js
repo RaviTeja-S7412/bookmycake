@@ -276,7 +276,7 @@ exports.get_singleproduct = (req, res) => {
                 id, category_id, sub_category_id, customer_type, product_name, product_image,
                 product_description, ingredients, nutritional_info, shipping, options, route,
                 status, deleted, created_date, updated_date, product_size, product_flavor, stock,
-                is_size, is_flavor
+                is_size, is_flavor, isDesignercollections, isCorporatecollections, isFeaturedproducts
             } = result[0];
 
             // Build options array
@@ -296,7 +296,7 @@ exports.get_singleproduct = (req, res) => {
                 id, category_id, sub_category_id, customer_type, product_name, product_image,
                 product_description, ingredients, nutritional_info, shipping, options, route,
                 status, deleted, created_date, updated_date, product_size, product_flavor, stock,
-                is_size, is_flavor,
+                is_size, is_flavor, isDesignercollections, isCorporatecollections, isFeaturedproducts,
                 product_options
             };
 

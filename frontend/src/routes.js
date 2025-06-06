@@ -17,6 +17,8 @@ const Areas = React.lazy(() => import('./views/settings/areas'));
 const AreasCrud = React.lazy(() => import('./views/settings/areas/crud'));
 const Props = React.lazy(() => import('./views/settings/props'));
 const PropsCrud = React.lazy(() => import('./views/settings/props/crud'));
+const Orders = React.lazy(() => import('./views/orders'));
+const OrderDetails = React.lazy(() => import('./views/orders/orderDetails'));
 
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
@@ -42,7 +44,13 @@ const routes = [
 
   { path: '/admin/settings/props', name: 'Props', element: Props },
   { path: '/admin/settings/create-props', name: 'Props/Create Props', element: PropsCrud},
-  { path: '/admin/settings/update-prop', name: 'Props/Update Prop', element: PropsCrud}
+  { path: '/admin/settings/update-prop', name: 'Props/Update Prop', element: PropsCrud},
+
+  { path: '/admin/orders/today-orders', name: 'Orders/Todays Orders', element: Orders},
+  { path: '/admin/orders/all-orders', name: 'Orders/All Orders', element: Orders},
+  { path: '/admin/orders/view-order/:order_id', name: 'Orders/View Order Details', element: OrderDetails}
+
+
   
 ]
 

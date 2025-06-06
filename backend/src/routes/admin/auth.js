@@ -9,7 +9,7 @@ router.post('/admin/updateUser',requireSignin,updateUser);
 router.delete('/admin/deleteUser',requireSignin,deleteUser);
 router.post('/admin/updateProfile',requireSignin,updateProfile);
 router.post('/admin/updatePassword',requireSignin,updatePassword);
-router.post('/admin/get_users',requireSignin,getUsers);
+router.get('/admin/get_users',requireSignin,getUsers);
 router.post('/admin/get_singleuser',requireSignin,get_singleuser);
 
 module.exports = router;

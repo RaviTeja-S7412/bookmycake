@@ -154,6 +154,8 @@ const ProductCrud = () => {
             getSingleproduct();
         }else{
             if(Object.keys(products.product_data).length > 0){
+                console.log(products.product_data);
+                
                 getSubcategories(products.product_data ? products.product_data.category_id : '')
                 setCategoryName(products.product_data ? products.product_data.category_id : '')
                 setCustomertype(products.product_data ? products.product_data.customer_type : '')
@@ -167,9 +169,9 @@ const ProductCrud = () => {
                 setSizes(products.product_data ? products.product_data.product_size && JSON.parse(products.product_data.product_size) : '')
                 setFlavors(products.product_data ? products.product_data.product_flavor && JSON.parse(products.product_data.product_flavor) : '')
                 setEggtypes(products.product_data ? products.product_data.product_eggtype && JSON.parse(products.product_data.product_eggtype) : '')
-                setCorporatecollections(products.product_data?.isCorporatecollections ? products.product_data?.isCorporatecollections : false);
-                setDesignercollections(products.product_data?.isDesignercollections ? products.product_data?.isDesignercollections : false);
-                setFeaturedproducts(products.product_data?.isFeaturedproducts ? products.product_data?.isFeaturedproducts : false);
+                setCorporatecollections(products.product_data?.isCorporatecollections);
+                setDesignercollections(products.product_data?.isDesignercollections);
+                setFeaturedproducts(products.product_data?.isFeaturedproducts);
 
                 const options = products.product_data ? products.product_data.options : '';
                 if (options) {
@@ -350,7 +352,7 @@ const ProductCrud = () => {
                                     id="validationDefault09"
                                     label="Designer Collections"
                                     onChange={() => setDesignercollections(!isDesignercollections)}
-                                    checked={isDesignercollections == true ? checked : '' }
+                                    checked={isDesignercollections == "true" ? "checked" : '' }
                                 />
                             </CCol>
                             <CCol md={2}>
@@ -359,7 +361,7 @@ const ProductCrud = () => {
                                     id="validationDefault10"
                                     label="Corporate Collections"
                                     onChange={() => setCorporatecollections(!isCorporatecollections)}
-                                    checked={isCorporatecollections == true ? checked : ''}
+                                    checked={isCorporatecollections == "true" ? "checked" : ''}
                                 />
                             </CCol>
                             <CCol md={2}>
@@ -368,7 +370,7 @@ const ProductCrud = () => {
                                     id="validationDefault11"
                                     label="Featured Products"
                                     onChange={() => setFeaturedproducts(!isFeaturedproducts)}
-                                    checked={isFeaturedproducts == true ? checked : ''}
+                                    checked={isFeaturedproducts == "true" ? "checked" : ''}
                                 />
                             </CCol>
 

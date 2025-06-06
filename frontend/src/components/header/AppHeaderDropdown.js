@@ -1,30 +1,27 @@
 import React from 'react'
 import {
   CAvatar,
-  CBadge,
   CDropdown,
-  CDropdownDivider,
   CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
 import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
   cilLockLocked,
   cilSettings,
-  cilTask,
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
-import avatar8 from '../../../public/assets/images/avatars/8.jpg'
+import avatar8 from '../../../public/assets/images/avatars/8.jpg';
+import { signout } from '../../redux/actions/auth.actions';
+import { useDispatch } from 'react-redux';
 
 const AppHeaderDropdown = () => {
+  
+  const dispatch = useDispatch();
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -40,7 +37,9 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilSettings} className="me-2" />
           Settings
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem href="#" onClick={() => {
+            dispatch(signout());
+          }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CDropdownItem>

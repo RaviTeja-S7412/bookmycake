@@ -1,4 +1,5 @@
 const db = require('../../connection.js').getDb();
+const axios = require('axios');
 
 exports.addcart = (req, res) => {
     const {
@@ -342,5 +343,38 @@ exports.updatePaymentStatus = (req, res) => {
         })
     }
 
+}
+
+exports.cashfreepay = async (req, res) => {
+
+    const { orderId, orderAmount, customerDetails } = req.body;
+    
+    const sandbox_url = "https://sandbox.cashfree.com/pg/orders";
+    const live_url = "https://api.cashfree.com/pg/orders";
+
+    try {
+        const response = await axios.post(
+        live_url,
+        {
+            order_id: orderId,
+            order_amount: orderAmount,
+            order_currency: 'INR',
+            customer_details: customerDetails,
+        },
+        {
+            headers: {
+            'x-client-id': "1751029664b0b899c7067cf76e201571",
+            'x-client-secret': "913db8256643a85be78d59b6521cac0e61419467",
+            'x-api-version': '2023-08-01',
+            'Content-Type': 'application/json',
+            },
+        }
+        );
+
+        res.json({ success: true, payment_session_id: response.data.payment_session_id });
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+        res.status(500).json({ success: false, error: err.message });
+    }
 }
 
