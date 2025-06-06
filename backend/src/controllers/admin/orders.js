@@ -101,7 +101,7 @@ exports.get_userorders = function(req,res){
     let params = [];
     if (user_id) {
         query += ' WHERE o.user_id = ?';
-        params.push(date);
+        params.push(user_id);
     }
 
     db.query(query, params, function (err, result) {

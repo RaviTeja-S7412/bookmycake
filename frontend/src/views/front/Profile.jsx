@@ -1,105 +1,158 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CIcon } from '@coreui/icons-react';
 import { cilEnvelopeLetter, cilPhone, cilUser, cilPencil } from '@coreui/icons';
 import { CTable, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import axiosIntance from "../../components/axios";
+import ReactDatatable from "../../components/datatables/ReactDatatable";
 
 export default function UserProfile() {
 
-    const columns = [
-        {
-            key: 'OrderID',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'area',
-            label: 'Area',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'total_amount',
-            label: 'Total Amount',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'order_status',
-            label: 'Order Status',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'payment_status',
-            label: 'Payment Status',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'delivery_status',
-            label: 'Delivery Status',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'delivery_time',
-            label: 'Delivery Time',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'order_date',
-            label: 'Order Date',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'payment_date',
-            label: 'Payment Date',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'action',
-            label: 'Action',
-            _props: { scope: 'col' },
-        },
-    ]
-    const items = [
-        {
-            OrderID: 'Mark',
-            area: 'Otto',
-            total_amount: '@mdo',
-            order_status: 'Success',
-            payment_status: 'Success',
-            delivery_status: 'Pending',
-            delivery_time: '7.30 PM',
-            order_date: '01-02-2025',
-            payment_date: '01-02-2025',
-            action: (
-                <div>
-                    <button className="flex rounded mx-auto text-center" onClick={() => setVisible(!visible)}>
-                        <img src="/assets/open-eye.png" className="w-5 h-5" />
-                    </button>
-                </div>
-            ),
-            _cellProps: { id: { scope: 'row' } },
-        },
-        {
-            OrderID: 'Jacob',
-            area: 'Thornton',
-            total_amount: '@fat',
-            order_status: 'Success',
-            payment_status: 'Success',
-            delivery_status: 'Pending',
-            delivery_time: '8.30 PM',
-            order_date: '01-02-2025',
-            payment_date: '01-02-2025',
-            action: (
-                <div>
-                    <button className="flex rounded mx-auto text-center" onClick={() => setVisible(!visible)}>
-                        <img src="/assets/open-eye.png" className="w-5 h-5" />
-                    </button>
-                </div>
-            ),
-            _cellProps: { id: { scope: 'row' } },
-        },
-    ]
+    const [ loading, setLoading ] = useState(false);
+    const [ orders, setOrders ] = useState([]);
+    const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
 
+    const get_orders = async () => {
+        setLoading(true);
+        setOrders([]);
+
+        const params = {
+            user_id: localStorage.getItem('user_id')
+        };
+
+        try {
+        const res = await axiosIntance.post(`/front/orders/get_userorders`, { params });
+
+        if (res.status === 200) {
+            setOrders(res.data.orders)
+        } else {
+        }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        get_orders();
+    }, [])
 
     const [activeSection, setActiveSection] = React.useState("My Profile");
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
+
+    const columns = useMemo(
+        () => [
+            {
+                name: '#',
+                selector: (row, key) => `${++key}`,
+                sortable: true,
+            },
+            {
+                name: 'Order ID',
+                selector: (row) => `${row.order_id}`,
+                sortable: true,
+            },
+            {
+                name: 'Customer Name',
+                cell: (row) => `${row.first_name} ${row.last_name}`,
+                sortable: true,
+            },
+            {
+                name: 'Area',
+                selector: (row) => `${row.area_name}`,
+                sortable: true,
+            },
+            {
+                name: 'Total Amount',
+                selector: (row) => `₹ ${row.total_amount}`,
+                sortable: true,
+            },
+            {
+                name: 'Order Status',
+                selector: (row) => {
+                    if(row.order_status === "Pending"){
+                        return <span className='badge bg-yellow-500'>Pending</span>
+                    }else if(row.order_status === "cancelled"){
+                        return <span className='badge  bg-red-500'>Cancelled</span>
+                    }else if(row.order_status === "success"){
+                        return <span className='badge bg-green-500'>Success</span>
+                    }
+                },
+                sortable: true,
+            },
+            {
+                name: 'Payment Status',
+                selector: (row) => {
+                    if(row.payment_status === "Pending"){
+                        return <span className='badge bg-yellow-500'>Pending</span>
+                    }else if(row.payment_status === "failed"){
+                        return <span className='badge  bg-red-500'>Failed</span>
+                    }else if(row.payment_status === "success"){
+                        return <span className='badge bg-green-500'>Success</span>
+                    }
+                },
+                sortable: true,
+            },
+            {
+                name: 'Delivery Status',
+                selector: (row) => {
+                    if(row.delivery_status === "Pending"){
+                        return <span className='badge bg-yellow-500'>Pending</span>
+                    }else if(row.delivery_status === "failed"){
+                        return <span className='badge  bg-red-500'>Failed</span>
+                    }else if(row.delivery_status === "Delivered"){
+                        return <span className='badge bg-green-500'>Delivered</span>
+                    }else if(row.delivery_status === "out"){
+                        return <span className='badge' style={{ backgroundColor: '#3b82f6', color: '#fff' }}>Out For Delivery</span>
+                    }
+                },
+                sortable: true,
+            },
+            {
+                name: 'Order Date',
+                selector: (row) => {
+                    const date = new Date(row.date_of_order);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                },
+                sortable: true,
+            },
+            {
+                name: 'Payment Date',
+                selector: (row) => {
+                    console.log('row: ', row);
+                    if(row.date_of_payment !== "0000-00-00 00:00:00"){
+                        const date = new Date(row.date_of_payment);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                        return `${day}-${month}-${year}`;
+                    }else{
+                        return '-';
+                    }
+                },
+                sortable: true,
+            },
+            /* {
+                name: "Action",
+                cell: (row) => (
+                    <>
+                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => {
+                            setDeliverystatus(row.delivery_status);
+                            setVisible(!visible);
+                            setOrderID(row.order_id);
+                        }} className='mr-2'>
+                            <i className='fa fa-eye'></i>
+                        </span>
+                    </>
+                ),
+            }, */
+        ],
+        [],
+    )
 
     const renderSection = () => {
         switch (activeSection) {
@@ -107,7 +160,7 @@ export default function UserProfile() {
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6 overflow-x-auto">
                         <h2 className="text-lg font-semibold mb-4">My Orders</h2>
-                        <CTable columns={columns} items={items} className="border" />
+                        {orders.length > 0 && <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
                     </section>
                 );
             case "Address Book":
@@ -189,13 +242,13 @@ export default function UserProfile() {
             <header className="w-full bg-white shadow p-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <CIcon icon={cilUser} size="xl" />
-                    <span className="text-lg font-bold">John Doe</span>
+                    <span className="text-lg font-bold">{user_data?.first_name} {user_data?.last_name}</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
                     <CIcon icon={cilEnvelopeLetter} size="l" className="w-5 h-5 mr-1" />
-                    <span className="mr-4">johndoe@gmail.com</span>
+                    <span className="mr-4">{user_data?.email}</span>
                     <CIcon icon={cilPhone} size="l" className="w-5 h-5 mr-1" />
-                    <span> 9632587410</span>
+                    <span> {user_data?.mobile_number}</span>
                 </div>
             </header>
             <main className="sm:min-h-[535px] default-width sm:flex !mt-10 gap-4">

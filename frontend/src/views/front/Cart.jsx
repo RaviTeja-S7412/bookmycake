@@ -66,21 +66,22 @@ export default function Cart() {
     const params = {
       user_id: localStorage.getItem("user_id"),
       order_id: order_id,
-      status: "failed"
+      status: "success"
     };
    
     try {
       const res = await axiosIntance.post(`/front/updatePaymentStatus`, params);
 
       if (res.status === 200) {
-        
         Swal.fire({
           title: res.data.message
         })
+        navigate('/order-status');
       } else {
         Swal.fire({
           title: res.data.message
         })
+        navigate('/order-status');
       }
     } catch (error) {
     } finally {
@@ -129,7 +130,7 @@ export default function Cart() {
             Continue shopping
           </button>
         </div>
-        <button onClick={() => makePayment()}>Pay</button>
+        {/* <button onClick={() => makePayment()}>Pay</button> */}
 
         {cart?.cart_data?.map((item, index) => (
           <div className="grid lg:grid-cols-1 gap-2" key={index}>

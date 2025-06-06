@@ -82,7 +82,10 @@ export default function HomeHeader() {
                   <ul className="profil-drop">
                     <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
                     <hr className='!m-2' />
-                    <li className='block'>Logout</li>
+                    <li className='block' onClick={() => {
+                      localStorage.clear();
+                      navigate('/login')
+                    }}>Logout</li>
                   </ul>
                   : ''
                 }

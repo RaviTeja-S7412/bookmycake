@@ -1,7 +1,8 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const FrontFooter = () => {
+  const navigate = useNavigate();
   return (
     <footer className="default-width text-black py-8 font-[poppins]">
       <div className='grid lg:grid-cols-3 gap-4'>
@@ -17,11 +18,9 @@ const FrontFooter = () => {
         <div>
           <h5>Quick Links</h5>
           <ul className='text-sm leading-10'>
-            <li>Search</li>
-            <li>Contact us</li>
-            <li>Locate us</li>
-            <li>Terms and Conditions</li>
-            <li>Cancellation and Refunds</li>
+            <li onClick={() => navigate('/contact')} className='cursor-pointer'>Contact us</li>
+            <li onClick={() => navigate('/terms-and-conditions')} className='cursor-pointer'>Terms and Conditions</li>
+            <li onClick={() => navigate('/cancellation-and-refund-policy')} className='cursor-pointer'>Cancellation and Refunds</li>
             <li>Track Order</li>
           </ul>
         </div>
