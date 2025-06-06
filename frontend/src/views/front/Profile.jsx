@@ -1,17 +1,113 @@
-import React from "react";
+import React, { useState } from "react";
 import { CIcon } from '@coreui/icons-react';
-import { cilEnvelopeLetter, cilPhone, cilUser } from '@coreui/icons';
+import { cilEnvelopeLetter, cilPhone, cilUser, cilPencil } from '@coreui/icons';
+import { CTable, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 
 export default function UserProfile() {
+
+    const columns = [
+        {
+            key: 'OrderID',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'area',
+            label: 'Area',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'total_amount',
+            label: 'Total Amount',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'order_status',
+            label: 'Order Status',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'payment_status',
+            label: 'Payment Status',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'delivery_status',
+            label: 'Delivery Status',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'delivery_time',
+            label: 'Delivery Time',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'order_date',
+            label: 'Order Date',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'payment_date',
+            label: 'Payment Date',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'action',
+            label: 'Action',
+            _props: { scope: 'col' },
+        },
+    ]
+    const items = [
+        {
+            OrderID: 'Mark',
+            area: 'Otto',
+            total_amount: '@mdo',
+            order_status: 'Success',
+            payment_status: 'Success',
+            delivery_status: 'Pending',
+            delivery_time: '7.30 PM',
+            order_date: '01-02-2025',
+            payment_date: '01-02-2025',
+            action: (
+                <div>
+                    <button className="flex rounded mx-auto text-center" onClick={() => setVisible(!visible)}>
+                        <img src="/assets/open-eye.png" className="w-5 h-5" />
+                    </button>
+                </div>
+            ),
+            _cellProps: { id: { scope: 'row' } },
+        },
+        {
+            OrderID: 'Jacob',
+            area: 'Thornton',
+            total_amount: '@fat',
+            order_status: 'Success',
+            payment_status: 'Success',
+            delivery_status: 'Pending',
+            delivery_time: '8.30 PM',
+            order_date: '01-02-2025',
+            payment_date: '01-02-2025',
+            action: (
+                <div>
+                    <button className="flex rounded mx-auto text-center" onClick={() => setVisible(!visible)}>
+                        <img src="/assets/open-eye.png" className="w-5 h-5" />
+                    </button>
+                </div>
+            ),
+            _cellProps: { id: { scope: 'row' } },
+        },
+    ]
+
+
     const [activeSection, setActiveSection] = React.useState("My Profile");
+    const [visible, setVisible] = useState(false)
 
     const renderSection = () => {
         switch (activeSection) {
             case "My Orders":
                 return (
-                    <section className="flex-1 bg-white shadow rounded p-6">
+                    <section className="flex-1 bg-white shadow rounded p-6 overflow-x-auto">
                         <h2 className="text-lg font-semibold mb-4">My Orders</h2>
-                        <p>No orders found.</p>
+                        <CTable columns={columns} items={items} className="border" />
                     </section>
                 );
             case "Address Book":
@@ -89,33 +185,32 @@ export default function UserProfile() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+        <div className="bg-gray-100 flex flex-col items-center font-['poppins']">
             <header className="w-full bg-white shadow p-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <CIcon icon={cilUser} size="xl"/>
+                    <CIcon icon={cilUser} size="xl" />
                     <span className="text-lg font-bold">John Doe</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
-                    <CIcon icon={cilEnvelopeLetter} size="l" className="w-5 h-5 mr-1"/>
+                    <CIcon icon={cilEnvelopeLetter} size="l" className="w-5 h-5 mr-1" />
                     <span className="mr-4">johndoe@gmail.com</span>
-                    <CIcon icon={cilPhone} size="l" className="w-5 h-5 mr-1"/>
+                    <CIcon icon={cilPhone} size="l" className="w-5 h-5 mr-1" />
                     <span> 9632587410</span>
                 </div>
             </header>
-            <main className="flex w-full max-w-6xl mt-6 gap-4">
-                <aside className="w-64 bg-white shadow rounded p-4 space-y-4">
+            <main className="sm:min-h-[535px] default-width sm:flex !mt-10 gap-4">
+                <aside className="w-full sm:w-64 bg-white shadow rounded p-4 space-y-4">
                     {[
                         "My Orders",
-                        "Address Book",
+                        // "Address Book",
                         "My Profile",
                         "My Reviews",
                     ].map((item) => (
                         <button
                             key={item}
                             onClick={() => setActiveSection(item)}
-                            className={`w-full text-left p-2 rounded hover:bg-gray-100 ${
-                                activeSection === item ? "bg-gray-100 font-semibold" : ""
-                            }`}
+                            className={`w-full text-left p-2 rounded hover:bg-gray-100 ${activeSection === item ? "bg-gray-100 font-semibold" : ""
+                                }`}
                         >
                             {item}
                         </button>
@@ -123,6 +218,48 @@ export default function UserProfile() {
                 </aside>
                 {renderSection()}
             </main>
+            <CModal
+                visible={visible}
+                onClose={() => setVisible(false)}
+                aria-labelledby="LiveDemoExampleLabel"
+                className="font-['poppins']"
+                size="lg"
+            >
+                <CModalHeader>
+                    <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead className="mb-10">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div className="flex">
+                                        <img src="/assets/images/products/featured/almond.jpg" className="w-20" />
+                                        <div className="ml-4">
+                                            <h5 className="font-bold !mb-1">Almonds Cake</h5>
+                                            <p className="font-semibold !mb-1">Almond Truffle</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="text-center font-bold text-md">500/-</td>
+                                <td>
+                                    <div className="flex items-center justify-center gap-2 text-sm">
+                                        <span className="w-2 h-2 rounded-full bg-green-700"></span>
+                                        Delivered on 22-05-2025
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </CModalBody>
+            </CModal>
         </div>
     );
 }
