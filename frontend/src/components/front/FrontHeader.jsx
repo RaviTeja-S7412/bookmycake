@@ -77,12 +77,15 @@ export default function HomeHeader() {
               <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
             <div className="cursor-pointer icon-user">
-              <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />
-              <ul className="profil-drop">
-                <li className='block'>Profile</li>
-                <hr className='!m-2' />
-                <li className='block'>Logout</li>
-              </ul>
+              <UserIcon className="h-7 w-7 text-gray-600" onClick={() => localStorage.getItem('user_id') ? '' : navigate('/login')} />
+                {localStorage.getItem('user_id') ? 
+                  <ul className="profil-drop">
+                    <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
+                    <hr className='!m-2' />
+                    <li className='block'>Logout</li>
+                  </ul>
+                  : ''
+                }
             </div>
           </div>
         </div>

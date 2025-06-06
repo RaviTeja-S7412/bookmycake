@@ -88,3 +88,28 @@ exports.update_deliverystatus = function(req,res){
         }
     });
 }
+
+exports.get_userorders = function(req,res){
+
+    var user_id = req.body.user_id;
+    let query = `
+        SELECT o.*, u.first_name, u.last_name, ta.area_name 
+        FROM tbl_orders o 
+        LEFT JOIN tbl_users u ON o.user_id = u.id 
+        LEFT JOIN tbl_areas ta ON o.area = ta.id
+    `;
+    let params = [];
+    if (user_id) {
+        query += ' WHERE o.user_id = ?';
+        params.push(date);
+    }
+
+    db.query(query, params, function (err, result) {
+        if (err) {
+            return res.status(500).json({ message: err });
+        }
+        return res.status(200).json({
+            orders: result
+        });
+    });
+}
