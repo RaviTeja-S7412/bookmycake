@@ -5,6 +5,7 @@ import CategoryCards from "../../components/categorycards";
 import Sweetfullcakes from "../../components/sweetfullcakes";
 import CorporateCollections from "../../components/corporatecollect";
  import DesignerCollections from "../../components/DesignerCollections";
+import FeaturedCollection from "../../components/FeaturedCollection";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <div className="mx-auto w-full">
         <Carousel />
         <CategoryCards />
+        <FeaturedCollection />
         <DesignerCollections />
         <Sweetfullcakes />
         <CorporateCollections />

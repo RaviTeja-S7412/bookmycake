@@ -41,17 +41,17 @@ export default function HomeHeader() {
   }, []);
 
   useEffect(() => {
-    if(cart?.get_cart) {
+    if (cart?.get_cart) {
       dispatch(getCart())
     }
-  },[cart?.get_cart]);
+  }, [cart?.get_cart]);
 
   return (
     <header className="bg-white font-[Poppins]">
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
-        <div className="flex items-center gap-4 min-w-[200px] cursor-pointer" onClick={() => navigate('/')}>
-          <img src="/assets/logo.jpg" alt="Logo" className="w-35" />
+        <div className="flex justify-center w-full sm:w-[unset] items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
+          <img src="/assets/logo.jpg" alt="Logo" />
         </div>
 
         {/* Middle: Search */}
@@ -74,15 +74,21 @@ export default function HomeHeader() {
             <span className="text-xs">Track Order</span>
             <div className='relative'>
               <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
-            <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
+              <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
-            <div className="flex items-center gap-1 cursor-pointer">
+            <div className="cursor-pointer icon-user">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => navigate('/login')} />
-              {/* <span className="text-xs text-rose-600 font-medium">Login/Signup</span> */}
+              <ul className="profil-drop">
+                <li className='block'>Profile</li>
+                <hr className='!m-2' />
+                <li className='block'>Logout</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+
+
 
       {/* Desktop navigation bar - only visible on large screens */}
       <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#910f3f]">
@@ -145,9 +151,14 @@ export default function HomeHeader() {
           </div>
 
           <div className="mt-6">
-            {NavBarItems.map((item) => (
-              <Disclosure key={item.id} as="div" className="mb-2">
-                <DisclosureButton className="flex w-full justify-between px-4 py-2 text-left text-sm font-semibold text-gray-900 hover:bg-gray-100">
+            {menuItems.map((item) => (
+              <Disclosure key={item.id} as="div" className="mb-2"
+                onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+                onMouseLeave={() => setOpenPopover(null)}
+              >
+                <DisclosureButton className="flex w-full justify-between px-4 py-2 text-left text-sm font-semibold text-gray-900 hover:bg-gray-100"
+                  onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+                >
                   {item.label}
                   {item.subItems && <ChevronDownIcon className="size-5 text-gray-400" />}
                 </DisclosureButton>
@@ -171,7 +182,7 @@ export default function HomeHeader() {
       </Dialog>
 
       {/* Mobile menu toggle - only on small screens */}
-      <div className="flex lg:hidden items-center justify-between px-6 py-4">
+      <div className="flex lg:hidden items-center justify-between px-6 lg:py-4">
         <button
           type="button"
           className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md"

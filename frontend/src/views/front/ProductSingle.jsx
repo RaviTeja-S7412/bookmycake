@@ -4,6 +4,8 @@ import axiosIntance from "../../components/axios";
 import Swal from 'sweetalert2'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTocart } from "../../redux/actions/front/cart.actions";
+import InnerImageZoom from 'react-inner-image-zoom'
+import 'react-inner-image-zoom/lib/styles.min.css'
 
 export default function ProductSingle() {
   const images = [
@@ -142,27 +144,18 @@ export default function ProductSingle() {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
-    <div className="default-width mx-auto p-4 grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
+    <div className="default-width mx-auto p-4 lg:grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
       {/* Image Gallery Section */}
       <div>
         {/* Main image */}
-        <div className="flex">
-          <div>
-            {/* {images.map((img, index) => ( */}
-              <img
-                // key={index}
-                src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
-                alt={product?.product_name}
-                className={`w-20 h-20 object-cover rounded-lg mr-7 mb-2 border cursor-pointer `}
-                // onClick={() => setSelectedImage(img)}
-              />
-            {/* ))} */}
-          </div>
-          <img
-            alt={product?.product_name}
-            src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
-            className="rounded-2xl shadow-lg w-[80%]"
-          />
+        <div>
+          {/* <img
+            
+          /> */}
+          <InnerImageZoom 
+          alt={product?.product_name}
+          src={import.meta.env.VITE_APIBASE_URL + product?.product_image} zoomSrc={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+          className="rounded-2xl shadow-lg" />
         </div>
 
         {/* Down thumbnails */}
@@ -204,7 +197,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-3 gap-4">
+        <div className="mb-4 lg:grid grid-cols-3 gap-4">
           {/* Weight */}
           <div>
             <p className="font-semibold mb-1">Weight</p>
@@ -242,7 +235,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-3 gap-4">
+        <div className="mb-4 lg:grid grid-cols-3 gap-4">
           <div>
             <p className="font-semibold mb-1">Select Date & Time</p>
             <div className="flex gap-2 mb-3">
@@ -311,7 +304,7 @@ export default function ProductSingle() {
         </div>
 
         <div className="mb-4">
-          <div className="w-1/2">
+          <div className="lg:w-1/2">
             <p className="font-semibold mb-1">Message on Cake</p>
             <textarea
               rows="3"

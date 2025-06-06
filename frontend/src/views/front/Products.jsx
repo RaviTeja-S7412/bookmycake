@@ -212,8 +212,8 @@ export default function Products() {
             {products.map((product, index) => {
               var startingSize = product.product_options?.sort((a, b) => a.price - b.price)?.[0];
             return(
-              <div key={index} className="bg-white shadow-md overflow-hidden">
-                <img src={import.meta.env.VITE_APIBASE_URL + product.product_image} alt={product.product_image} className="w-full h-auto object-cover  cursor-pointer"  onClick={() => navigate('/products/'+product.route)} />
+              <div key={index} className="shadow-md overflow-hidden bg-white">
+                <img src={import.meta.env.VITE_APIBASE_URL + product.product_image} alt={product.product_image} className="w-full h-auto object-cover  cursor-pointer max-h-[320px]"  onClick={() => navigate('/products/'+product.route)} />
                 <div className="p-2">
                   <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/'+product.route)}>{product.product_name}</h6>
                   {/* <p className="text-sm text-gray-600 mb-1">

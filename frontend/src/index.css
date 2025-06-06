@@ -254,3 +254,33 @@
 .ins-brdr img:hover {
     transform: scale(1.05) rotate(1deg);
 }
+
+.profil-drop {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    z-index: 9999;
+    width: 150px;
+    padding: 10px 0px;
+    right: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+
+
+.icon-user:hover .profil-drop {
+    display: block !important;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    z-index: 9999;
+    width: 150px;
+    padding: 10px 0px;
+    right: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
