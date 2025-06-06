@@ -334,11 +334,11 @@ exports.updatePaymentStatus = (req, res) => {
     }else{
         const updateQuery = 'UPDATE tbl_orders SET order_status=?, payment_status=? where order_id=?';
         const values = ["cancelled", "failed", order_id];
-        db.query(updateQuery, [values], (err, result) => {
+        db.query(updateQuery, values, (err, result) => {
             if (err) {
-                return res.status(500).json({ message: 'Database error' });
+                return res.status(500).json({ message: err });
             }
-            return res.status(200).json({ message: "Payment failed" });    
+            return res.status(202).json({ message: "Payment failed" });    
         })
     }
 

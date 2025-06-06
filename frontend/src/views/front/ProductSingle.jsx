@@ -322,12 +322,21 @@ export default function ProductSingle() {
               maxLength="50"></textarea>
           </div>
           <div className="w-1/2">
-            <button
-              className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
-              onClick={() => add_cart()}
-            >
-              Add to Cart
-            </button>
+            {cart?.cart_data?.filter((p) => p?.product_data?.route === product_id && p?.flavor === selectedFlavor && p?.weight == selectedWeight)?.length > 0 ?
+              <button
+                className={`px-4 py-2 border rounded-full bg-green-800 text-white w-full mt-3`}
+                onClick={() => navigate('/cart')}
+              >
+                Go to Cart
+              </button>
+              :
+              <button
+                className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
+                onClick={() => add_cart()}
+              >
+                Add to Cart
+              </button>
+            }
           </div>
         </div>
 

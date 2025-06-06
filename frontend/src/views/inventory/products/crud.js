@@ -53,9 +53,12 @@ const ProductCrud = () => {
     const [ingredeints, setIngredeints] = useState('')
     const [nutritional_info, setnutritional_info] = useState('')
     const [shipping_info, setshipping_info] = useState('')
-    const [isSize, setIssize] = useState(false)
-    const [isFlavor, setIsflavor] = useState(false)
+    const [isSize, setIssize] = useState(true)
+    const [isFlavor, setIsflavor] = useState(true)
     const [isEggtype, setIseggtype] = useState(false)
+    const [isDesignercollections, setDesignercollections] = useState(false)
+    const [isCorporatecollections, setCorporatecollections] = useState(false)
+    const [isFeaturedproducts, setFeaturedproducts] = useState(false)
     const [sku, setSku] = useState('')
     const [sizes, setSizes] = useState([{ kg: '', unit: 'kg', price: '' }]);
     const [flavors, setFlavors] = useState([{flavor: ''}]);
@@ -118,6 +121,9 @@ const ProductCrud = () => {
         formData.append('ingredients', ingredeints)
         formData.append('nutritional_info', nutritional_info)
         formData.append('shipping', shipping_info)
+        formData.append('isFeaturedproducts', isFeaturedproducts)
+        formData.append('isCorporatecollections', isCorporatecollections)
+        formData.append('isDesignercollections', isDesignercollections)
 
         formData.append('product_size', JSON.stringify(sizes))
         formData.append('product_flavor', JSON.stringify(flavors))
@@ -161,6 +167,9 @@ const ProductCrud = () => {
                 setSizes(products.product_data ? products.product_data.product_size && JSON.parse(products.product_data.product_size) : '')
                 setFlavors(products.product_data ? products.product_data.product_flavor && JSON.parse(products.product_data.product_flavor) : '')
                 setEggtypes(products.product_data ? products.product_data.product_eggtype && JSON.parse(products.product_data.product_eggtype) : '')
+                setCorporatecollections(products.product_data?.isCorporatecollections ? products.product_data?.isCorporatecollections : false);
+                setDesignercollections(products.product_data?.isDesignercollections ? products.product_data?.isDesignercollections : false);
+                setFeaturedproducts(products.product_data?.isFeaturedproducts ? products.product_data?.isFeaturedproducts : false);
 
                 const options = products.product_data ? products.product_data.options : '';
                 if (options) {
@@ -170,7 +179,6 @@ const ProductCrud = () => {
                     setIseggtype(parsedOptions.includes('egg'));
 
                     const product_options = products?.product_data?.product_options;
-                    console.log('product_options: ', product_options);
                     if (parsedOptions.includes('weight')) {
                         const formattedSizes = product_options.map(item => ({
                             id: item.id || '',
@@ -196,13 +204,6 @@ const ProductCrud = () => {
     const handleSizeDelete = (index) => {
         const updatedList = sizes.filter((_, i) => i !== index);
         setSizes(updatedList);
-    };
-
-    const handleFlavorChange = (index, event) => {
-        const { value } = event.target;
-        const updatedInputs = [...flavors];
-        updatedInputs[index] = value;
-        setFlavors(updatedInputs);
     };
 
     const handleFlavorDelete = (index) => {
@@ -253,11 +254,6 @@ const ProductCrud = () => {
             setOptionsLength(eggtypes?.length);
         }
     }, [sizes, flavors, eggtypes])
-
-    console.log(sizes, flavors, eggtypes);
-
-
-    
 
     return (
         <CRow>
@@ -331,7 +327,6 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-                           
                                 <CFormTextarea
                                     label="Ingredients:"
                                     rows={2}
@@ -340,7 +335,6 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                             <CCol md={6}>
-
                                 <CFormTextarea
                                     label="Nutritional Information:"
                                     rows={2}
@@ -348,9 +342,38 @@ const ProductCrud = () => {
                                     value={nutritional_info}
                                 />
                             </CCol>
-                          
-                            <CCol md={12}>Options:</CCol>
+
+                            <CCol md={12}><CFormLabel>Visible To:</CFormLabel></CCol>
                             <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault09"
+                                    label="Designer Collections"
+                                    onChange={() => setDesignercollections(!isDesignercollections)}
+                                    checked={isDesignercollections == true ? checked : '' }
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault10"
+                                    label="Corporate Collections"
+                                    onChange={() => setCorporatecollections(!isCorporatecollections)}
+                                    checked={isCorporatecollections == true ? checked : ''}
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault11"
+                                    label="Featured Products"
+                                    onChange={() => setFeaturedproducts(!isFeaturedproducts)}
+                                    checked={isFeaturedproducts == true ? checked : ''}
+                                />
+                            </CCol>
+
+                            <CCol md={12}><CFormLabel>Product Options:</CFormLabel></CCol>
+                            {/* <CCol md={2}>
                             <CFormCheck
                                 type="checkbox"
                                 id="validationDefault09"
@@ -367,8 +390,8 @@ const ProductCrud = () => {
                                 onChange={() => setIsflavor(!isFlavor)}
                                 checked={isFlavor}
                             />
-                            </CCol>
-                            <CCol md={2}>
+                            </CCol> */}
+                            {/* <CCol md={2}>
                             <CFormCheck
                                 type="checkbox"
                                 id="validationDefault11"
@@ -376,11 +399,11 @@ const ProductCrud = () => {
                                 onChange={() => setIseggtype(!isEggtype)}
                                 checked={isEggtype}
                             />
-                            </CCol>
+                            </CCol> */}
 
                             <CCol md={8}></CCol>
 
-                            {(isSize || isFlavor || isEggtype) && (
+                            {(isSize || isFlavor) && (
                             <>
                                 {Array.from({ length: optionsLength }).map((_, index) => (
                                 <CRow key={index} className="mb-3">
@@ -402,6 +425,7 @@ const ProductCrud = () => {
                                             label="Size kg's/ml:"
                                             onChange={(e) => handleSizeChange(index, e)}
                                             value={sizes[index].kg}
+                                            required
                                         />
                                     </CCol>
                                     <CCol xs={12} md={1}>
@@ -450,7 +474,7 @@ const ProductCrud = () => {
                                     </CCol>
                                     )}
 
-                                    {isEggtype && eggtypes[index] !== undefined && (
+                                    {/* {isEggtype && eggtypes[index] !== undefined && (
                                     <CCol xs={12} md={2}>
                                         <label className='mb-2'>Egg/Eggless:</label>
                                         <CreatableSelect
@@ -467,7 +491,7 @@ const ProductCrud = () => {
                                         }}
                                         />
                                     </CCol>
-                                    )}
+                                    )} */}
 
                                     <CCol xs={12} md={1}>
                                     {index > 0 && (

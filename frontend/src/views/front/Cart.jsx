@@ -65,7 +65,7 @@ export default function Cart() {
     const params = {
       user_id: localStorage.getItem("user_id"),
       order_id: order_id,
-      status: "success"
+      status: "failed"
     };
    
     try {
@@ -82,8 +82,6 @@ export default function Cart() {
         })
       }
     } catch (error) {
-      // console.error('Error fetching product:', error);
-      // Handle API error
     } finally {
     }
   };

@@ -47,8 +47,8 @@ exports.create_product = [upload.single("file"),function(req,res){
                         .replace(/^-+/, '')      // Remove leading hyphen
                         .replace(/-+$/, '');
 
-    const query = "INSERT INTO tbl_products (category_id, sub_category_id, customer_type, product_name, product_image, product_description, ingredients, nutritional_info, shipping, options, route, status, deleted, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, 1, 0, new Date()];
+    const query = "INSERT INTO tbl_products (category_id, sub_category_id, customer_type, product_name, product_image, product_description, ingredients, nutritional_info, shipping, options, route, status, deleted, created_date, isDesignercollections, isCorporatecollections, isFeaturedproducts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, 1, 0, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts];
     
     db.query(query, values, function (err, result) {
     
@@ -142,8 +142,8 @@ exports.update_product = [upload.single("file"),function(req,res){
         if (results.length > 0) {
             return res.status(202).json({ message: 'Product name already exists' });
         }else{
-            const query = "UPDATE tbl_products SET category_id = ?, sub_category_id = ?, customer_type = ?, product_name = ?, product_image = ?, product_description = ?, ingredients = ?, nutritional_info = ?, shipping = ?, options = ?, route = ?, updated_date = ? where id = ?";
-            const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, new Date(), req.body.id];
+            const query = "UPDATE tbl_products SET category_id = ?, sub_category_id = ?, customer_type = ?, product_name = ?, product_image = ?, product_description = ?, ingredients = ?, nutritional_info = ?, shipping = ?, options = ?, route = ?, updated_date = ?, isDesignercollections = ?, isCorporatecollections = ?, isFeaturedproducts = ? where id = ?";
+            const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts, req.body.id];
             
             db.query(query, values, function (err, result) {
             
@@ -154,7 +154,7 @@ exports.update_product = [upload.single("file"),function(req,res){
                 if (result) {
                     const product_size = JSON.parse(req.body.product_size);
                     const product_flavor = JSON.parse(req.body.product_flavor);
-                    const product_eggtype = JSON.parse(req.body.product_eggtype);
+                    // const product_eggtype = JSON.parse(req.body.product_eggtype);
                     var options_array = [];
                     product_size.forEach((data, i) => {
                         options_array.push({
@@ -165,7 +165,7 @@ exports.update_product = [upload.single("file"),function(req,res){
                             "unit": data.unit,
                             "price": data.price,
                             "flavor": product_flavor[i].flavor,
-                            "eggoption": product_eggtype[i].eggoption,
+                            // "eggoption": product_eggtype[i].eggoption,
                             "created_at": new Date(),
                         })
                     })
@@ -175,11 +175,11 @@ exports.update_product = [upload.single("file"),function(req,res){
                             let query = "";
                             let values = [];
                             if (data.id) {
-                                query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ?, eggoption = ? WHERE id = ?";
-                                values = [data.weight, data.unit, data.price, data.flavor, data.eggoption, data.id];
+                                query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ? WHERE id = ?";
+                                values = [data.weight, data.unit, data.price, data.flavor, data.id];
                             } else {
-                                query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, eggoption, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                                values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.eggoption, data.created_at];
+                                query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                                values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.created_at];
                             }
                             db.query(query, values, (err, result) => {
                                 if (err) return reject(err);
