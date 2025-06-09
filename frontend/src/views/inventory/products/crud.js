@@ -56,9 +56,9 @@ const ProductCrud = () => {
     const [isSize, setIssize] = useState(true)
     const [isFlavor, setIsflavor] = useState(true)
     const [isEggtype, setIseggtype] = useState(false)
-    const [isDesignercollections, setDesignercollections] = useState(false)
-    const [isCorporatecollections, setCorporatecollections] = useState(false)
-    const [isFeaturedproducts, setFeaturedproducts] = useState(false)
+    const [isDesignercollections, setDesignercollections] = useState("false")
+    const [isCorporatecollections, setCorporatecollections] = useState("false")
+    const [isFeaturedproducts, setFeaturedproducts] = useState("false")
     const [sku, setSku] = useState('')
     const [sizes, setSizes] = useState([{ kg: '', unit: 'kg', price: '' }]);
     const [flavors, setFlavors] = useState([{flavor: ''}]);
@@ -311,6 +311,7 @@ const ProductCrud = () => {
                                     onChange={(e) => setproductImage(e.target.files[0])}
                                     required={queryParams.get("id") ? false : true}
                                 />
+                                <small className='text-red-500'>Note: Please select 700px*700px image</small>
                             </CCol>
                             <CCol md={6}>
                                 <CFormTextarea
@@ -351,7 +352,7 @@ const ProductCrud = () => {
                                     type="checkbox"
                                     id="validationDefault09"
                                     label="Designer Collections"
-                                    onChange={() => setDesignercollections(!isDesignercollections)}
+                                    onChange={() => setDesignercollections(isDesignercollections == "true" ? "false" : "true")}
                                     checked={isDesignercollections == "true" ? "checked" : '' }
                                 />
                             </CCol>
@@ -360,7 +361,7 @@ const ProductCrud = () => {
                                     type="checkbox"
                                     id="validationDefault10"
                                     label="Corporate Collections"
-                                    onChange={() => setCorporatecollections(!isCorporatecollections)}
+                                    onChange={() => setCorporatecollections(isCorporatecollections == "true" ? "false" : "true")}
                                     checked={isCorporatecollections == "true" ? "checked" : ''}
                                 />
                             </CCol>
@@ -369,7 +370,7 @@ const ProductCrud = () => {
                                     type="checkbox"
                                     id="validationDefault11"
                                     label="Featured Products"
-                                    onChange={() => setFeaturedproducts(!isFeaturedproducts)}
+                                    onChange={() => setFeaturedproducts(isFeaturedproducts == "true" ? "false" : "true")}
                                     checked={isFeaturedproducts == "true" ? "checked" : ''}
                                 />
                             </CCol>
@@ -420,7 +421,7 @@ const ProductCrud = () => {
                                             value={sizes[index].sku}
                                         />
                                     </CCol>*/}
-                                    <CCol xs={12} md={1}>
+                                    <CCol xs={12} md={2}>
                                         <CFormInput
                                             type="number"
                                             name="kg"
@@ -430,7 +431,7 @@ const ProductCrud = () => {
                                             required
                                         />
                                     </CCol>
-                                    <CCol xs={12} md={1}>
+                                    <CCol xs={12} md={2}>
                                         <CFormSelect
                                             name="unit"
                                             label="Unit"
@@ -441,7 +442,7 @@ const ProductCrud = () => {
                                             <option value="ml">ml</option>
                                         </CFormSelect>
                                         </CCol>
-                                        <CCol xs={12} md={1}>
+                                        <CCol xs={12} md={2}>
                                         <CFormInput
                                             type="number"
                                             name="price"
@@ -454,7 +455,7 @@ const ProductCrud = () => {
                                     )}
 
                                     {isFlavor && flavors[index] !== undefined && (
-                                    <CCol xs={12} md={2}>
+                                    <CCol xs={12} md={3}>
                                         <label className='mb-2'>Flavor:</label>
                                         <CreatableSelect
                                         isClearable

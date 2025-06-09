@@ -234,7 +234,7 @@ exports.deleteproduct = (req, res) => {
         return res.status(202).json({ message: "Product ID is Required." });
     }
 
-    const checkCategoryQuery = 'DELETE FROM tbl_products WHERE id = ?';
+    const checkCategoryQuery = 'UPDATE tbl_products set deleted=1, status=0 WHERE id = ?';
     db.query(checkCategoryQuery, [id], (err, result) => {
 
         if (err) {
@@ -373,7 +373,7 @@ exports.get_singleproduct_by_route = async (req, res) => {
 
 exports.get_allproducts = (req, res) => {
 
-    const query = "SELECT p.*, c.category_name, sc.sub_category_name FROM tbl_products p LEFT JOIN tbl_sub_categories sc ON p.sub_category_id = sc.id left join tbl_categories c ON p.category_id = c.id order by p.id desc";
+    const query = "SELECT p.*, c.category_name, sc.sub_category_name FROM tbl_products p LEFT JOIN tbl_sub_categories sc ON p.sub_category_id = sc.id left join tbl_categories c ON p.category_id = c.id where p.deleted=0 order by p.id desc";
 
     db.query(query, function (error, result) {    
 

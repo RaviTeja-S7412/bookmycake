@@ -10,9 +10,10 @@ import CIcon from '@coreui/icons-react'
 import { cilPenAlt, cilTrash } from '@coreui/icons'
 import ReactDatatable from '../../../components/datatables/ReactDatatable'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProducts } from '../../../redux/actions/products.actions'
+import { deleteProduct, getProducts } from '../../../redux/actions/products.actions'
 import { useNavigate } from 'react-router-dom'
 import { productConstants } from '../../../redux/actions/constants'
+import Swal from 'sweetalert2'
 
 const Products = () => {
 
@@ -27,6 +28,25 @@ const Products = () => {
 
     const handleDelete = (id) => {
 
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+        if (result.isConfirmed) {
+                dispatch(deleteProduct(id))
+                Swal.fire({
+                title: "Deleted!",
+                text: "Your product has been deleted.",
+                icon: "success"
+                });
+            }
+        });
+        
     }
 
     useEffect(() => {
@@ -59,7 +79,7 @@ const Products = () => {
             },
             {
                 name: 'Sub Category',
-                selector: (row) => `${row.sub_category_name}`,
+                selector: (row) => `${row.sub_category_name === null ? '-' : row.sub_category_name}`,
                 sortable: true,
             },
             /* {
