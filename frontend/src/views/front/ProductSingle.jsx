@@ -235,7 +235,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 lg:grid grid-cols-3 gap-4">
+        <div className="mb-4 gap-4 slots">
           <div>
             <p className="font-semibold mb-1">Select Date & Time</p>
             <div className="flex gap-2 mb-3">
