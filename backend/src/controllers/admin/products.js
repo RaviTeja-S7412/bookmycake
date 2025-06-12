@@ -42,6 +42,9 @@ exports.create_product = [upload.single("file"), async function(req, res) {
         product_image = "products/" + req.file.filename;
     }
 
+    const product_size = JSON.parse(req.body.product_size);
+    const product_flavor = JSON.parse(req.body.product_flavor);
+
     // Create product route
     var product_route = req.body.product_name
         .toLowerCase()          // Convert to lowercase
@@ -56,41 +59,36 @@ exports.create_product = [upload.single("file"), async function(req, res) {
     const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, 1, 0, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts];
 
     try {
-        const result = await db.query(query, values);
-        
-        // Proceed to handle product options once the product is created
-        const product_size = JSON.parse(req.body.product_size);
-        const product_flavor = JSON.parse(req.body.product_flavor);
+        db.query(query, values, async function(req, result){
+            
+            if (!Array.isArray(product_size) || !Array.isArray(product_flavor)) {
+                return res.status(202).json({ message: "Product options (size, flavor) are required." });
+            }
 
-        if (!Array.isArray(product_size) || !Array.isArray(product_flavor)) {
-            return res.status(202).json({ message: "Product options (size, flavor) are required." });
-        }
+            let options_array = product_size.map((data, i) => ({
+                "product_id": result.insertId,
+                "weight": data.kg,
+                "unit": data.unit,
+                "price": data.price,
+                "flavor": product_flavor[i].flavor,
+                "created_at": new Date(),
+            }));
+            // Insert product options into the database
+            const optionsQuery = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES ?";
+            const valuesArray = options_array.map(obj => [
+                obj.product_id,
+                obj.weight,
+                obj.unit,
+                obj.price,
+                obj.flavor,
+                obj.created_at
+            ]);
 
-        let options_array = product_size.map((data, i) => ({
-            "product_id": result.insertId,
-            "weight": data.kg,
-            "unit": data.unit,
-            "price": data.price,
-            "flavor": product_flavor[i].flavor,
-            "created_at": new Date(),
-        }));
+            await db.query(optionsQuery, [valuesArray]);
 
-        // Insert product options into the database
-        const optionsQuery = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES ?";
-        const valuesArray = options_array.map(obj => [
-            obj.product_id,
-            obj.weight,
-            obj.unit,
-            obj.price,
-            obj.flavor,
-            obj.created_at
-        ]);
-
-        await db.query(optionsQuery, [valuesArray]);
-
-        // Send success response after both product and options are created
-        return res.status(200).json({ message: "Created Successfully" });
-        
+            // Send success response after both product and options are created
+            return res.status(200).json({ message: "Created Successfully" });
+        })
     } catch (err) {
         // Error handling for any operation in the async flow
         if (err.code === 'ER_DUP_ENTRY') {
