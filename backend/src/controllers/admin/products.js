@@ -76,14 +76,13 @@ exports.create_product = [upload.single("file"), async function(req, res) {
         }));
 
         // Insert product options into the database
-        const optionsQuery = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, eggoption, created_at) VALUES ?";
+        const optionsQuery = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES ?";
         const valuesArray = options_array.map(obj => [
             obj.product_id,
             obj.weight,
             obj.unit,
             obj.price,
             obj.flavor,
-            obj.eggoption,
             obj.created_at
         ]);
 
