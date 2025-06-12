@@ -232,6 +232,20 @@ exports.getProps = (req, res) => {
 exports.insertOrder = (req, res) => {
     
     const user_id = req.body.user_id;
+    const payment_type = req.body.payment_type;
+    const shipping_address = req.body.address;
+
+    if(user_id == ""){
+        return res.status(500).json({ status: false, message: "User ID Is Required." });
+    }
+
+    if(payment_type == ""){
+        return res.status(500).json({ status: false, message: "Payment Type Is Required." });
+    }
+
+    if(shipping_address == ""){
+        return res.status(500).json({ status: false, message: "Shipping Address Is Required." });
+    }
 
     const cartQuery = "SELECT * FROM tbl_cart WHERE user_id = ?";
     db.query(cartQuery, [user_id], async (err, cresult) => {
@@ -247,8 +261,8 @@ exports.insertOrder = (req, res) => {
             const total_amount = cresult.reduce((total, item) => total + (item.product_price * item.qty), 0);
             
             const order_id = "ORD_" + new Date().toLocaleTimeString('en-US', { hour12: false }).replace(/:/g, '');
-            const insertQuery = `INSERT INTO tbl_orders (order_id, payment_type, total_amount, total_order_amount, discount_amount, area,user_id, date_of_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-            const values = [order_id, "online", total_amount, total_amount, 0, cartData?.area, user_id, new Date()];
+            const insertQuery = `INSERT INTO tbl_orders (order_id, payment_type, total_amount, total_order_amount, discount_amount, area,user_id, date_of_order, shipping_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            const values = [order_id, payment_type, total_amount, total_amount, 0, cartData?.area, user_id, new Date(), shipping_address];
 
             db.query(insertQuery, values, (insertErr) => {
                 if (insertErr) {
@@ -279,8 +293,16 @@ exports.insertOrder = (req, res) => {
                     if (oinsertErr) {
                         return res.status(500).json({ message: oinsertErr });
                     }
-
-                    return res.status(200).json({ message: "Order Processed successfully.", order_id });
+                    if(payment_type === "cod"){
+                        db.query("delete from tbl_cart where user_id = "+user_id, (cerr, cres) => {
+                            if (cerr) {
+                                return res.status(500).json({ message: cerr });
+                            }   
+                            return res.status(200).json({ message: "Order Placed successfully", order_id });
+                        })
+                    }else{
+                        return res.status(200).json({ message: "Order Processed successfully.", order_id });
+                    }
                 });
             });
         }else{

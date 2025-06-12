@@ -47,6 +47,7 @@ mongo.connectToServer( function( err) {
       app.use('/api',require('./routes/admin/propcategories'));
       app.use('/api',require('./routes/admin/user_login.js'));    
       app.use('/api',require('./routes/admin/orders.js'));    
+      app.use('/api',require('./routes/admin/cron.js'));    
 })
 
 app.listen(process.env.PORT,() =>{
