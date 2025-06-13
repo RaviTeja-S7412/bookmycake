@@ -123,7 +123,6 @@ export default function UserProfile() {
             {
                 name: 'Payment Date',
                 selector: (row) => {
-                    console.log('row: ', row);
                     if(row.date_of_payment !== "0000-00-00 00:00:00"){
                         const date = new Date(row.date_of_payment);
                         const day = String(date.getDate()).padStart(2, '0');
@@ -132,6 +131,18 @@ export default function UserProfile() {
                         return `${day}-${month}-${year}`;
                     }else{
                         return '-';
+                    }
+                },
+                sortable: true,
+            },
+            {
+                name: 'Payment Type',
+                grow: 2,
+                selector: (row) => {
+                    if(row.payment_type == "cod"){
+                        return 'Cash On Delivery'
+                    }else{
+                        return 'Online';
                     }
                 },
                 sortable: true,
@@ -185,38 +196,13 @@ export default function UserProfile() {
                         <form className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium">Name</label>
-                                <input className="w-full border rounded p-2" value="sai" readOnly />
-                            </div>
-                            <div className="flex gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium">Birthday</label>
-                                    <select className="border rounded p-2 mr-2">
-                                        <option>Date</option>
-                                    </select>
-                                    <select className="border rounded p-2">
-                                        <option>Month</option>
-                                    </select>
-                                    <select className="border rounded p-2">
-                                        <option>Year</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium">Gender</label>
-                                <div className="flex gap-4 mt-1">
-                                    {["Male", "Female", "Others"].map((g) => (
-                                        <label key={g} className="flex items-center gap-1">
-                                            <input type="radio" name="gender" />
-                                            {g}
-                                        </label>
-                                    ))}
-                                </div>
+                                <input className="w-full border rounded p-2" value={user_data?.first_name+' '+user_data?.last_name} readOnly />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium">Mobile</label>
                                 <input
                                     className="w-full border rounded p-2"
-                                    value="8019291105"
+                                    value={user_data?.mobile_number}
                                     readOnly
                                 />
                             </div>
@@ -224,7 +210,7 @@ export default function UserProfile() {
                                 <label className="block text-sm font-medium">Email</label>
                                 <input
                                     className="w-full border rounded p-2"
-                                    value="pscsherry5@gmail.com"
+                                    value={user_data?.email}
                                     readOnly
                                 />
                             </div>

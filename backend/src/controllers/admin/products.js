@@ -18,135 +18,128 @@ const storage = multer.diskStorage({
 var upload = multer({storage: storage})
 
 // categories
-exports.create_product = [upload.single("file"),function(req,res){
+exports.create_product = [upload.single("file"), async function(req, res) {
 
-    if(!req.body.category_id){
+    // Validate incoming request data
+    if (!req.body.category_id) {
         return res.status(202).json({ message: "Category is Required." });
     }
-    if(!req.body.customer_type){
+    if (!req.body.customer_type) {
         return res.status(202).json({ message: "Customer Type is Required." });
     }
-    if(!req.body.product_name){
+    if (!req.body.product_name) {
         return res.status(202).json({ message: "Product Name is Required." });
     }
-    if(!req.body.options){
+    if (!req.body.options) {
         return res.status(202).json({ message: "Select Atleast One Option." });
     }
+
+    // Handle product image
     let product_image = "";
-    if(!req.file){
+    if (!req.file) {
         return res.status(202).json({ message: "Product Image is Required." });
-    }else{
-        product_image = "products/"+req.file.filename;
+    } else {
+        product_image = "products/" + req.file.filename;
     }
 
-    var product_route = req.body.product_name
-                        .toLowerCase()          // Convert to lowercase
-                        .replace(/\s+/g, '-')    // Replace spaces with hyphens
-                        .replace(/[^\w\-]+/g, '') // Remove any non-alphanumeric characters, except hyphens
-                        .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
-                        .replace(/^-+/, '')      // Remove leading hyphen
-                        .replace(/-+$/, '');
+    const product_size = JSON.parse(req.body.product_size);
+    const product_flavor = JSON.parse(req.body.product_flavor);
 
+    // Create product route
+    var product_route = req.body.product_name
+        .toLowerCase()          // Convert to lowercase
+        .replace(/\s+/g, '-')    // Replace spaces with hyphens
+        .replace(/[^\w\-]+/g, '') // Remove non-alphanumeric characters except hyphens
+        .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
+        .replace(/^-+/, '')      // Remove leading hyphen
+        .replace(/-+$/, '');     // Remove trailing hyphen
+
+    // Insert product into the database
     const query = "INSERT INTO tbl_products (category_id, sub_category_id, customer_type, product_name, product_image, product_description, ingredients, nutritional_info, shipping, options, route, status, deleted, created_date, isDesignercollections, isCorporatecollections, isFeaturedproducts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, 1, 0, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts];
-    
-    db.query(query, values, function (err, result) {
-    
-        if (err) {
-            if (err.code === 'ER_DUP_ENTRY') {
-              return res.status(202).json({ message: 'Product name already exists' });
-            }
-            return res.status(500).json({ message: err });
-        }
 
-        if (result) {
-            const product_size = JSON.parse(req.body.product_size);
-            const product_flavor = JSON.parse(req.body.product_flavor);
-            const product_eggtype = JSON.parse(req.body.product_eggtype);
-            var options_array = [];
-            product_size.forEach((data, i) => {
-                options_array.push({
-                    "id": data.id,
-                    "product_id": result?.insertId,
-                    // "sku": data.sku,
-                    "weight": data.kg,
-                    "unit": data.unit,
-                    "price": data.price,
-                    "flavor": product_flavor[i].flavor,
-                    "eggoption": product_eggtype[i].eggoption,
-                    "created_at": new Date(),
-                })
-            })
-            const query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, eggoption, created_at) VALUES ?";
-     
+    try {
+        db.query(query, values, async function(req, result){
+            
+            if (!Array.isArray(product_size) || !Array.isArray(product_flavor)) {
+                return res.status(202).json({ message: "Product options (size, flavor) are required." });
+            }
+
+            let options_array = product_size.map((data, i) => ({
+                "product_id": result.insertId,
+                "weight": data.kg,
+                "unit": data.unit,
+                "price": data.price,
+                "flavor": product_flavor[i].flavor,
+                "created_at": new Date(),
+            }));
+            // Insert product options into the database
+            const optionsQuery = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES ?";
             const valuesArray = options_array.map(obj => [
                 obj.product_id,
-                // obj.sku,
                 obj.weight,
                 obj.unit,
                 obj.price,
                 obj.flavor,
-                obj.eggoption,
                 obj.created_at
             ]);
-            db.query(query, [valuesArray], function (err, result) {
-                if (err) {
-                    return res.status(500).json({ message: err });
-                }
-                if (result) {
-                    return res.status(200).json({
-                        message: "Created Successfully"
-                    })
-                }
-            });
+
+            await db.query(optionsQuery, [valuesArray]);
+
+            // Send success response after both product and options are created
+            return res.status(200).json({ message: "Created Successfully" });
+        })
+    } catch (err) {
+        // Error handling for any operation in the async flow
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(202).json({ message: 'Product name already exists' });
         }
-    });
-}]
+        return res.status(500).json({ message: err.message || 'Internal Server Error' });
+    }
+}];
 
-exports.update_product = [upload.single("file"),function(req,res){
-
-    if(!req.body.category_id){
+exports.update_product = [upload.single("file"), async function(req, res) {
+    if (!req.body.category_id) {
         return res.status(202).json({ message: "Category is Required." });
     }
-    if(!req.body.customer_type){
+    if (!req.body.customer_type) {
         return res.status(202).json({ message: "Customer Type is Required." });
     }
-    if(!req.body.product_name){
+    if (!req.body.product_name) {
         return res.status(202).json({ message: "Product Name is Required." });
     }
-    if(!req.body.options){
+    if (!req.body.options) {
         return res.status(202).json({ message: "Select Atleast One Option." });
     }
 
     let product_image = "";
-    if(!req.file){
+    if (!req.file) {
         product_image = req.body.old_image;
-    }else{
-        product_image = "products/"+req.file.filename;
+    } else {
+        product_image = "products/" + req.file.filename;
     }
 
     var product_route = req.body.product_name
-                        .toLowerCase()          // Convert to lowercase
-                        .replace(/\s+/g, '-')    // Replace spaces with hyphens
-                        .replace(/[^\w\-]+/g, '') // Remove any non-alphanumeric characters, except hyphens
-                        .replace(/--+/g, '-')    // Replace multiple hyphens with a single hyphen
-                        .replace(/^-+/, '')      // Remove leading hyphen
-                        .replace(/-+$/, '');
+        .toLowerCase()
+        .replace(/\s+/g, '-')  
+        .replace(/[^\w\-]+/g, '') 
+        .replace(/--+/g, '-')  
+        .replace(/^-+/, '')  
+        .replace(/-+$/, '');
 
     const checkCategoryQuery = 'SELECT * FROM tbl_products WHERE product_name = ? and id != ?';
-    db.query(checkCategoryQuery, [req.body.category_name, req.body.id], (err, results) => {
+    db.query(checkCategoryQuery, [req.body.category_name, req.body.id], async (err, results) => {
         if (err) {
-            return callback(err);
+            return res.status(500).json({ error: err });
         }
 
         if (results.length > 0) {
             return res.status(202).json({ message: 'Product name already exists' });
-        }else{
-            const query = "UPDATE tbl_products SET category_id = ?, sub_category_id = ?, customer_type = ?, product_name = ?, product_image = ?, product_description = ?, ingredients = ?, nutritional_info = ?, shipping = ?, options = ?, route = ?, updated_date = ?, isDesignercollections = ?, isCorporatecollections = ?, isFeaturedproducts = ? where id = ?";
+        } else {
+            const query = "UPDATE tbl_products SET category_id = ?, sub_category_id = ?, customer_type = ?, product_name = ?, product_image = ?, product_description = ?, ingredients = ?, nutritional_info = ?, shipping = ?, options = ?, route = ?, updated_date = ?, isDesignercollections = ?, isCorporatecollections = ?, isFeaturedproducts = ? WHERE id = ?";
             const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts, req.body.id];
-            
-            db.query(query, values, function (err, result) {
-            
+
+            db.query(query, values, async (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: err });
                 }
@@ -154,78 +147,51 @@ exports.update_product = [upload.single("file"),function(req,res){
                 if (result) {
                     const product_size = JSON.parse(req.body.product_size);
                     const product_flavor = JSON.parse(req.body.product_flavor);
-                    // const product_eggtype = JSON.parse(req.body.product_eggtype);
-                    var options_array = [];
-                    product_size.forEach((data, i) => {
-                        options_array.push({
-                            "id": data.id,
-                            "product_id": req.body.id,
-                            // "sku": data.sku,
-                            "weight": data.kg,
-                            "unit": data.unit,
-                            "price": data.price,
-                            "flavor": product_flavor[i].flavor,
-                            // "eggoption": product_eggtype[i].eggoption,
-                            "created_at": new Date(),
-                        })
-                    })
 
-                    const updateOrInsertOption = (data) => {
-                        return new Promise((resolve, reject) => {
-                            let query = "";
-                            let values = [];
-                            if (data.id) {
-                                query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ? WHERE id = ?";
-                                values = [data.weight, data.unit, data.price, data.flavor, data.id];
-                            } else {
-                                query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                                values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.created_at];
-                            }
-                            db.query(query, values, (err, result) => {
-                                if (err) return reject(err);
-                                resolve(result);
-                            });
+                    let options_array = product_size.map((data, i) => ({
+                        "id": data.id,
+                        "product_id": req.body.id,
+                        "weight": data.kg,
+                        "unit": data.unit,
+                        "price": data.price,
+                        "flavor": product_flavor[i].flavor,
+                        "created_at": new Date(),
+                    }));
+
+                    try {
+                        await Promise.all(options_array.map(updateOrInsertOption));
+                        // Once all options are updated/inserted, send a success response
+                        return res.status(200).json({
+                            message: "Updated Successfully"
                         });
-                    };
-
-                    Promise.all(options_array.map(updateOrInsertOption))
-                        .then(() => {
-                            // All options updated/inserted
-                        })
-                        .catch(err => {
-                            return res.status(500).json({ message: err });
-                        });
-                    /* options_array.forEach(async (data) => {
-
-                        var query = "";
-                        var values = [];
-                        if(data.id){
-                            var query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ?, eggoption = ? where id = ?";
-                            var values = [data.weight, data.unit, data.price, data.flavor, data.eggoption, data.id];
-                        }else{
-                            query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, eggoption, created_at) VALUES ?";
-                            values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.eggoption, new Date()];
-                        }
-
-                        await db.query(query, values, function (err, result) {
-                            if (err) {
-                                return res.status(500).json({ message: err });
-                            }
-                            if (result) {
-                                
-                            }
-                        });
-
-                    }); */
-                    return res.status(200).json({
-                        message: "Updated Successfully"
-                    })
+                    } catch (err) {
+                        return res.status(500).json({ message: err });
+                    }
                 }
             });
         }
+    });
+}];
 
-    })
-}]
+// Helper function to handle updating/inserting product options
+const updateOrInsertOption = (data) => {
+    return new Promise((resolve, reject) => {
+        let query = "";
+        let values = [];
+        if (data.id) {
+            query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ? WHERE id = ?";
+            values = [data.weight, data.unit, data.price, data.flavor, data.id];
+        } else {
+            query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+            values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.created_at];
+        }
+
+        db.query(query, values, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
 
 exports.deleteproduct = (req, res) => {
 

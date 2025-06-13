@@ -461,11 +461,22 @@ const ProductCrud = () => {
                                         isClearable
                                         options={[
                                             { value: 'Chocolate Truffle', label: 'Chocolate Truffle' },
-                                            { value: 'Exotic Pineapple', label: 'Exotic Pineapple' },
-                                            { value: 'Caramel Butterscotch', label: 'Caramel Butterscotch' },
+                                            { value: 'Pineapple', label: 'Pineapple' },
+                                            { value: 'Butterscotch', label: 'Butterscotch' },
                                             { value: 'Black Forest', label: 'Black Forest' },
                                             { value: 'Blue Berry', label: 'Blue Berry' },
-                                            { value: 'Pineapple', label: 'Pineapple' }
+                                            { value: 'Chocolate', label: 'Chocolate' },
+                                            { value: 'Chocolate inside', label: 'Chocolate inside' },
+                                            { value: 'Chocolate Soft', label: 'Chocolate Soft' },
+                                            { value: 'Dark Chocolate', label: 'Dark Chocolate' },
+                                            { value: 'Fresh Fruit Inside', label: 'Fresh Fruit Inside' },
+                                            { value: 'Fresh Fruits', label: 'Fresh Fruits' },
+                                            { value: 'Fruit', label: 'Fruit' },
+                                            { value: 'Fruit Inside', label: 'Fruit Inside' },
+                                            { value: 'Rainbow', label: 'Rainbow' },
+                                            { value: 'Red Velvet', label: 'Red Velvet' },
+                                            { value: 'Soft Chocolate', label: 'Soft Chocolate' },
+                                            { value: 'Strawberry', label: 'Strawberry' },
                                         ]}
                                         value={flavors[index] ? { label: flavors[index]["flavor"], value: flavors[index]["flavor"] } : null}
                                         onChange={(newValue) => {

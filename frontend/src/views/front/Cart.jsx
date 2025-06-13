@@ -10,6 +10,8 @@ export default function Cart() {
 
   const [cartTotal, setCarttotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentmethod] = useState('cod');
+  const [shippingAddress, setShippingaddress] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
@@ -37,21 +39,31 @@ export default function Cart() {
     setLoading(true);
 
     const params = {
-      user_id: localStorage.getItem("user_id")
+      user_id: localStorage.getItem("user_id"),
+      payment_type: paymentMethod,
+      address: shippingAddress
     };
    
     try {
       const res = await axiosIntance.post(`/front/insertOrder`, params);
 
       if (res.status === 200) {
-        updateStatus(res.data.order_id);
-        Swal.fire({
-          title: res.data.message
-        })
+        dispatch(getCart());
+        if(paymentMethod == 'cod'){
+          console.log(res.data.order_id);
+          
+          navigate('/order-status/'+res.data.order_id);
+        }else{
+          
+        }
+        // updateStatus(res.data.order_id);
+        // Swal.fire({
+        //   title: res.data.message
+        // })
       } else {
-        Swal.fire({
-          title: res.data.message
-        })
+        // Swal.fire({
+        //   title: res.data.message
+        // })
       }
     } catch (error) {
       // console.error('Error fetching product:', error);
@@ -73,14 +85,14 @@ export default function Cart() {
       const res = await axiosIntance.post(`/front/updatePaymentStatus`, params);
 
       if (res.status === 200) {
-        Swal.fire({
-          title: res.data.message
-        })
+        // Swal.fire({
+        //   title: res.data.message
+        // })
         navigate('/order-status');
       } else {
-        Swal.fire({
-          title: res.data.message
-        })
+        // Swal.fire({
+        //   title: res.data.message
+        // })
         navigate('/order-status');
       }
     } catch (error) {
@@ -190,6 +202,43 @@ export default function Cart() {
               <p className="text-sm text-gray-500 mb-4">
                 Tax included and shipping calculated at checkout
               </p>
+              <div className="mb-4">
+                <label htmlFor="shippingAddress" className="block text-sm font-medium mb-1">
+                  Shipping Address
+                </label>
+                <textarea
+                  id="shippingAddress"
+                  className="w-full border rounded p-2 text-sm"
+                  rows={3}
+                  placeholder="Enter your shipping address"
+                  onChange={e => setShippingaddress(e.target.value)}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="flex items-center mb-2 mr-3">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="online"
+                    className="mr-2"
+                    disabled={true}
+                    checked={paymentMethod === 'online'}
+                    onChange={() => setPaymentmethod('online')}
+                  />
+                  <span className="ml-1">Pay Online</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="paymentMethod"  
+                    value="cod"
+                    className="mr-2"
+                    checked={paymentMethod === 'cod'}
+                    onChange={() => setPaymentmethod('cod')}
+                  />
+                  <span className="ml-1">Cash on Delivery (COD)</span>
+                </label>
+              </div>
               <button className="px-4 py-2 border rounded-full bg-black text-white w-full mt-0" onClick={() => {
                 const user_id = localStorage.getItem('user_id');
                 if (user_id) {

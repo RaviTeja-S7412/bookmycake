@@ -18,10 +18,12 @@ import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } 
 const Orders = () => {
 
     const [visible, setVisible] = useState(false)
+    const [pvisible, setPVisible] = useState(false)
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState([]);
     const [delivery_status, setDeliverystatus] = useState('');
+    const [payment_status, setPaymentstatus] = useState('');
     const [order_id, setOrderID] = useState('');
 
     const parts = window.location.pathname.split('/').filter(Boolean);
@@ -41,6 +43,32 @@ const Orders = () => {
                 setOrders(res?.data?.orders);
             } else {
             }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updatePaymentstatus = async () => {
+        setLoading(true);
+        
+        const params = {
+            'payment_status': payment_status,
+            "order_id": order_id
+        };
+
+        try {
+        const res = await axiosIntance.post(`/admin/orders/update_paymentstatus`, params);
+
+        if (res.status === 200) {
+            setPVisible(!pvisible)
+            setTimeout(() => {
+                location.reload();
+            },1000)
+        } else {
+        }
         } catch (error) {
         // console.error('Error fetching product:', error);
         // Handle API error
@@ -104,6 +132,17 @@ const Orders = () => {
             {
                 name: 'Total Amount',
                 selector: (row) => `₹ ${row.total_amount}`,
+                sortable: true,
+            },
+            {
+                name: 'Payment Type',
+                selector: (row) => {
+                    if(row.payment_type == "cod"){
+                        return 'COD';
+                    }else{
+                        return 'Online';
+                    }
+                },
                 sortable: true,
             },
             {
@@ -181,13 +220,22 @@ const Orders = () => {
                         <span title="View Order" style={{cursor: 'pointer'}} onClick={() => navigate('/admin/orders/view-order/'+row?.order_id)} className='mr-2'>
                             <i className='fa fa-eye'></i>
                         </span>
-                        <span title="Update Delivery Status" style={{cursor: 'pointer'}} onClick={() => {
+                        <span title="Update Delivery Status" style={{cursor: 'pointer'}} className='mr-2' onClick={() => {
                             setDeliverystatus(row.delivery_status);
                             setVisible(!visible);
                             setOrderID(row.order_id);
                         }}>
                             <i className='fa fa-edit'></i>
                         </span>
+                        {row.payment_type == 'cod' &&
+                            <span title="Update Payment Status" style={{cursor: 'pointer'}} onClick={() => {
+                                setPaymentstatus(row.payment_status);
+                                setPVisible(!visible);
+                                setOrderID(row.order_id);
+                            }}>
+                                <i className='fa fa-pen'></i>
+                            </span>
+                        }
                     </>
                 ),
             },
@@ -234,6 +282,32 @@ const Orders = () => {
                         Close
                     </CButton>
                     <CButton color="primary" onClick={() => updateDeliverstatus()}>Submit</CButton>
+                    </CModalFooter>
+                </CModal>
+                <CModal
+                    backdrop="static"
+                    visible={pvisible}
+                    onClose={() => setPVisible(false)}
+                    aria-labelledby="StaticBackdropExampleLabel"
+                >
+                    <CModalHeader>
+                    <CModalTitle id="StaticBackdropExampleLabel">Update Payment Status</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <CCol md={12}>
+                            <CFormSelect label="Delivery Status" className="mb-3" onChange={(e) => setPaymentstatus(e.target.value)} defaultValue={payment_status}>
+                                <option>Select Payment Status</option>
+                                <option value={'Pending'} selected={payment_status == "Pending" ? 'selected' : ''}>Pending</option>
+                                <option value={'success'} selected={payment_status == "success" ? 'selected' : ''}>Success</option>
+                                <option value={'failed'} selected={payment_status == "failed" ? 'selected' : ''}>Failed</option>
+                            </CFormSelect>
+                        </CCol>
+                    </CModalBody>
+                    <CModalFooter>
+                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                        Close
+                    </CButton>
+                    <CButton color="primary" onClick={() => updatePaymentstatus()}>Submit</CButton>
                     </CModalFooter>
                 </CModal>
             </>

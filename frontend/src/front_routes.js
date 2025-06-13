@@ -28,7 +28,7 @@ const front_routes = [
   {path: '/login', exact: true, name: 'Login', element: Login},
   {path: '/sign-up', exact: true, name: 'Register', element: Register},
   {path: '/my-profile', exact: true, name: 'Profile', element: Profile},
-  {path: '/order-status', exact: true, name: 'Profile', element: OrderStatus},
+  {path: '/order-status/:order_id', exact: true, name: 'Profile', element: OrderStatus},
   {path: '/forgot-password', exact: true, name: 'Forgot Password', element: ForgotPassword},
   {path: '/cancellation-and-refund-policy', exact: true, name: 'Policy', element: Policy},
   {path: '/contact', exact: true, name: 'Policy', element: Contact},

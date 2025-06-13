@@ -19,7 +19,7 @@ exports.get_orders = function(req,res){
         params.push(date);
     }
 
-    db.query(query, params, function (err, result) {
+    db.query(query+' order by o.id desc', params, function (err, result) {
         if (err) {
             return res.status(500).json({ message: err });
         }
@@ -59,6 +59,33 @@ exports.get_order_details = function(req, res){
         return res.status(200).json({
             data: result
         });
+    });
+}
+
+exports.update_paymentstatus = function(req,res){
+
+    if(!req.body.order_id){
+        return res.status(202).json({ message: "Order ID is Required." });
+    }
+
+    if(!req.body.payment_status){
+        return res.status(202).json({ message: "Payment Status is Required." });
+    }
+
+    const query = "UPDATE tbl_orders SET payment_status = ?, date_of_payment = ? where order_id = ?";
+    const values = [req.body.payment_status, new Date(), req.body.order_id];
+    
+    db.query(query, values, function (err, result) {
+    
+        if (err) {
+            return res.status(500).json({ message: err });
+        }
+
+        if (result) {
+            return res.status(200).json({
+                message: "Payment Status Updated Succussfully."
+            })
+        }
     });
 }
 
@@ -104,7 +131,7 @@ exports.get_userorders = function(req,res){
         params.push(user_id);
     }
 
-    db.query(query, params, function (err, result) {
+    db.query(query+' order by o.id desc', params, function (err, result) {
         if (err) {
             return res.status(500).json({ message: err });
         }
