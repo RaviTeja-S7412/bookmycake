@@ -159,6 +159,7 @@ exports.update_product = [upload.single("file"), async function(req, res) {
                     }));
 
                     try {
+                        db.query("DELETE from tbl_product_option where product_id="+req.body.id);
                         await Promise.all(options_array.map(updateOrInsertOption));
                         // Once all options are updated/inserted, send a success response
                         return res.status(200).json({
@@ -178,13 +179,13 @@ const updateOrInsertOption = (data) => {
     return new Promise((resolve, reject) => {
         let query = "";
         let values = [];
-        if (data.id) {
-            query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ? WHERE id = ?";
-            values = [data.weight, data.unit, data.price, data.flavor, data.id];
-        } else {
+        // if (data.id) {
+        //     query = "UPDATE tbl_product_option SET weight = ?, unit = ?, price = ?, flavor = ? WHERE id = ?";
+        //     values = [data.weight, data.unit, data.price, data.flavor, data.id];
+        // } else {
             query = "INSERT INTO tbl_product_option (product_id, weight, unit, price, flavor, created_at) VALUES (?, ?, ?, ?, ?, ?)";
             values = [data.product_id, data.weight, data.unit, data.price, data.flavor, data.created_at];
-        }
+        // }
 
         db.query(query, values, (err, result) => {
             if (err) return reject(err);
