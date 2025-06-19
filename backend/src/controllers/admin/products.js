@@ -59,7 +59,7 @@ exports.create_product = [upload.single("file"), async function(req, res) {
     const values = [req.body.category_id, req.body.sub_category_id, req.body.customer_type, req.body.product_name, product_image, req.body.product_description, req.body.ingredients, req.body.nutritional_info, req.body.shipping, req.body.options, product_route, 1, 0, new Date(), req.body.isDesignercollections, req.body.isCorporatecollections, req.body.isFeaturedproducts];
 
     try {
-        db.query(query, values, async function(req, result){
+        db.query(query, values, async function(err, result){
             
             if (!Array.isArray(product_size) || !Array.isArray(product_flavor)) {
                 return res.status(202).json({ message: "Product options (size, flavor) are required." });
