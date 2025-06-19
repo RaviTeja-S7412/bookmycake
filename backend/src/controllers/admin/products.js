@@ -287,7 +287,7 @@ exports.get_singleproduct_by_route = async (req, res) => {
                o.id as option_id, o.weight, o.unit, o.price, o.flavor, o.eggoption
         FROM tbl_products p
         LEFT JOIN tbl_product_option o ON p.id = o.product_id
-        WHERE p.route =?`;
+        WHERE p.route =? and p.deleted=0 and p.status=1`;
     const areas = await new Promise((resolve, reject) => {
         db.query("select * from tbl_areas where city_id=1", (err, result) => {
             if (err) return reject(err);
