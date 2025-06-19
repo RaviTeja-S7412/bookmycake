@@ -64,6 +64,12 @@ exports.create_product = [upload.single("file"), async function(req, res) {
             if (!Array.isArray(product_size) || !Array.isArray(product_flavor)) {
                 return res.status(202).json({ message: "Product options (size, flavor) are required." });
             }
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(202).json({ message: 'Product name already exists' });
+                }
+                return res.status(500).json({ message: err });
+            }
 
             let options_array = product_size.map((data, i) => ({
                 "product_id": result.insertId,
