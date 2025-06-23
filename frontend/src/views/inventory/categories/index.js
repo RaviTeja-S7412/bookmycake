@@ -246,9 +246,12 @@ const Categories = () => {
                             <CCard className="mb-4">
                                 <CCardHeader>
                                     <strong>List Of Categories</strong>
+                                    <div className="card-header-actions float-right">
+                                        <button className='btn-sm btn btn-primary' onClick={() => navigate('/admin/inventory/create-category')}>Create Category</button>
+                                    </div>
                                 </CCardHeader>
                                 <CCardBody>
-                                    {categories?.categories.length > 0 && <ReactDatatable columns={columns} data={categories?.categories} actions={true} actionTarget={'/admin/inventory/create-category'} />}
+                                    {categories?.categories.length > 0 && <ReactDatatable columns={columns} data={categories?.categories} actions={false} />}
                                 </CCardBody>
                             </CCard>
                         </CTabPanel>
@@ -256,9 +259,12 @@ const Categories = () => {
                             <CCard className="mb-4">
                                 <CCardHeader>
                                     <strong>List Of Sub Categories</strong>
+                                    <div className="card-header-actions float-right">
+                                        <button className='btn-sm btn btn-primary' onClick={() => navigate('/admin/inventory/create-sub-category')}>Create Sub Category</button>
+                                    </div>
                                 </CCardHeader>
                                 <CCardBody>
-                                    {categories?.sub_categories.length > 0 && <ReactDatatable columns={subcategory_columns} data={categories?.sub_categories} actions={true} actionTarget={'/admin/inventory/create-sub-category'} />}
+                                    {categories?.sub_categories.length > 0 && <ReactDatatable columns={subcategory_columns} data={categories?.sub_categories} actions={false} />}
                                 </CCardBody>
                             </CCard>
                         </CTabPanel>
@@ -266,9 +272,12 @@ const Categories = () => {
                             <CCard className="mb-4">
                                 <CCardHeader>
                                     <strong>List Of Child Categories</strong>
+                                    <div className="card-header-actions float-right">
+                                        <button className='btn-sm btn btn-primary' onClick={() => navigate('/admin/inventory/create-child-category')}>Create Child Category</button>
+                                    </div>
                                 </CCardHeader>
                                 <CCardBody>
-                                    {categories?.child_categories.length > 0 && <ReactDatatable columns={childcategory_columns} data={categories?.child_categories} actions={true} actionTarget={'/admin/inventory/create-child-category'} />}
+                                    {categories?.child_categories.length > 0 && <ReactDatatable columns={childcategory_columns} data={categories?.child_categories} actions={false} />}
                                 </CCardBody>
                             </CCard>
                         </CTabPanel>

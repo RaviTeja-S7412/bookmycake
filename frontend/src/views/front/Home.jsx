@@ -15,6 +15,7 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [designerProducts, setDesignerProducts] = useState([]);
   const [corporateProducts, setCorporateProducts] = useState([]);
+  const [banners, setBanners] = useState([]);
 
   const getSelectedProducts = async () => {
     setLoading(true);
@@ -25,23 +26,25 @@ export default function Home() {
       setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));
       setDesignerProducts(res?.data?.selectedProducts?.filter(product => product.isDesignercollections === 'true'));
       setCorporateProducts(res?.data?.selectedProducts?.filter(product => product.isCorporatecollections === 'true'));
+      setBanners(res?.data?.banners);
     } else {
       setFeaturedProducts([]);
       setDesignerProducts([]);
       setCorporateProducts([]);
+      setBanners([]);
     }
   }
-
-  console.log(featuredProducts, designerProducts, corporateProducts);
-  
 
   useEffect(() => {
     getSelectedProducts();
   }, []);
+
   return (
     <>
       <div className="mx-auto w-full">
-        <Carousel />
+        {banners?.length > 0 && (
+          <Carousel data={banners} />
+        )}
         <CategoryCards />
         {featuredProducts?.length > 0 && (
           <FeaturedCollection data={featuredProducts} />

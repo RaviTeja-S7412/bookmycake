@@ -526,9 +526,17 @@ exports.get_homepage_data = async (req, res) => {
             resolve(result);
         });
     });
+
+    const bannerquery = "SELECT * FROM `tbl_banners` WHERE status=1 AND deleted=0 ORDER BY `id` DESC;";
+    const banners = await new Promise((resolve, reject) => {
+        db.query(bannerquery, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
          
     return res.status(200).json({
-        banner: [],
+        banners: banners,
         selectedProducts: selectedProducts
     });
 };

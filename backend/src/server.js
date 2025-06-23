@@ -35,6 +35,7 @@ mongo.connectToServer( function( err) {
       app.use('/categories', express.static(path.join(__dirname, '../uploads', 'categories')));
       app.use('/products', express.static(path.join(__dirname, '../uploads', 'products')));
       app.use('/props', express.static(path.join(__dirname, '../uploads', 'props')));
+      app.use('/banners', express.static(path.join(__dirname, '../uploads', 'banners')));
   // auth routes
       app.use('/api',require('./routes/admin/auth'));
       app.use('/api',require('./routes/admin/admin'));
@@ -48,6 +49,7 @@ mongo.connectToServer( function( err) {
       app.use('/api',require('./routes/admin/user_login.js'));    
       app.use('/api',require('./routes/admin/orders.js'));    
       app.use('/api',require('./routes/admin/cron.js'));    
+      app.use('/api',require('./routes/admin/banners.js'));    
 })
 
 app.listen(process.env.PORT,() =>{

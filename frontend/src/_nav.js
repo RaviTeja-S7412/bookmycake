@@ -84,6 +84,11 @@ const _nav = [
     items: [
       {
         component: CNavItem,
+        name: 'Banners',
+        to: '/admin/settings/banners',
+      },
+      {
+        component: CNavItem,
         name: 'Cities',
         to: '/admin/settings/cities',
       },

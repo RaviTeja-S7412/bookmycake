@@ -14,7 +14,8 @@ import './styles.css';
 // import required modules
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
-export default function Carousel() {
+export default function Carousel({data}) {
+  console.log('data: ', data);
   return (
     <>
       <Swiper
@@ -32,9 +33,9 @@ export default function Carousel() {
         className=""
       >
         {
-          Banners.map(image => (
+          data?.map(image => (
             <SwiperSlide className='relative'>
-              <img src={image.imageSrc} alt={image.name} className='w-full' /> <span className='absolute bottom-0 left-0 right-0 font-bold text-gray-100 lg:text-[50px]'>{image.name}</span>
+              <img src={import.meta.env.VITE_APIBASE_URL + image?.image} alt={image.name} className='w-full' /> <span className='absolute bottom-0 left-0 right-0 font-bold text-gray-100 lg:text-[50px]'>{image?.banner_title}</span>
             </SwiperSlide>
           ))
         }

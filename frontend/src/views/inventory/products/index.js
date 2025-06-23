@@ -106,9 +106,12 @@ const Products = () => {
                 <CCard className="mb-4">
                     <CCardHeader>
                         <strong>List Of Products</strong>
+                        <div className="card-header-actions float-right">
+                            <button className='btn-sm btn btn-primary' onClick={() => navigate('/admin/inventory/create-product')}>Create Product</button>
+                        </div>
                     </CCardHeader>
                     <CCardBody>
-                    {products?.products.length > 0 && <ReactDatatable columns={columns} data={products?.products} actions={true} actionTarget={'/admin/inventory/create-product'} />}
+                    {products?.products.length > 0 && <ReactDatatable columns={columns} data={products?.products} actions={false} />}
                     </CCardBody>
                 </CCard>
             </CCol>

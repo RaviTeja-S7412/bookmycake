@@ -19,6 +19,7 @@ const Props = React.lazy(() => import('./views/settings/props'));
 const PropsCrud = React.lazy(() => import('./views/settings/props/crud'));
 const Orders = React.lazy(() => import('./views/orders'));
 const OrderDetails = React.lazy(() => import('./views/orders/orderDetails'));
+const Banners = React.lazy(() => import('./views/settings/banners'));
 
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
@@ -34,6 +35,7 @@ const routes = [
   { path: '/admin/inventory/update-sub-category', name: 'Categories/Update Sub Category', element: SubCategoryCrud },
   { path: '/admin/inventory/create-child-category', name: 'Categories/Create Child Category', element: ChildCategoryCrud },
   { path: '/admin/inventory/update-child-category', name: 'Categories/Update Child Category', element: ChildCategoryCrud },
+  { path: '/admin/settings/Banners', name: 'Banners', element: Banners },
   { path: '/admin/settings/cities', name: 'Cities', element: Cities },
   { path: '/admin/settings/create-cities', name: 'Cities/Create Cities', element: CitiesCrud },
   { path: '/admin/settings/update-city', name: 'Cities/Update Cities', element: CitiesCrud },
