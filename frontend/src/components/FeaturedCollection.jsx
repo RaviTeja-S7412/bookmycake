@@ -1,65 +1,20 @@
 // components/DesignerCollections.jsx
-import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 
-const features = [
-    { title: "Almond Cake", image: "/assets/images/products/featured/almond.jpg", price: 1619 },
-    { title: "Buscuite Cake", image: "/assets/images/products/featured/buscuite.jpg", price: 2150 },
-    { title: "Cheese Cake", image: "/assets/images/products/featured/cheese.jpg", price: 2145 },
-    { title: "Choconuts Cake", image: "/assets/images/products/featured/choconuts.jpg", price: 1548 },
-    { title: "Strawberry Chocolate Cake", image: "/assets/images/products/featured/strawberry-chocolate.jpg", price: 1519 },
-];
+export default function FeaturedCollection({data}) {
 
-export default function FeaturedCollection() {
-
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: true,
-        speed: 1500,
-        slidesToShow: 4,
-        slidesToScroll: 0.5,
-        initialSlide: 0,
-        autoplay: false,
-        autoplaySpeed: 3000,
-        cssEase: "linear",
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                    initialSlide: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    };
-
+    const navigate = useNavigate();
+    
     return (
         <section className='bg-gray-200 py-10 font-[poppins]'>
             <div className="default-width">
                 <h4 className="sm:!text-4xl poppins-semibold text-gray-800 mb-4">Featured Collection</h4>
                 <div className="slider-container">
                     <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-5">
-                        {features.map((feature, index) => (<>
+                        {data?.map((feature, index) => (<>
                             <div className="rounded-md shadow p-2 bg-white">
-                                <div className="feature-img rounded-lg overflow-hidden">
-                                    <img src={feature.image} alt={feature.title} className="w-full h-48 object-cover" />
+                                <div className="feature-img rounded-lg overflow-hidden cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                                    <img src={import.meta.env.VITE_APIBASE_URL + feature?.product_image} alt={feature?.product_name} className="w-full h-48 object-cover" />
                                 </div>
                                 <div className="relative">
                                     <div className="veg-icon flex" style={{ marginBottom: '7px', flexWrap: 'wrap' }}>
@@ -69,13 +24,13 @@ export default function FeaturedCollection() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="feature-title flex">
-                                        <p className="font-semibold mt-2">{feature.title}</p>
+                                    <div className="feature-title flex cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                                        <p className="font-semibold mt-2">{feature?.product_name}</p>
                                     </div>
-                                    <div className="feature-footer flex justify-space-between items-center w-full left-[0px] bottom-[12px] py-[5px]">
+                                    {/* <div className="feature-footer flex justify-space-between items-center w-full left-[0px] bottom-[12px] py-[5px]">
                                         <p className="flex items-center m-0 font-semibold">₹ {feature.price}</p>
                                         <button className="text-[#333] px-[20px] py-[5px] rounded rounded-[8px] font-semibold border border-black !ml-auto">Add</button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </>))}

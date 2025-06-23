@@ -6,17 +6,53 @@ import Sweetfullcakes from "../../components/sweetfullcakes";
 import CorporateCollections from "../../components/corporatecollect";
  import DesignerCollections from "../../components/DesignerCollections";
 import FeaturedCollection from "../../components/FeaturedCollection";
+import axiosIntance from "../../components/axios";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+
+  const [loading, setLoading] = useState(false);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [designerProducts, setDesignerProducts] = useState([]);
+  const [corporateProducts, setCorporateProducts] = useState([]);
+
+  const getSelectedProducts = async () => {
+    setLoading(true);
+  
+    const res = await axiosIntance.get(`/admin/get_homepage_data`);
+    
+    if (res.status === 200) {
+      setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));
+      setDesignerProducts(res?.data?.selectedProducts?.filter(product => product.isDesignercollections === 'true'));
+      setCorporateProducts(res?.data?.selectedProducts?.filter(product => product.isCorporatecollections === 'true'));
+    } else {
+      setFeaturedProducts([]);
+      setDesignerProducts([]);
+      setCorporateProducts([]);
+    }
+  }
+
+  console.log(featuredProducts, designerProducts, corporateProducts);
+  
+
+  useEffect(() => {
+    getSelectedProducts();
+  }, []);
   return (
     <>
       <div className="mx-auto w-full">
         <Carousel />
         <CategoryCards />
-        <FeaturedCollection />
-        <DesignerCollections />
+        {featuredProducts?.length > 0 && (
+          <FeaturedCollection data={featuredProducts} />
+        )}
+        {designerProducts?.length > 0 && (
+          <DesignerCollections data={designerProducts} />
+        )}
         <Sweetfullcakes />
-        <CorporateCollections />
+        {corporateProducts?.length > 0 && (
+          <CorporateCollections data={corporateProducts} />
+        )}
 
         <section className="default-width mx-auto my-3">
           <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>

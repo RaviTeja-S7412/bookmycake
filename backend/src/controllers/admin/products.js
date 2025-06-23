@@ -517,6 +517,22 @@ exports.get_filter_products = async (req, res) => {
     });
 };
 
+exports.get_homepage_data = async (req, res) => {
+
+    const selectedquery = "SELECT * FROM `tbl_products` WHERE isDesignercollections='true' OR isCorporatecollections='true' OR isFeaturedproducts='true' ORDER BY `id` DESC;";
+    const selectedProducts = await new Promise((resolve, reject) => {
+        db.query(selectedquery, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+         
+    return res.status(200).json({
+        banner: [],
+        selectedProducts: selectedProducts
+    });
+};
+
 
 
 

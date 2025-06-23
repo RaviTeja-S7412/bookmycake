@@ -1,16 +1,10 @@
 // components/DesignerCollections.jsx
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 
-const cakes = [
-  { title: "Elsa Frozen Cake", image: "/assets/images/wallpaperflare.com_wallpaper.jpg" },
-  { title: "Real Madrid Cake", image: "/assets/images/real_madrid.jpg" },
-  { title: "Avengers Cake", image: "/assets/images/avengers.jpg" },
-  { title: "Elsa Frozen Cake", image: "/assets/images/wallpaperflare.com_wallpaper.jpg" },
-  { title: "Avengers Cake", image: "/assets/images/avengers.jpg" },
-];
+export default function DesignerCollections({data}) {
 
-export default function DesignerCollections() {
-
+  const navigate = useNavigate();
   const settings = {
     dots: true,
     arrows: false,
@@ -56,13 +50,13 @@ export default function DesignerCollections() {
         <h4 className="sm:!text-4xl poppins-semibold text-gray-800 mb-4 text-white">Designer Collections</h4>
         <div className="slider-container">
           <Slider {...settings}>
-            {cakes.map((cake, index) => (
-              <div key={index} className="p-2">
+            {data?.map((feature, index) => (
+              <div key={index} className="p-2 cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
                 <div className="border border-[#b5b6b8] overflow-hidden relative">
-                  <img src={cake.image} alt={cake.title} className="w-full max-h-[290px] object-cover" />
+                  <img src={import.meta.env.VITE_APIBASE_URL + feature?.product_image} alt={feature?.product_name} className="w-full max-h-[290px] object-cover" />
                 </div>
                 <div className="bg-[#1f1f1f] text-[#ffb14f] text-center py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-xl mb-[30px]">
-                  {cake.title}
+                  {feature?.product_name}
                 </div>
               </div>
             ))}

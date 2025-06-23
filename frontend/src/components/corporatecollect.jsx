@@ -1,13 +1,7 @@
-export default function CorporateCollections() {
-  const cakes = [
-    { title: "Orange Slice Cake", image: "assets/images/lemon-chessescake-food-photography-recipe-idea.jpg" },
-    { title: "Black Forest Cake", image: "assets/images/front-view-delicious-cake-concept.jpg" },
-    { title: "Chocolate Truffle Cake", image: "assets/images/front-view-round-chocolate-cake-stand.jpg" },
-    { title: "Blue Berry Cake", image: "assets/images/high-angle-delicious-chocolate-cake-concept.jpg" },
-    { title: "Dry Fruite Cake", image: "assets/images/blue-berry-cake.jpg" },
-    { title: "Oreo Chocolate Cake", image: "assets/images/delicious-cake-with-biscuits.jpg" },
-  ];
+import { useNavigate } from "react-router-dom";
 
+export default function CorporateCollections({data}) {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col md:flex-row bg-black text-white">
       {/* Left Content Block */}
@@ -24,7 +18,7 @@ export default function CorporateCollections() {
           <p className="text-xl text-white poppins-regular mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
             Lorem ipsum dolor sit amet.</p>
 
-          <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4">
+          <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4" onClick={() => navigate('/collections/corporate-cakes')}>
             Explore
           </button>
         </div>
@@ -32,15 +26,15 @@ export default function CorporateCollections() {
 
       {/* Cake Grid */}
       <div className="md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {cakes.map((cake, index) => (
-          <div key={index} className="relative group ins-brdr">
+        {data?.map((feature, index) => (
+          <div key={index} className="relative group ins-brdr cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
             <img
-              src={cake.image}
-              alt={cake.title}
-              className="w-full h-full object-cover"
+              src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
+              alt={feature?.product_name}
+              className="object-cover object-center max-h-[300px] w-full"
             />
             <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
-              {cake.title}
+              {feature?.product_name}
             </p>
           </div>
         ))}

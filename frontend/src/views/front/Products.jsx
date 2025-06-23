@@ -110,10 +110,43 @@ export default function Products() {
 
   return (
     <div className="default-width font-[Poppins]">
-      <h2 className="text-3xl poppins-bold my-3 py-2">Products</h2>
+      <nav className="flex mt-3 p-1" aria-label="Breadcrumb">
+        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+          <li className="inline-flex items-center">
+            <a href='javascript:void(0)' onClick={() => navigate(`/`)} className="inline-flex !no-underline items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white text-black">
+              <svg className="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+              </svg>
+              Home
+            </a>
+          </li>
+          {category_id && (
+            <li>
+              <div className="flex items-center">
+                <svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <a href='javascript:void(0)' onClick={() => navigate(`/collections/${category_id}`)} className="!no-underline ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white  text-black">{category_id
+                    .split('-')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}</a>
+              </div>
+            </li>
+          )}
+          {sub_category_id && (
+            <li>
+              <div className="flex items-center">
+                <svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <a href='javascript:void(0)' onClick={() => navigate(`/collections/${category_id}/${sub}`)} className="!no-underline ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">{sub_category_id}</a>
+              </div>
+            </li>
+          )}
+        </ol>
+      </nav>
 
       <div className="flex flex-wrap md:flex-nowrap">
-
         {/* Sidebar Filters */}
         <div className="md:w-1/4 p-4 bg-[#910f3f] mb-6 md:mb-0 text-white" style={{ height: 'fit-content' }}>
           {/* Price */}
@@ -209,34 +242,74 @@ export default function Products() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product, index) => {
-              var startingSize = product.product_options?.sort((a, b) => a.price - b.price)?.[0];
-            return(
-              <div key={index} className="shadow-md overflow-hidden bg-white">
-                <img src={import.meta.env.VITE_APIBASE_URL + product.product_image} alt={product.product_image} className="w-full h-auto object-cover  cursor-pointer max-h-[320px]"  onClick={() => navigate('/products/'+product.route)} />
-                <div className="p-2">
-                  <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/'+product.route)}>{product.product_name}</h6>
-                  {/* <p className="text-sm text-gray-600 mb-1">
-                    Earliest delivery: <span className="font-sm poppins-semibold">{cake.delivery}</span>
-                  </p> */}
+            {/* Image loading state for each product */}
+            {/*
+              We'll use an array of booleans, one for each product, to track image loading.
+            */}
+            {(() => {
+              const [imgLoadedArr, setImgLoadedArr] = useState([]);
 
-                  <div className="flex items-center justify-between mt-2">
+              // Reset image loaded state when products change
+              useEffect(() => {
+                setImgLoadedArr(Array(products.length).fill(false));
+              }, [products.length]);
+
+              return products.map((product, index) => {
+                var startingSize = product.product_options?.sort((a, b) => a.price - b.price)?.[0];
+                const imgLoaded = imgLoadedArr[index] || false;
+
+                const handleImgLoad = () => {
+                  setImgLoadedArr((prev) => {
+                    const updated = [...prev];
+                    updated[index] = true;
+                    return updated;
+                  });
+                };
+
+                return(
+                  <div key={index} className="shadow-md overflow-hidden bg-white">
+                  <div className="relative">
+                    {!imgLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
+                      <svg className="animate-spin h-8 w-8 text-[#910f3f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                      </svg>
+                    </div>
+                    )}
+                    <img
+                    src={import.meta.env.VITE_APIBASE_URL + product.product_image}
+                    alt={product.product_image}
+                    className={`w-full h-auto object-cover cursor-pointer max-h-[320px] transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    onClick={() => navigate('/products/' + product.route)}
+                    onLoad={handleImgLoad}
+                    />
+                  </div>
+                  <div className="p-2">
+                    <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/'+product.route)}>{product.product_name}</h6>
+                    {/* <p className="text-sm text-gray-600 mb-1">
+                    Earliest delivery: <span className="font-sm poppins-semibold">{cake.delivery}</span>
+                    </p> */}
+
+                    <div className="flex items-center justify-between mt-2">
                     <p className="text-lg poppins-bold mb-0">₹ {startingSize?.price}</p>
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       {[...Array(4)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 text-yellow-300 ms-1" fill="currentColor" viewBox="0 0 22 20">
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />  
-                        </svg>
+                      <svg key={i} className="w-4 h-4 text-yellow-300 ms-1" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />  
+                      </svg>
                       ))}
                       <svg className="w-4 h-4 ms-1 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                       </svg>
                       <span className="ml-2 text-gray-600 text-sm">({3})</span>
+                    </div> */}
                     </div>
                   </div>
-                </div>
-              </div>
-            )})}
+                  </div>
+                )
+              });
+            })()}
           </div>
         </div>
 
