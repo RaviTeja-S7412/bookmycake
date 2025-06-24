@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-export default function CorporateCollections({data}) {
+export default function CorporateCollections({ data }) {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col md:flex-row bg-black text-white">
       {/* Left Content Block */}
-      <div className="md:w-2/5 bg-[#2e1e1c] p-[10px] sm:p-[40px]"> 
+      <div className="md:w-2/5 bg-[#2e1e1c] p-[10px] sm:p-[40px]">
         <div className="border border-2 border-white rounded-xl p-[10px] sm:p-[40px]">
           <div className="d-flex items-center">
             <img
@@ -27,15 +27,18 @@ export default function CorporateCollections({data}) {
       {/* Cake Grid */}
       <div className="md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {data?.map((feature, index) => (
-          <div key={index} className="relative group ins-brdr cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
-            <img
-              src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
-              alt={feature?.product_name}
-              className="object-cover object-center max-h-[300px] w-full"
-            />
-            <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
-              {feature?.product_name}
-            </p>
+          <div key={index} className="relative" onClick={() => navigate('/products/' + feature?.route)}>
+            <div className="absolute bg-black opacity-50"></div>
+            <div className="relative group ins-brdr cursor-pointer">
+              <img
+                src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
+                alt={feature?.product_name}
+                className="object-cover object-center max-h-[300px] w-full"
+              />
+              <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
+                {feature?.product_name}
+              </p>
+            </div>
           </div>
         ))}
       </div>

@@ -97,7 +97,7 @@ export default function HomeHeader() {
 
 
       {/* Desktop navigation bar - only visible on large screens */}
-      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#910f3f]">
+      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#bc4d5e]">
         <div className="flex gap-4">
           {menuItems.map((item) => (
             <div

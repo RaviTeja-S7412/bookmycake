@@ -14,7 +14,7 @@ export default function CategoryCards() {
         {categories.map((cat, index) => (
           <div
             key={index}
-            className="bg-[#bc4d5e] text-white rounded-3xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 min-h-[350px]"
+            className="bg-[#bc4d5e] text-white rounded-3xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 min-h-[230px]"
           >
             <img src={cat.icon} alt={cat.title} className="mb-3" />
             <div className="text-center poppins-semibold">{cat.title}</div>

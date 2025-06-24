@@ -1,18 +1,58 @@
 // components/DesignerCollections.jsx
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
 
 export default function FeaturedCollection({data}) {
 
     const navigate = useNavigate();
+    const settings = {
+    dots: false,
+    arrows: false,
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+    
     
     return (
         <section className='bg-gray-200 py-10 font-[poppins]'>
             <div className="default-width">
                 <h4 className="sm:!text-4xl poppins-semibold text-gray-800 mb-4">Featured Collection</h4>
                 <div className="slider-container">
-                    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-5">
+                    <Slider {...settings}>
                         {data?.map((feature, index) => (<>
-                            <div className="rounded-md shadow p-2 bg-white">
+                            <div className="rounded-md p-2 bg-white m-2">
                                 <div className="feature-img rounded-lg overflow-hidden cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
                                     <img src={import.meta.env.VITE_APIBASE_URL + feature?.product_image} alt={feature?.product_name} className="w-full h-48 object-cover" />
                                 </div>
@@ -34,7 +74,7 @@ export default function FeaturedCollection({data}) {
                                 </div>
                             </div>
                         </>))}
-                    </div>
+                    </Slider>
                 </div>
             </div>
         </section>
