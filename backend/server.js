@@ -52,7 +52,7 @@ mongo.connectToServer( function( err) {
       app.use('/api',require('./src/routes/admin/banners.js'));    
 })
 
-app.listen(process.env.PORT,() =>{
-  console.log(`server is running on ${process.env.PORT}`);
+app.listen(3000,() =>{
+  console.log(`server is running on 3000`);
 });
 app.use(express.json());

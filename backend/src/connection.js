@@ -1,11 +1,11 @@
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  host: 'localhost',
+  user: 'bookmycake',
+  password: '10FemhDy^9u&gTtp',
+  database: 'bookmycake',
+  port: 3306
 });
 
 function connectToServer(callback) {
