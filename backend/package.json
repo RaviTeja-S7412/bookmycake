@@ -2,7 +2,7 @@
   "name": "back-end",
   "version": "1.0.0",
   "description": "Back-end for an e-commerce website",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "build": "node build"
