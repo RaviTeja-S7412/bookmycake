@@ -4,6 +4,7 @@ import {
     CCardBody,
     CCardHeader,
     CCol,
+    CFormSwitch,
     CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -14,9 +15,11 @@ import { getProps, deleteProp } from '../../../redux/actions/props.actions'
 import { useNavigate } from 'react-router-dom'
 import { propConstants } from '../../../redux/actions/constants'
 import Swal from 'sweetalert2'
+import axiosIntance from '../../../components/axios'
 
 const Props = () => {
 
+    const [loading, setLoading] = useState(false);
     const props = useSelector(state => state.props)
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -51,9 +54,29 @@ const Props = () => {
     }, [props.get_props])
 
      const update_prop = (id) => {
-            dispatch({ type: propConstants.GET_SINGLEPROP_REQUEST })
-            navigate('/admin/settings/update-prop?id='+id)
+        dispatch({ type: propConstants.GET_SINGLEPROP_REQUEST })
+        navigate('/admin/settings/update-prop?id='+id)
+    }
+
+    const handleStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
         }
+        try {
+            const res = await axiosIntance.post(`/admin/update_propstatus`, params);
+            if (res.status === 200) {
+                dispatch({ type: propConstants.GET_PROPS_REQUEST });
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const columns = useMemo(
         () => [
@@ -75,6 +98,19 @@ const Props = () => {
             {
                 name: 'Price',
                 selector: (row) => `₹ ${row.price}`,
+                sortable: true,
+            },
+            {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleStatus(row.id, status);
+                    }}
+                />,
                 sortable: true,
             },
             {

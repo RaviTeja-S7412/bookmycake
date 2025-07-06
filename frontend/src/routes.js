@@ -50,7 +50,7 @@ const routes = [
 
   { path: '/admin/orders/today-orders', name: 'Orders/Todays Orders', element: Orders},
   { path: '/admin/orders/all-orders', name: 'Orders/All Orders', element: Orders},
-  { path: '/admin/orders/view-order/:order_id', name: 'Orders/View Order Details', element: OrderDetails}
+  { path: '/admin/orders/view-order', name: 'Orders/View Order Details', element: OrderDetails}
 
 
   

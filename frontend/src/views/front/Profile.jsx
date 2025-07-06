@@ -9,6 +9,7 @@ export default function UserProfile() {
 
     const [ loading, setLoading ] = useState(false);
     const [ orders, setOrders ] = useState([]);
+    const [ products, setProducts ] = useState([]);
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
 
     const get_orders = async () => {
@@ -34,9 +35,29 @@ export default function UserProfile() {
         }
     };
 
+    const getOrderdetails = async (order_id) => {
+        setLoading(true);
+        setProducts([]);
+        const params = {};
+        params.order_id = order_id;
+        try {
+            const res = await axiosIntance.post(`/admin/orders/get_order_details`, params);
+            if (res.status === 200) {
+                setProducts(res?.data?.products);
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         get_orders();
     }, [])
+
 
     const [activeSection, setActiveSection] = React.useState("My Profile");
     const [visible, setVisible] = useState(false);
@@ -50,7 +71,18 @@ export default function UserProfile() {
             },
             {
                 name: 'Order ID',
-                selector: (row) => `${row.order_id}`,
+                selector: (row) => {
+                    return (
+                        <>
+                            <span title="View Order" style={{cursor: 'pointer'}} onClick={() => {
+                                getOrderdetails(row?.order_id);
+                                setVisible(!visible);
+                            }} className='mr-2'>
+                                {row?.order_id}
+                            </span>
+                        </>
+                    )
+                },
                 sortable: true,
             },
             {
@@ -273,28 +305,36 @@ export default function UserProfile() {
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                        {products.length > 0 ? products.map((item, idx) => (
+                            <tr key={idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td>
-                                    <div className="flex">
-                                        <img src="/assets/images/products/featured/almond.jpg" className="w-20" />
+                                    <div className="flex mb-2">
+                                        <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
                                         <div className="ml-4">
-                                            <h5 className="font-bold !mb-1">Almonds Cake</h5>
-                                            <p className="font-semibold !mb-1">Almond Truffle</p>
+                                            <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
+                                            
+                                                {item?.type === 'product' && 
+                                                <span className='text-sm'>
+                                                    Delivery Time: {item?.delivery_time}<br />
+                                                    Weight: {item?.weight/1000} KG<br />
+                                                    Flavor: {item?.flavor}<br />
+                                                    Message: {item?.message}
+                                                </span>
+                                            }</h5>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="text-center font-bold text-md">500/-</td>
-                                <td>
-                                    <div className="flex items-center justify-center gap-2 text-sm">
-                                        <span className="w-2 h-2 rounded-full bg-green-700"></span>
-                                        Delivered on 22-05-2025
-                                    </div>
-                                </td>
+                                <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
+                               
                             </tr>
+                        )) : (
+                            <tr>
+                                <td colSpan="3" className="text-center text-gray-500">No products found</td>
+                            </tr>
+                        )}
                         </tbody>
                     </table>
                 </CModalBody>
