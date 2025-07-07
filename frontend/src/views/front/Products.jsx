@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
+import { ChevronDownIcon } from "@heroicons/react/24/outline"
 
 export default function Products() {
 
@@ -152,8 +153,7 @@ export default function Products() {
           {/* Price */}
           <div onClick={() => setShowPrice(!showPrice)} className="flex justify-between items-center cursor-pointer mb-1">
             <h6 className="poppins-semibold mb-0">Price</h6>
-            <img src="/icons/uparrow-white.png" alt="arrow"
-              className={`transition-transform duration-300 ${showPrice ? 'rotate-0' : 'rotate-180'}`} />
+              <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showPrice ? 'rotate-180' : 'rotate-0'}`}  />
           </div>
 
           {showPrice && (
