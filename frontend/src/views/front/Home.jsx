@@ -19,8 +19,10 @@ export default function Home() {
 
   const getSelectedProducts = async () => {
     setLoading(true);
-  
-    const res = await axiosIntance.get(`/admin/get_homepage_data`);
+    const params = {
+      customer_type: localStorage?.getItem('user_type') ? localStorage?.getItem('user_type') : 'retail'
+    };
+    const res = await axiosIntance.get(`/admin/get_homepage_data?customer_type=${params.customer_type}`);
     
     if (res.status === 200) {
       setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));

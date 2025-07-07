@@ -150,6 +150,46 @@ const Categories = () => {
         }
     }
 
+    const handleSubStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
+        }
+        try {
+            const res = await axiosIntance.post(`/admin/update_subcategorystatus`, params);
+            if (res.status === 200) {
+                dispatch({ type: categoryConstants.GET_SUBCATEGORIES_REQUEST });
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleChildStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
+        }
+        try {
+            const res = await axiosIntance.post(`/admin/update_childcategorystatus`, params);
+            if (res.status === 200) {
+                dispatch({ type: categoryConstants.GET_CHILDCATEGORIES_REQUEST });
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const columns = useMemo(
         () => [
             {
@@ -216,6 +256,19 @@ const Categories = () => {
                 sortable: true,
             },
             {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleSubStatus(row.id, status);
+                    }}
+                />,
+                sortable: true,
+            },
+            {
                 name: "Action",
                 cell: (row) => (
                     <>
@@ -256,6 +309,19 @@ const Categories = () => {
                 sortable: true,
             },
             {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleChildStatus(row.id, status);
+                    }}
+                />,
+                sortable: true,
+            },
+            {
                 name: "Action",
                 cell: (row) => (
                     <>
@@ -275,7 +341,7 @@ const Categories = () => {
                     <CTabList variant="underline-border">
                         <CTab aria-controls="home-tab-pane" itemKey={1}>Categories</CTab>
                         <CTab aria-controls="profile-tab-pane" itemKey={2}>Sub Categories</CTab>
-                        <CTab aria-controls="contact-tab-pane" itemKey={3}>Child Categories</CTab>
+                        {/* <CTab aria-controls="contact-tab-pane" itemKey={3}>Child Categories</CTab> */}
                     </CTabList>
                     <CTabContent>
                         <CTabPanel className="p-3" aria-labelledby="home-tab-pane" itemKey={1}>
