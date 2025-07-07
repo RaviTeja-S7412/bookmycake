@@ -7,8 +7,6 @@ import {
     CFormSelect,
     CRow
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cibEllo, cilPenAlt, cilTrash } from '@coreui/icons'
 import ReactDatatable from '../../components/datatables/ReactDatatable'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -200,7 +198,6 @@ const Orders = () => {
             {
                 name: 'Payment Date',
                 selector: (row) => {
-                    console.log('row: ', row);
                     if(row.date_of_payment !== "0000-00-00 00:00:00"){
                         const date = new Date(row.date_of_payment);
                         const day = String(date.getDate()).padStart(2, '0');
@@ -217,7 +214,7 @@ const Orders = () => {
                 name: "Action",
                 cell: (row) => (
                     <>
-                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => navigate('/admin/orders/view-order/'+row?.order_id)} className='mr-2'>
+                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => navigate('/admin/orders/view-order?order_id='+row?.order_id)} className='mr-2'>
                             <i className='fa fa-eye'></i>
                         </span>
                         <span title="Update Delivery Status" style={{cursor: 'pointer'}} className='mr-2' onClick={() => {
@@ -295,7 +292,7 @@ const Orders = () => {
                     </CModalHeader>
                     <CModalBody>
                         <CCol md={12}>
-                            <CFormSelect label="Delivery Status" className="mb-3" onChange={(e) => setPaymentstatus(e.target.value)} defaultValue={payment_status}>
+                            <CFormSelect label="Payment Status" className="mb-3" onChange={(e) => setPaymentstatus(e.target.value)} defaultValue={payment_status}>
                                 <option>Select Payment Status</option>
                                 <option value={'Pending'} selected={payment_status == "Pending" ? 'selected' : ''}>Pending</option>
                                 <option value={'success'} selected={payment_status == "success" ? 'selected' : ''}>Success</option>
@@ -304,7 +301,7 @@ const Orders = () => {
                         </CCol>
                     </CModalBody>
                     <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                    <CButton color="secondary" onClick={() => setPVisible(false)}>
                         Close
                     </CButton>
                     <CButton color="primary" onClick={() => updatePaymentstatus()}>Submit</CButton>

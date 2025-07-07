@@ -4,6 +4,7 @@ import {
     CCardBody,
     CCardHeader,
     CCol,
+    CFormSwitch,
     CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -14,9 +15,11 @@ import { deleteProduct, getProducts } from '../../../redux/actions/products.acti
 import { useNavigate } from 'react-router-dom'
 import { productConstants } from '../../../redux/actions/constants'
 import Swal from 'sweetalert2'
+import axiosIntance from '../../../components/axios'
 
 const Products = () => {
 
+    const [loading, setLoading] = useState(false);
     const products = useSelector(state => state.products)
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -47,6 +50,26 @@ const Products = () => {
             }
         });
         
+    }
+
+    const handleStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
+        }
+        try {
+            const res = await axiosIntance.post(`/admin/update_productstatus`, params);
+            if (res.status === 200) {
+                dispatch({ type: productConstants.GET_PRODUCTS_REQUEST });
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -82,11 +105,19 @@ const Products = () => {
                 selector: (row) => `${row.sub_category_name === null ? '-' : row.sub_category_name}`,
                 sortable: true,
             },
-            /* {
-                name: 'Stock Available',
-                selector: (row) => `${row.stock}`,
+            {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleStatus(row.id, status);
+                    }}
+                />,
                 sortable: true,
-            }, */
+            },
             {
                 name: "Action",
                 cell: (row) => (
