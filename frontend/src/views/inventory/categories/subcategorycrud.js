@@ -131,12 +131,12 @@ const SubCategoryCrud = () => {
                                     required={queryParams.get("id") ? false : true}
                                 />
                             </CCol>
-                            <CCol md={4}>
+                            {/* <CCol md={4}>
                                 <CFormSelect label="Show Category" className="mb-3" aria-label="Small select example" onChange={(e) => setShowCategory(e.target.value)} required>
                                     <option key={1} value={0} selected={0 == show_category ? true : false}>{'No'}</option>
                                     <option key={1} value={1} selected={1 == show_category ? true : false}>{'Yes'}</option>
                                 </CFormSelect>
-                            </CCol>
+                            </CCol> */}
                             <CCol xs={12}>
                                 <CButton color="primary" type="submit">
                                     Submit

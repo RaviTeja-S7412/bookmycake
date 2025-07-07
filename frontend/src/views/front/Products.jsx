@@ -58,6 +58,7 @@ export default function Products() {
     }else if(category_id){
       params.category_id = category_id;
     }
+    params.customer_type = localStorage?.getItem('user_type') ? localStorage?.getItem('user_type') : 'retail';
 
     const res = await axiosIntance.get(`/admin/get_filterproducts`,{ params });
     

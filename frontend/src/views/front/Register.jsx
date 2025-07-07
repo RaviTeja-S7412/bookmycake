@@ -25,7 +25,6 @@ export default function Register() {
         };
         try {
             const res = await axiosIntance.post('/user/signup', formData);
-            console.log(res);
             
             if (res.status === 200) {
                 setTimeout(() => {
@@ -51,29 +50,31 @@ export default function Register() {
                         </select>
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium mb-2" htmlFor="name">First Name</label>
+                        <label className="block text-sm font-medium mb-2" htmlFor="name">{user_type === 'corporate' ? 'Company Name' : 'First Name'}</label>
                         <input
                             type="text"
                             id="name"
                             onChange={(e) => setFirstname(e.target.value)}
                             value={first_name}
                             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your First name"
+                            placeholder={`Enter your ${user_type === 'corporate' ? 'Company Name' : 'First Name'}`}
                             required
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-2" htmlFor="name">Last Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            onChange={(e) => setLastname(e.target.value)}
-                            value={last_name}
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your Last name"
-                        />
-                    </div>
+                    {user_type === "retail" && (
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium mb-2" htmlFor="name">Last Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                onChange={(e) => setLastname(e.target.value)}
+                                value={last_name}
+                                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter your Last name"
+                            />
+                        </div>
+                    )}
 
                     <div className="mb-4">
                         <label className="block text-sm font-medium mb-2" htmlFor="email">Email</label>

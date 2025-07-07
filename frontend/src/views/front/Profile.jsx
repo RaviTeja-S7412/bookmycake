@@ -19,9 +19,9 @@ export default function UserProfile() {
         const params = {
             user_id: localStorage.getItem('user_id')
         };
-
+        
         try {
-        const res = await axiosIntance.post(`/front/orders/get_userorders`, { params });
+        const res = await axiosIntance.post(`/front/orders/get_userorders`, params);
 
         if (res.status === 200) {
             setOrders(res.data.orders)
@@ -74,7 +74,7 @@ export default function UserProfile() {
                 selector: (row) => {
                     return (
                         <>
-                            <span title="View Order" style={{cursor: 'pointer'}} onClick={() => {
+                            <span title="View Order Details" style={{cursor: 'pointer', color: 'blue'}} onClick={() => {
                                 getOrderdetails(row?.order_id);
                                 setVisible(!visible);
                             }} className='mr-2'>

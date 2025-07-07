@@ -103,22 +103,22 @@ export default function HomeHeader() {
             <div
               key={item.id}
               className="relative"
-              onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+              onMouseEnter={() => item.subItems?.filter((s) => s.status === 1)?.length > 0 && setOpenPopover(item.id)}
               onMouseLeave={() => setOpenPopover(null)}
             >
               <button
                 className="flex items-center gap-1 focus:outline-none px-2 py-3"
-                onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+                onClick={() => item.subItems?.filter((s) => s.status === 1)?.length === 0 && navigate('/collections/' + item.path)}
               >
                 {item.label}
-                {item.subItems.length > 0 && (
+                {item.subItems.filter((s) => s.status === 1)?.length > 0 && (
                   <ChevronDownIcon className="h-4 w-4 text-white" />
                 )}
               </button>
 
-              {item.subItems.length > 0 && openPopover === item.id && (
+              {item.subItems?.filter((s) => s.status === 1)?.length > 0 && openPopover === item.id && (
                 <div className="absolute top-full z-10 mt-0 bg-white shadow-md rounded p-2 w-48">
-                  {item.subItems.map((sub) => (
+                  {item.subItems?.filter((s) => s.status === 1)?.map((sub) => (
                     <a
                       key={sub.id}
                       href="#"
