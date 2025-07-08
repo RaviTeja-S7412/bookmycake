@@ -12,7 +12,7 @@ export default function CorporateCollections({ data }) {
     autoplaySpeed: 3000,
     slidesToShow: data?.length > 1 ? 3 : '',
     speed: 500,
-    rows: 2,
+    // rows: 2,
     rows: data?.length > 1 ? 2 : '',
     // slidesPerRow: 1,
     slidesPerRow: data?.length > 1 ? 1 : '',
