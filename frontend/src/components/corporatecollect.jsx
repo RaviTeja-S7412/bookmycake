@@ -1,7 +1,23 @@
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+
 
 export default function CorporateCollections({ data }) {
   const navigate = useNavigate();
+  const settings = {
+    dots: false,
+    arrows: false,
+    infinite: data?.length > 5 ? true : false,
+    autoplay: data?.length > 5 ? true : false,
+    autoplaySpeed: 3000,
+    slidesToShow: data?.length > 1 ? 3 : '',
+    speed: 500,
+    rows: 2,
+    rows: data?.length > 1 ? 2 : '',
+    // slidesPerRow: 1,
+    slidesPerRow: data?.length > 1 ? 1 : '',
+  };
+
   return (
     <div className="flex flex-col md:flex-row bg-black text-white">
       {/* Left Content Block */}
@@ -25,22 +41,26 @@ export default function CorporateCollections({ data }) {
       </div>
 
       {/* Cake Grid */}
-      <div className="md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {data?.map((feature, index) => (
-          <div key={index} className="relative" onClick={() => navigate('/products/' + feature?.route)}>
-            <div className="absolute bg-black opacity-50"></div>
-            <div className="relative group ins-brdr cursor-pointer">
-              <img
-                src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
-                alt={feature?.product_name}
-                className="object-cover object-center max-h-[300px] w-full"
-              />
-              <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
-                {feature?.product_name}
-              </p>
-            </div>
-          </div>
-        ))}
+      <div className="md:w-3/5">
+        <div className="slider-container">
+          <Slider {...settings}>
+            {data?.map((feature, index) => (
+              <div key={index} className="relative d-block" onClick={() => navigate('/products/' + feature?.route)}>
+                <div className="absolute bg-black opacity-50"></div>
+                <div className="relative group ins-brdr cursor-pointer">
+                  <img
+                    src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
+                    alt={feature?.product_name}
+                    className="object-cover object-center max-h-[300px] w-full"
+                  />
+                  <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
+                    {feature?.product_name}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
       </div>
     </div>
   );

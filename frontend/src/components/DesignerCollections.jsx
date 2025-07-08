@@ -8,12 +8,12 @@ export default function DesignerCollections({data}) {
   const settings = {
     dots: true,
     arrows: false,
-    infinite: true,
+    infinite: data?.length > 2 ? true : false,
     speed: 1500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     initialSlide: 0,
-    autoplay: true,
+    autoplay: data?.length > 2 ? true : false,
     autoplaySpeed: 3000,
     cssEase: "linear",
     responsive: [
