@@ -16,6 +16,7 @@ const OrderStatus = React.lazy(() => import('./views/front/OrderStatus'));
 const Policy = React.lazy(() => import('./views/front/Policy'));
 const Contact = React.lazy(() => import('./views/front/Contact'));
 const Terms = React.lazy(() => import('./views/front/Terms'));
+const PrivacyPolicy = React.lazy(() => import('./views/front/PrivacyPolicy'));
 
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -33,6 +34,7 @@ const front_routes = [
   {path: '/cancellation-and-refund-policy', exact: true, name: 'Policy', element: Policy},
   {path: '/contact', exact: true, name: 'Policy', element: Contact},
   {path: '/terms-and-conditions', exact: true, name: 'terms', element: Terms},
+  {path: '/privacy-policy', exact: true, name: 'privacy policy', element: PrivacyPolicy},
 ]
 
 export default front_routes

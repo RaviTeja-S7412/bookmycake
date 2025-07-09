@@ -21,6 +21,7 @@ const FrontFooter = () => {
             <ul className='text-sm leading-10'>
               <li onClick={() => navigate('/contact')} className='cursor-pointer'>Contact us</li>
               <li onClick={() => navigate('/terms-and-conditions')} className='cursor-pointer'>Terms and Conditions</li>
+              <li onClick={() => navigate('/privacy-policy')} className='cursor-pointer'>Privacy Policy</li>
               <li onClick={() => navigate('/cancellation-and-refund-policy')} className='cursor-pointer'>Cancellation and Refunds</li>
               <li>Track Order</li>
             </ul>
