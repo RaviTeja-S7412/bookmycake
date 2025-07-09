@@ -7,8 +7,8 @@ export default function CorporateCollections({ data }) {
   const settings = {
     dots: false,
     arrows: false,
-    infinite: data?.length > 5 ? true : false,
-    autoplay: data?.length > 5 ? true : false,
+    infinite: data?.length > 6 ? true : false,
+    autoplay: data?.length > 6 ? true : false,
     autoplaySpeed: 3000,
     slidesToShow: data?.length > 1 ? 3 : '',
     speed: 500,
@@ -16,6 +16,7 @@ export default function CorporateCollections({ data }) {
     rows: data?.length > 1 ? 2 : '',
     // slidesPerRow: 1,
     slidesPerRow: data?.length > 1 ? 1 : '',
+    slidesToScroll: 3
   };
 
   return (
@@ -46,14 +47,14 @@ export default function CorporateCollections({ data }) {
           <Slider {...settings}>
             {data?.map((feature, index) => (
               <div key={index} className="relative d-block" onClick={() => navigate('/products/' + feature?.route)}>
-                <div className="absolute bg-black opacity-50"></div>
                 <div className="relative group ins-brdr cursor-pointer">
                   <img
                     src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
                     alt={feature?.product_name}
                     className="object-cover object-center max-h-[300px] w-full"
                   />
-                  <p className="absolute top-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins]">
+                  {/* Black overlay effect */}
+                  <p className="absolute bottom-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins] z-10">
                     {feature?.product_name}
                   </p>
                 </div>
