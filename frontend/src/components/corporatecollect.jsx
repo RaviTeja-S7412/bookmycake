@@ -16,13 +16,39 @@ export default function CorporateCollections({ data }) {
     rows: data?.length > 1 ? 2 : '',
     // slidesPerRow: 1,
     slidesPerRow: data?.length > 1 ? 1 : '',
-    slidesToScroll: 3
+    slidesToScroll: 3,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-black text-white">
+    <div className="flex xl:flex-row lg:flex-row flex-col bg-black text-white">
       {/* Left Content Block */}
-      <div className="md:w-2/5 bg-[#2e1e1c] p-[10px] sm:p-[40px]">
+      <div className="xl:w-2/5 lg:w-2/5 w-full bg-[#2e1e1c] p-[10px] sm:p-[40px] flex justify-center items-center">
         <div className="border border-2 border-white rounded-xl p-[10px] sm:p-[40px]">
           <div className="d-flex items-center">
             <img
@@ -42,7 +68,7 @@ export default function CorporateCollections({ data }) {
       </div>
 
       {/* Cake Grid */}
-      <div className="md:w-3/5">
+      <div className="xl:w-3/5 lg:w-3/5 w-full">
         <div className="slider-container">
           <Slider {...settings}>
             {data?.map((feature, index) => (
@@ -53,7 +79,8 @@ export default function CorporateCollections({ data }) {
                     alt={feature?.product_name}
                     className="object-cover object-center max-h-[300px] w-full"
                   />
-                  {/* Black overlay effect */}
+                  {/* Black gradient overlay effect */}
+                  <div className="absolute bottom-0 left-0 right-0 h-50 bg-gradient-to-t from-black to-transparent z-0" />
                   <p className="absolute bottom-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins] z-10">
                     {feature?.product_name}
                   </p>

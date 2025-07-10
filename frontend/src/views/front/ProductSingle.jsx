@@ -245,8 +245,8 @@ export default function ProductSingle() {
           </div> */}
         </div>
 
-        <div className="mb-4 lg:grid grid-cols-3 gap-4">
-          <div>
+        <div className="mb-4 xl:flex lg:flex block w-full">
+          <div className="xl:w-1/2 lg:w-full w-full">
             <p className="font-semibold mb-1">Select Date & Time</p>
             <div className="flex gap-2 mb-3">
               {days.map((day) => (
@@ -286,7 +286,7 @@ export default function ProductSingle() {
               )}
             </div>
           </div>
-          <div className="ml-8">
+          <div className="xl:w-1/2 lg:w-2/5 w-full">
             {fixTime && (
               <div className="mb-2">
                 <div className="font-semibold mb-1">Fixed Time Delivery:</div>
