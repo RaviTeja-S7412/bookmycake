@@ -174,8 +174,7 @@ export default function Products() {
           {/* Flavor */}
           <div onClick={() => setShowFlavor(!showFlavor)} className="flex justify-between items-center cursor-pointer mt-3">
             <h6 className="poppins-semibold mb-0">Flavor</h6>
-            <img src="/icons/uparrow-white.png" alt="arrow"
-              className={`transition-transform duration-300 ${showFlavor ? 'rotate-0' : 'rotate-180'}`} />
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showPrice ? 'rotate-180' : 'rotate-0'}`}  />
           </div>
           {showFlavor && (
             <>
@@ -201,8 +200,7 @@ export default function Products() {
           {/* Weight */}
           <div onClick={() => setShowWeight(!showWeight)} className="flex justify-between items-center cursor-pointer mt-3">
             <h6 className="poppins-semibold mb-0">Weight</h6>
-            <img src="/icons/uparrow-white.png" alt="arrow"
-              className={`transition-transform duration-300 ${showWeight ? 'rotate-0' : 'rotate-180'}`} />
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showPrice ? 'rotate-180' : 'rotate-0'}`}  />
           </div>
           {showWeight && (
             <div className="checkbox-wrapper">

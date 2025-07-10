@@ -197,7 +197,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 lg:grid grid-cols-3 gap-4">
+        <div className="mb-4 gap-4">
           {/* Weight */}
           <div>
             <p className="font-semibold mb-1">Weight</p>
@@ -216,27 +216,10 @@ export default function ProductSingle() {
               ))}
             </div>
           </div>
-
-          <div className="ml-8">
-            <p className="font-semibold mb-1">Select Area</p>
-            <select
-              id="area"
-              value={selectedArea}
-              onChange={(e) => setSelectedArea(e.target.value)}
-              className="border border-gray-300 rounded-md p-2 w-full"
-            >
-              <option value="">Choose an area</option>
-              {areas?.map((area, index) => (
-                <option key={index} value={area?.id}>
-                  {area?.area_name}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
 
-        <div className="mb-4 lg:grid grid-cols-3 gap-4">
-          <div>
+        <div className="mb-4 xl:flex lg:flex block w-full">
+          <div className="xl:w-1/2 lg:w-full w-full">
             <p className="font-semibold mb-1">Select Date & Time</p>
             <div className="flex gap-2 mb-3">
               {days.map((day) => (
@@ -276,7 +259,7 @@ export default function ProductSingle() {
               )}
             </div>
           </div>
-          <div className="ml-8">
+          <div className="xl:w-1/2 lg:w-2/5 w-full">
             {fixTime && (
               <div className="mb-2">
                 <div className="font-semibold mb-1">Fixed Time Delivery:</div>

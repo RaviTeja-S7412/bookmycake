@@ -138,7 +138,7 @@ export default function Cart() {
       <div className="default-width px-6 py-10 bg-white font-[poppins]">
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-3xl font-bold">Your Cart</h2>
-          <button className="text-sm text-gray-600 hover:underline" onClick={() => navigate('/')}>
+          <button className="px-4 py-2 border rounded-full bg-[#bc4d5e] text-white mt-0" onClick={() => navigate('/')}>
             Continue shopping
           </button>
         </div>

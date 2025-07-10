@@ -52,7 +52,7 @@ export default function FeaturedCollection({ data }) {
         <div className="slider-container w-full overflow-hidden featured-track">
           <Slider {...settings}>
             {data.map((feature, index) => (
-              <div key={index} className="rounded-md p-2 bg-white m-2 mx-auto">
+              <div key={index} className="rounded-md p-2 bg-white mx-auto">
                 <div
                   className="feature-img rounded-lg overflow-hidden cursor-pointer"
                   onClick={() => navigate('/products/' + feature?.route)}
