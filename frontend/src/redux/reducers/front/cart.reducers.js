@@ -9,6 +9,7 @@ const initState = {
   cart_data: [],
   props: [],
   prop_categories: [],
+  user_addresses: [],
   get_cart: true,
   get_props: true,
   is_cart_added: false,
@@ -99,6 +100,8 @@ export default (state = initState, action) => {
         loading: true,
         get_cart: true,
         is_cart_added: false,
+        cart_data: [],
+        user_addresses: [],
       }
       break
     case cartConstants.GET_CART_SUCCESS:
@@ -107,7 +110,8 @@ export default (state = initState, action) => {
         loading: false,
         get_cart: false,
         is_cart_added: false,
-        cart_data: action.payload
+        cart_data: action.payload.cart_data,
+        user_addresses: action.payload.user_addresses,
       }
       break
     case cartConstants.GET_CART_FAILURE:

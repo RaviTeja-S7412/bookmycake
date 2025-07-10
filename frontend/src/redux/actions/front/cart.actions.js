@@ -86,7 +86,7 @@ export const getCart = () => {
     if (res.status === 200) {
       dispatch({
         type: cartConstants.GET_CART_SUCCESS,
-        payload: res.data.cart_data,
+        payload: res.data,
       })
     } else {
       dispatch({

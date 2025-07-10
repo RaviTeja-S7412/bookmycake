@@ -15,7 +15,6 @@ import './styles.css';
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
 export default function Carousel({data}) {
-  console.log('data: ', data);
   return (
     <>
       <Swiper

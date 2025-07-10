@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosIntance from '../axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../../redux/actions/front/cart.actions';
+import { cartConstants } from '../../redux/actions/constants';
 
 export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,12 +40,6 @@ export default function HomeHeader() {
     };
     getMenuItems();
   }, []);
-
-  useEffect(() => {
-    if (cart?.get_cart) {
-      dispatch(getCart())
-    }
-  }, [cart?.get_cart]);
 
   return (
     <header className="bg-white font-[Poppins]">
@@ -73,7 +68,10 @@ export default function HomeHeader() {
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
             <div className='relative'>
-              <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => navigate('/cart')} />
+              <ShoppingBagIcon className="h-7 w-7 text-gray-700 cursor-pointer" onClick={() => {
+                dispatch({ type: cartConstants.GET_CART_REQUEST })
+                navigate('/cart')
+              }} />
               <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
             <div className="cursor-pointer icon-user">

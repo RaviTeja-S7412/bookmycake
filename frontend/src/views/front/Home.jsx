@@ -15,6 +15,7 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [designerProducts, setDesignerProducts] = useState([]);
   const [corporateProducts, setCorporateProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
 
   const getSelectedProducts = async () => {
@@ -29,11 +30,13 @@ export default function Home() {
       setDesignerProducts(res?.data?.selectedProducts?.filter(product => product.isDesignercollections === 'true'));
       setCorporateProducts(res?.data?.selectedProducts?.filter(product => product.isCorporatecollections === 'true'));
       setBanners(res?.data?.banners);
+      setCategories(res?.data?.categories);
     } else {
       setFeaturedProducts([]);
       setDesignerProducts([]);
       setCorporateProducts([]);
       setBanners([]);
+      setCategories([]);
     }
   }
 
@@ -47,7 +50,7 @@ export default function Home() {
         {banners?.length > 0 && (
           <Carousel data={banners} />
         )}
-        <CategoryCards />
+        <CategoryCards categories={categories} />
         {featuredProducts?.length > 0 && (
           <FeaturedCollection data={featuredProducts} />
         )}

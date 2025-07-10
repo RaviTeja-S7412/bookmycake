@@ -28,7 +28,7 @@ export default function ProductSingle() {
   const [product, setProduct] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [flavors, setFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
@@ -105,10 +105,19 @@ export default function ProductSingle() {
 
   const add_cart = () => {
     
-    if(selectedArea === '') {
+    if(selectedDate === '') {
       Swal.fire({
         title: 'Error!',
-        text: 'Please select an area',
+        text: 'Please select date',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
+      return;
+    }
+    if(selectedSlot === '') {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please select time slot',
         icon: 'error',
         confirmButtonText: 'Ok'
       })
@@ -129,9 +138,10 @@ export default function ProductSingle() {
       user_type: localStorage.getItem('user_type') ? 'user' : 'guest'
     };
     dispatch(addTocart(params));
-    setTimeout(() => {
-      navigate('/props');
-    }, 1000);
+
+      setTimeout(() => {
+        navigate('/props');
+      }, 1000);
   };
 
   useEffect(() => {
@@ -197,7 +207,7 @@ export default function ProductSingle() {
           </div>
         </div>
 
-        <div className="mb-4 lg:grid grid-cols-3 gap-4">
+        <div className="mb-4 gap-4">
           {/* Weight */}
           <div>
             <p className="font-semibold mb-1">Weight</p>
@@ -217,7 +227,7 @@ export default function ProductSingle() {
             </div>
           </div>
 
-          <div className="ml-8">
+          {/* <div className="ml-8">
             <p className="font-semibold mb-1">Select Area</p>
             <select
               id="area"
@@ -232,7 +242,7 @@ export default function ProductSingle() {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
         </div>
 
         <div className="mb-4 lg:grid grid-cols-3 gap-4">
