@@ -284,3 +284,21 @@
     text-align: center;
     border: 1px solid #ddd;
 }
+
+.cart-fit {
+    display: flex;
+}
+
+/* Responsive styles for small laptop to large laptop */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .cart-fit {
+        display: block;
+    }
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 767px) {
+    .cart-fit {
+        display: block;
+    }
+}
