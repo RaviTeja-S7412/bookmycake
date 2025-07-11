@@ -96,6 +96,11 @@ const _nav = [
         component: CNavItem,
         name: 'Areas',
         to: '/admin/settings/areas',
+      },
+      {
+        component: CNavItem,
+        name: 'PinCodes',
+        to: '/admin/settings/pincodes',
       }
     ],
   },

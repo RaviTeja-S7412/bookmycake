@@ -3,6 +3,7 @@ import {
     CCard,
     CCardBody,
     CCardHeader,
+    CFormSwitch,
     CCol,
     CRow,
     CTab,
@@ -21,6 +22,7 @@ import { areaConstants, bannerConstants } from '../../../redux/actions/constants
 import Swal from 'sweetalert2'
 import { createBanner, deleteBanner, getBanners, updateBanner } from '../../../redux/actions/banners.actions'
 import Modal from '../../../components/Modal'
+import axiosIntance from '../../../components/axios'
 
 const Banners = () => {
 
@@ -32,6 +34,7 @@ const Banners = () => {
     const [banner_id, setBannerid] = useState('');
 
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const handleDelete = (id) => {
 
@@ -54,6 +57,26 @@ const Banners = () => {
                 });
             }
         });
+    }
+
+    const handleStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
+        }
+        try {
+            const res = await axiosIntance.post(`/admin/update_bannerstatus`, params);
+            if (res.status === 200) {
+                dispatch({ type: bannerConstants.GET_BANNERS_REQUEST });
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -84,6 +107,19 @@ const Banners = () => {
             {
                 name: 'Image',
                 cell: (row) => (<img src={`${import.meta.env.VITE_APIBASE_URL+row.image}`} height={'260px'} width={'200px'}className='p-2 rounded-4' />),
+                sortable: true,
+            },
+            {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleStatus(row.id, status);
+                    }}
+                />,
                 sortable: true,
             },
             {
