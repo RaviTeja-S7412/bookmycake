@@ -6,7 +6,7 @@ import {
     CCardHeader,
     CCardBody
   } from '@coreui/react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { json, useLocation, useNavigate } from 'react-router-dom';
 import axiosIntance from '../../components/axios';
 
 const Orderdetails = () => {
@@ -42,9 +42,7 @@ const Orderdetails = () => {
         }
     }, []);
 
-    console.log(order_data);
-    
-
+    const billingAddress = order_data?.order_details?.billing_address ? JSON.parse(order_data?.order_details?.billing_address) : {};
     return (
         <CRow>
             {/* Customer Details */}
@@ -57,7 +55,16 @@ const Orderdetails = () => {
                         <div><b>Name:</b> {order_data?.order_details?.first_name+' '+order_data?.order_details?.last_name}</div>
                         <div><b>Email:</b> {order_data?.order_details?.email}</div>
                         <div><b>Phone:</b> {order_data?.order_details?.mobile_number}</div>
-                        <div><b>Shipping Address:</b> {order_data?.order_details?.shipping_address}</div>
+                        <div><b>Shipping Address:</b> <span className='font-bold'>{order_data?.order_details?.full_name}</span><br />
+                            {order_data?.order_details?.house_no}, {order_data?.order_details?.area},<br />
+                            {order_data?.order_details?.city}, {order_data?.order_details?.state},<br />
+                            {order_data?.order_details?.country} - {order_data?.order_details?.pincode}<br />
+                            Mobile: {order_data?.order_details?.mobile_number}</div>
+                        <div><b>Billing Address:</b> <span className='font-bold'>{billingAddress?.full_name}</span><br />
+                            {billingAddress?.house_no}, {billingAddress?.area},<br />
+                            {billingAddress?.city}, {billingAddress?.state},<br />
+                            {billingAddress?.country} - {billingAddress?.pincode}<br />
+                            Mobile: {billingAddress?.mobile_number}</div>
                     </CCardBody>
                 </CCard>
             </CCol>

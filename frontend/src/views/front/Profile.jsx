@@ -91,8 +91,18 @@ export default function UserProfile() {
                 sortable: true,
             },
             {
-                name: 'Area',
-                selector: (row) => `${row.area_name}`,
+                name: 'Shipping Address',
+                selector: (row) => {
+                    return (
+                        <>
+                            <span className='font-bold'>{row?.full_name}</span><br />
+                            {row?.house_no}, {row?.area},<br />
+                            {row?.city}, {row.shipping_address?.state},<br />
+                            {row?.country} - {row?.pincode}<br />
+                            Mobile: {row?.mobile_number}
+                        </>
+                    )
+                },
                 sortable: true,
             },
             {
