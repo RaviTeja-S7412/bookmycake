@@ -10,6 +10,8 @@ export default function UserProfile() {
     const [ loading, setLoading ] = useState(false);
     const [ orders, setOrders ] = useState([]);
     const [ products, setProducts ] = useState([]);
+    const [ shippingAddress, setShippingaddress ] = useState({});
+    const [ billingAddress, setBillingaddress ] = useState({});
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
 
     const get_orders = async () => {
@@ -43,6 +45,18 @@ export default function UserProfile() {
         try {
             const res = await axiosIntance.post(`/admin/orders/get_order_details`, params);
             if (res.status === 200) {
+                const odata = orders?.find((item) => item.order_id === order_id);
+                setShippingaddress({
+                    full_name: odata?.full_name,
+                    house_no: odata?.house_no,
+                    area: odata?.area,
+                    city: odata?.city,
+                    state: odata?.state,
+                    country: odata?.country,
+                    pincode: odata?.pincode,
+                    mobile_number: odata?.mobile_number
+                });
+                setBillingaddress(odata?.billing_address && JSON.parse(odata?.billing_address));
                 setProducts(res?.data?.products);
             } else {
             }
@@ -88,21 +102,6 @@ export default function UserProfile() {
             {
                 name: 'Customer Name',
                 cell: (row) => `${row.first_name} ${row.last_name}`,
-                sortable: true,
-            },
-            {
-                name: 'Shipping Address',
-                selector: (row) => {
-                    return (
-                        <>
-                            <span className='font-bold'>{row?.full_name}</span><br />
-                            {row?.house_no}, {row?.area},<br />
-                            {row?.city}, {row.shipping_address?.state},<br />
-                            {row?.country} - {row?.pincode}<br />
-                            Mobile: {row?.mobile_number}
-                        </>
-                    )
-                },
                 sortable: true,
             },
             {
@@ -310,43 +309,67 @@ export default function UserProfile() {
                     <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead className="mb-10">
-                            <tr>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {products.length > 0 ? products.map((item, idx) => (
-                            <tr key={idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td>
-                                    <div className="flex mb-2">
-                                        <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
-                                        <div className="ml-4">
-                                            <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
-                                            
-                                                {item?.type === 'product' && 
-                                                <span className='text-sm'>
-                                                    Delivery Time: {item?.delivery_time}<br />
-                                                    Weight: {item?.weight/1000} KG<br />
-                                                    Flavor: {item?.flavor}<br />
-                                                    Message: {item?.message}
-                                                </span>
-                                            }</h5>
+                    <>
+                        <table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead className="mb-10">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {products.length > 0 ? products.map((item, idx) => (
+                                <tr key={idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td>
+                                        <div className="flex mb-2">
+                                            <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
+                                            <div className="ml-4">
+                                                <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
+                                                
+                                                    {item?.type === 'product' && 
+                                                    <span className='text-sm'>
+                                                        Delivery Time: {item?.delivery_time}<br />
+                                                        Weight: {item?.weight/1000} KG<br />
+                                                        Flavor: {item?.flavor}<br />
+                                                        Message: {item?.message}
+                                                    </span>
+                                                }</h5>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
-                               
-                            </tr>
-                        )) : (
-                            <tr>
-                                <td colSpan="3" className="text-center text-gray-500">No products found</td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
+                                
+                                </tr>
+                            )) : (
+                                <tr>
+                                    <td colSpan="3" className="text-center text-gray-500">No products found</td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="mt-4">
+                                <h5 className="font-bold">Shipping Address</h5>
+                                <p className="text-sm">
+                                    <span className='font-bold'>{shippingAddress?.full_name}</span><br />
+                                    {shippingAddress?.house_no}, {shippingAddress?.area},<br />
+                                    {shippingAddress?.city}, {shippingAddress?.state},<br />
+                                    {shippingAddress?.country} - {shippingAddress?.pincode}<br />
+                                    Mobile: {shippingAddress?.mobile_number}
+                                </p>
+                            </div>
+                            <div className="mt-4">
+                                <h5 className="font-bold">Billing Address</h5>
+                                <p className="text-sm">
+                                    <span className='font-bold'>{billingAddress?.full_name}</span><br />
+                                    {billingAddress?.house_no}, {billingAddress?.area},<br />
+                                    {billingAddress?.city}, {billingAddress?.state},<br />
+                                    {billingAddress?.country} - {billingAddress?.pincode}<br />
+                                    Mobile: {billingAddress?.mobile_number}
+                                </p>
+                            </div>
+                        </div>
+                    </>
                 </CModalBody>
             </CModal>
         </div>
