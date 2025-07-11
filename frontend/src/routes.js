@@ -13,6 +13,8 @@ const SubCategoryCrud = React.lazy(() => import('./views/inventory/categories/su
 const ChildCategoryCrud = React.lazy(() => import('./views/inventory/categories/childcategorycrud'));
 const Cities = React.lazy(() => import('./views/settings/cities'));
 const CitiesCrud = React.lazy(() => import('./views/settings/cities/crud'));
+const Pincodes = React.lazy(() =>import('./views/settings/pincodes'));
+const PincodesCrud = React.lazy(() => import('./views/settings/pincodes/crud')); 
 const Areas = React.lazy(() => import('./views/settings/areas'));
 const AreasCrud = React.lazy(() => import('./views/settings/areas/crud'));
 const Props = React.lazy(() => import('./views/settings/props'));
@@ -39,7 +41,11 @@ const routes = [
   { path: '/admin/settings/cities', name: 'Cities', element: Cities },
   { path: '/admin/settings/create-cities', name: 'Cities/Create Cities', element: CitiesCrud },
   { path: '/admin/settings/update-city', name: 'Cities/Update Cities', element: CitiesCrud },
-  
+
+  { path: '/admin/settings/pincodes', name: 'Pincodes', element: Pincodes },
+  { path: '/admin/settings/create-pincodes', name: 'Pincodes/Create Pincodes', element: PincodesCrud },
+  { path: '/admin/settings/update-pincode', name: 'Pincodes/Update Pincodes', element: PincodesCrud },
+
   { path: '/admin/settings/areas', name: 'Areas', element: Areas },
   { path: '/admin/settings/create-areas', name: 'Areas/Create Areas', element: AreasCrud},
   { path: '/admin/settings/update-area', name: 'Areas/Update Area', element: AreasCrud},

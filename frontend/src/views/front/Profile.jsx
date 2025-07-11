@@ -40,6 +40,8 @@ export default function UserProfile() {
     const getOrderdetails = async (order_id) => {
         setLoading(true);
         setProducts([]);
+        setShippingaddress({});
+        setBillingaddress({});
         const params = {};
         params.order_id = order_id;
         try {
@@ -310,7 +312,7 @@ export default function UserProfile() {
                 </CModalHeader>
                 <CModalBody>
                     <>
-                        <table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead className="mb-10">
                                 <tr>
                                     <th></th>
@@ -319,7 +321,7 @@ export default function UserProfile() {
                             </thead>
                             <tbody>
                             {products.length > 0 ? products.map((item, idx) => (
-                                <tr key={idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <tr key={'table-'+idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td>
                                         <div className="flex mb-2">
                                             <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />

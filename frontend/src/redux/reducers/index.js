@@ -8,6 +8,7 @@ import propsReducers from './props.reducers'
 import propcategoriesReducers from './propcategory.reducers'
 import cartReducers from './front/cart.reducers'
 import bannersReducers from './banners.reducers'
+import pincodesReducers from './pincodes.reducers'
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -18,7 +19,8 @@ const appReducer = combineReducers({
   props : propsReducers,
   propcategories : propcategoriesReducers,
   cart: cartReducers,
-  banners: bannersReducers
+  banners: bannersReducers,
+  pincodes: pincodesReducers,
 })
 const rootReducer = (state, action) => {
   if (action.type === 'LOGOUT_SUCCESS') {
