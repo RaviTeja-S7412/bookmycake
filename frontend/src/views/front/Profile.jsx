@@ -47,7 +47,7 @@ export default function UserProfile() {
         try {
             const res = await axiosIntance.post(`/admin/orders/get_order_details`, params);
             if (res.status === 200) {
-                const odata = orders?.find((item) => item.order_id === order_id);
+                const odata = orders?.find((item) => item.order_id == order_id);
                 setShippingaddress({
                     full_name: odata?.full_name,
                     house_no: odata?.house_no,
@@ -70,6 +70,8 @@ export default function UserProfile() {
         }
     };
 
+    console.log('orders', shippingAddress, billingAddress);
+    
     useEffect(() => {
         get_orders();
     }, [])
