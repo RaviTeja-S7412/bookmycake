@@ -209,18 +209,18 @@ export default function UserProfile() {
 
     const renderSection = () => {
         switch (activeSection) {
-            case "My Orders":
-                return (
-                    <section className="flex-1 bg-white shadow rounded p-6 overflow-x-auto">
-                        <h2 className="text-lg font-semibold mb-4">My Orders</h2>
-                        {orders.length > 0 && <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
-                    </section>
-                );
             case "Address Book":
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6">
                         <h2 className="text-lg font-semibold mb-4">Address Book</h2>
                         <p>No addresses saved.</p>
+                    </section>
+                );
+            case "My Orders":
+                return (
+                    <section className="flex-1 bg-white shadow rounded p-6 overflow-x-auto">
+                        <h2 className="text-lg font-semibold mb-4">My Orders</h2>
+                        {orders.length > 0 && <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
                     </section>
                 );
             case "My Reviews":
@@ -282,10 +282,10 @@ export default function UserProfile() {
             <main className="sm:min-h-[535px] default-width sm:flex !mt-10 gap-4">
                 <aside className="w-full sm:w-64 bg-white shadow rounded p-4 space-y-4">
                     {[
-                        "My Orders",
-                        // "Address Book",
                         "My Profile",
-                        "My Reviews",
+                        "My Orders",
+                        "Address Book",
+                        // "My Reviews",
                     ].map((item) => (
                         <button
                             key={item}

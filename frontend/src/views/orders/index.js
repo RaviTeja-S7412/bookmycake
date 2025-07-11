@@ -154,6 +154,13 @@ const Orders = () => {
                 sortable: true,
             },
             {
+                name: 'User Type',
+                selector: (row) => {
+                    return <span className='uppercase'>{row.user_type}</span>
+                },
+                sortable: true,
+            },
+            {
                 name: 'Order Status',
                 selector: (row) => {
                     if(row.order_status === "Pending"){
@@ -227,17 +234,19 @@ const Orders = () => {
                         <span title="View Order" style={{cursor: 'pointer'}} onClick={() => navigate('/admin/orders/view-order?order_id='+row?.order_id)} className='mr-2'>
                             <i className='fa fa-eye'></i>
                         </span>
-                        <span title="Update Delivery Status" style={{cursor: 'pointer'}} className='mr-2' onClick={() => {
-                            setDeliverystatus(row.delivery_status);
-                            setVisible(!visible);
-                            setOrderID(row.order_id);
-                        }}>
-                            <i className='fa fa-edit'></i>
-                        </span>
-                        {row.payment_type == 'cod' &&
+                        {row.delivery_status !== "Delivered" && (
+                            <span title="Update Delivery Status" style={{cursor: 'pointer'}} className='mr-2' onClick={() => {
+                                setDeliverystatus(row.delivery_status);
+                                setVisible(!visible);
+                                setOrderID(row.order_id);
+                            }}>
+                                <i className='fa fa-edit'></i>
+                            </span>
+                        )}
+                        {(row.payment_type === 'cod' && row.payment_status !== "success" && row.delivery_status !== "Delivered") &&
                             <span title="Update Payment Status" style={{cursor: 'pointer'}} onClick={() => {
                                 setPaymentstatus(row.payment_status);
-                                setPVisible(!visible);
+                                setPVisible(!pvisible);
                                 setOrderID(row.order_id);
                             }}>
                                 <i className='fa fa-pen'></i>
