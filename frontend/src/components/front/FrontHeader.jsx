@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
+import Slider from "react-slick";
 
 import {
   Dialog,
@@ -30,6 +31,16 @@ export default function HomeHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart)
+  const [openSearch, setOpenSearch] = useState(false);
+
+  const products = [
+    { "id": 1, "name": "Laptop", "image": "assets/images/products/featured/almond.jpg" },
+    { "id": 2, "name": "Smartphone", "image": "assets/images/products/featured/buscuite.jpg" },
+    { "id": 3, "name": "Headphones", "image": "assets/images/products/featured/cheese.jpg" },
+    { "id": 4, "name": "Keyboard", "image": "assets/images/products/featured/choconuts.jpg" },
+    { "id": 5, "name": "Monitor", "image": "assets/images/products/featured/strawberry-chocolate.jpg" },
+  ]
+
 
   useEffect(() => {
     const getMenuItems = async () => {
@@ -40,6 +51,45 @@ export default function HomeHeader() {
     };
     getMenuItems();
   }, []);
+
+  const settings = {
+    dots: true,
+    arrows: false,
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "linear",
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
 
   return (
     <header className="bg-white font-[Poppins]">
@@ -57,6 +107,37 @@ export default function HomeHeader() {
             className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
           />
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+          {openSearch &&
+            <div className='w-full absolute left-0 text-sm font-semibold px-2 py-1 rounded-sm border border-gray-200 z-10 bg-white'>
+              <div className='flex items-center gap-2 mt-2'>
+                <p className='mb-0'>Our Popular Searches</p>
+                <XMarkIcon className='w-5 cursor-pointer ml-auto' />
+              </div>
+              <div className='grid grid-cols-3 gap-1 mt-3'>
+                <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Birthday Cakes</span>
+                <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Anniversary Cakes</span>
+                <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Wedding Cakes</span>
+                <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Eggless Cakes</span>
+              </div>
+              <div className='mt-3'>
+                <p>Our Popular Products</p>
+                <div className="slider-container">
+                  <Slider {...settings}>
+                    {products?.map((products, index) => (
+                      <div key={index} className="p-2 cursor-pointer">
+                        <div className="border border-[#b5b6b8] overflow-hidden relative">
+                          <img src={products?.image} alt={products?.image} className="w-full max-h-[290px] object-cover" />
+                        </div>
+                        <div className="bg-[#1f1f1f] text-[#ffb14f] text-center py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-xl mb-[30px]">
+                          {products?.name}
+                        </div>
+                      </div>
+                    ))}
+                  </Slider>
+                </div>
+              </div>
+            </div>
+          }
         </div>
 
         {/* Right: Support + Icons */}
@@ -76,17 +157,17 @@ export default function HomeHeader() {
             </div>
             <div className="cursor-pointer icon-user">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => localStorage.getItem('user_id') ? '' : navigate('/login')} />
-                {localStorage.getItem('user_id') ? 
-                  <ul className="profil-drop">
-                    <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
-                    <hr className='!m-2' />
-                    <li className='block' onClick={() => {
-                      localStorage.clear();
-                      navigate('/login')
-                    }}>Logout</li>
-                  </ul>
-                  : ''
-                }
+              {localStorage.getItem('user_id') ?
+                <ul className="profil-drop">
+                  <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
+                  <hr className='!m-2' />
+                  <li className='block' onClick={() => {
+                    localStorage.clear();
+                    navigate('/login')
+                  }}>Logout</li>
+                </ul>
+                : ''
+              }
             </div>
           </div>
         </div>
