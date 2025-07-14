@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 
@@ -6,6 +6,13 @@ export default function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+    // Check if user is logged in and perform any necessary actions
+        if (localStorage.getItem('user_id')) {
+            navigate('/');
+        }
+    }, []);
     
     const handleSubmit = async (e) => {
         e.preventDefault();

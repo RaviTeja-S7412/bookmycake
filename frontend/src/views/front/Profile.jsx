@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { CIcon } from '@coreui/icons-react';
 import { cilEnvelopeLetter, cilPhone, cilUser, cilPencil } from '@coreui/icons';
 import { CTable, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import axiosIntance from "../../components/axios";
 import ReactDatatable from "../../components/datatables/ReactDatatable";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
 
@@ -12,6 +13,7 @@ export default function UserProfile() {
     const [ products, setProducts ] = useState([]);
     const [ shippingAddress, setShippingaddress ] = useState({});
     const [ billingAddress, setBillingaddress ] = useState({});
+    const navigate = useNavigate();
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
 
     const get_orders = async () => {
@@ -69,13 +71,16 @@ export default function UserProfile() {
             setLoading(false);
         }
     };
-
-    console.log('orders', shippingAddress, billingAddress);
     
     useEffect(() => {
         get_orders();
     }, [])
 
+    useEffect(() => {
+        if(!localStorage.getItem('user_id')){
+            navigate('/login');
+        }
+    }, []);
 
     const [activeSection, setActiveSection] = React.useState("My Profile");
     const [visible, setVisible] = useState(false);

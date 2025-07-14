@@ -12,7 +12,8 @@ export const login = (user) => {
     if (res.status === 200) {
       const { token, user } = res.data
       localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('admin_id', user?.id)
+      localStorage.setItem('admin_user', JSON.stringify(user))
       dispatch({
         type: authConstants.LOGIN_SUCCESS,
         payload: {
