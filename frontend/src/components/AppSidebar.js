@@ -26,10 +26,6 @@ const AppSidebar = () => {
   const sidebarShow = useSelector((state) => state.sidebarShow)
   const auth = useSelector(state => state.auth)
 
-  if(!auth.authenticate){
-    return <Navigate to={`/admin/login`} />
-  }
-
   return (
     <CSidebar
       className="border-end"

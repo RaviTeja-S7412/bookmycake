@@ -17,10 +17,12 @@ import CIcon from '@coreui/icons-react'
 import avatar8 from '../../../public/assets/images/avatars/8.jpg';
 import { signout } from '../../redux/actions/auth.actions';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const AppHeaderDropdown = () => {
   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <CDropdown variant="nav-item">
@@ -39,6 +41,7 @@ const AppHeaderDropdown = () => {
         </CDropdownItem>
         <CDropdownItem href="#" onClick={() => {
             dispatch(signout());
+            navigate('/admin/login');
           }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout

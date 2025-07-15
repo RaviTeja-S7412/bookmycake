@@ -1,11 +1,20 @@
-import React, { Suspense } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import React, { Suspense, use, useEffect } from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 
 // routes config
 import routes from '../routes'
 
 const AppContent = () => {
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    // Check if user is logged in and perform any necessary actions
+    if (!localStorage.getItem('admin_id')) {
+      navigate('/admin/login');
+    }
+  }, []);
+  
   return (
     <CContainer className="px-5" fluid>
       <Suspense fallback={<CSpinner color="primary" />}>

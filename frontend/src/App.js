@@ -23,7 +23,7 @@ const App = () => {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth)
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn());
     }
@@ -35,7 +35,7 @@ const App = () => {
       // dispatch(get_products());
       // dispatch(get_categories())
     }
-  },[auth.authenticate]);
+  },[auth.authenticate]); */
 
   // front end login check
   useEffect(() => {
@@ -58,7 +58,7 @@ const App = () => {
         <Routes>
         <Route path="/" exact index name="Home" element={<DefaultFrontLayout />} />
         <Route exact path="/admin/login" name="Login Page" element={<Login />} />
-        <Route path="*" name="Admin" element={auth.authenticate && uri == 'admin' ? <DefaultLayout /> : <DefaultFrontLayout />} />
+        <Route path="*" name="Admin" element={uri == 'admin' ? <DefaultLayout /> : <DefaultFrontLayout />} />
         </Routes>
       </Suspense>
       <ToastContainer />
