@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
 
@@ -8,6 +8,7 @@ export default function Products() {
 
   const navigate = useNavigate();
   const { category_id, sub_category_id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [showPrice, setShowPrice] = useState(true);
   const [showFlavor, setShowFlavor] = useState(true);
@@ -38,11 +39,13 @@ export default function Products() {
     { name: 'Date, new to old', value: 'date_desc', current: false },
   ]);
 
-  const getProducts = async (sort_by = '', min_price = '', max_price = '', selected_flavors = [], selected_weights = []) => {
+
+  const getProducts = async (sort_by = '', search = '', min_price = '', max_price = '', selected_flavors = [], selected_weights = []) => {
     setLoading(true);
 
     const params = {
-      "sort_by": sort_by
+      "sort_by": sort_by,
+      "search": search
     }
 
     if (min_price && max_price) {
@@ -78,15 +81,17 @@ export default function Products() {
   }
 
   useEffect(() => {
-    getProducts(sortOptions?.find((option) => option.current)?.value);
-  }, [category_id, sub_category_id]);
+    const search = searchParams.get('search') || "";
+    getProducts(sortOptions?.find((option) => option.current)?.value, search);
+  }, [category_id, sub_category_id, searchParams?.get('search')]);
 
   const filterProducts = () => {
     const min_price = minPrice ? Number(minPrice) : Number(0);
     const max_price = maxPrice ? Number(maxPrice) : Number(highestPrice);
     const selected_flavors = selectedFlavors.length > 0 ? selectedFlavors : [];
     const selected_weights = selectedWeights.length > 0 ? selectedWeights : [];
-    getProducts(sortOptions?.find((option) => option.current)?.value, min_price, max_price, selected_flavors, selected_weights);
+    const search = searchParams.get('search');
+    getProducts(sortOptions?.find((option) => option.current)?.value,search, min_price, max_price, selected_flavors, selected_weights);
   }
 
   useEffect(() => {

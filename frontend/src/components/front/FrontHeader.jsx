@@ -17,7 +17,7 @@ import {
   Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon
 } from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosIntance from '../axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../../redux/actions/front/cart.actions';
@@ -27,6 +27,7 @@ export default function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuItems, setMenuitems] = useState([]);
   const [openPopover, setOpenPopover] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart)
@@ -55,6 +56,8 @@ export default function HomeHeader() {
             type="text"
             placeholder="Search for cakes, occasion, flavor and more"
             className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
+            defaultValue={searchParams?.get('search')}
+            onChange={(e) => navigate('/collections?search='+e.target.value)}
           />
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
@@ -72,7 +75,7 @@ export default function HomeHeader() {
                 dispatch({ type: cartConstants.GET_CART_REQUEST })
                 navigate('/cart')
               }} />
-              <span class="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
+              <span className="badge bg-danger absolute left-5 bottom-[17px]">{cart?.cart_data?.length}</span>
             </div>
             <div className="cursor-pointer icon-user">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => localStorage.getItem('user_id') ? '' : navigate('/login')} />

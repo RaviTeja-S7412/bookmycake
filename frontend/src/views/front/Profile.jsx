@@ -5,16 +5,34 @@ import { CTable, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } f
 import axiosIntance from "../../components/axios";
 import ReactDatatable from "../../components/datatables/ReactDatatable";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../components/front/Spinner";
+import Modal from "../../components/Modal";
 
 export default function UserProfile() {
 
     const [ loading, setLoading ] = useState(false);
+    const [ ploading, setPLoading ] = useState(false);
+    const [ addresses, setAddresses ] = useState(false);
     const [ orders, setOrders ] = useState([]);
     const [ products, setProducts ] = useState([]);
     const [ shippingAddress, setShippingaddress ] = useState({});
     const [ billingAddress, setBillingaddress ] = useState({});
     const navigate = useNavigate();
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
+    const [activeSection, setActiveSection] = React.useState("My Profile");
+    const [visible, setVisible] = useState(false);
+    const [addShippingModal, setAddshippingModal] = useState(false);
+    const [addressId, setAddressID] = useState(false);
+    const [addshippingAddress, setAddShippingaddress] = useState({
+        full_name: '',
+        house_no: '',
+        area: '',
+        city: '',
+        state: '',
+        country: '',
+        pincode: '',
+        mobile_number: ''
+    });
 
     const get_orders = async () => {
         setLoading(true);
@@ -39,8 +57,31 @@ export default function UserProfile() {
         }
     };
 
-    const getOrderdetails = async (order_id) => {
+    const get_user_addresses = async () => {
         setLoading(true);
+        setAddresses([]);
+
+        const params = {
+            user_id: localStorage.getItem('user_id')
+        };
+        
+        try {
+        const res = await axiosIntance.post(`/front/get_user_addresses`, params);
+
+        if (res.status === 200) {
+            setAddresses(res.data.user_addresses)
+        } else {
+        }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+        setLoading(false);
+        }
+    };
+
+    const getOrderdetails = async (order_id) => {
+        setPLoading(true);
         setProducts([]);
         setShippingaddress({});
         setBillingaddress({});
@@ -68,12 +109,13 @@ export default function UserProfile() {
         // console.error('Error fetching product:', error);
         // Handle API error
         } finally {
-            setLoading(false);
+            setPLoading(false);
         }
     };
     
     useEffect(() => {
         get_orders();
+        get_user_addresses();
     }, [])
 
     useEffect(() => {
@@ -82,8 +124,99 @@ export default function UserProfile() {
         }
     }, []);
 
-    const [activeSection, setActiveSection] = React.useState("My Profile");
-    const [visible, setVisible] = useState(false);
+    const editAddress = (address) => {
+        if(address){
+            setAddShippingaddress(address);
+            setAddressID(address.id);
+        }else{
+            setAddShippingaddress({
+                full_name: '',
+                house_no: '',
+                area: '',      
+                city: '',
+                state: '',
+                country: '',
+                pincode: '',
+                mobile_number: ''
+            })
+        }
+        setAddshippingModal(true);
+    }
+
+    const cancelAddress = (address) => {
+        setAddShippingaddress({
+            full_name: '',
+            house_no: '',
+            area: '',      
+            city: '',
+            state: '',
+            country: '',
+            pincode: '',
+            mobile_number: ''
+        });
+        setAddressID('');
+        setAddshippingModal(false);
+    }
+
+    const saveAddress = async () => {
+        const user_id = localStorage.getItem('user_id');
+        const params = {
+        user_id: user_id,
+        full_name: addshippingAddress.full_name,
+        mobile_number: addshippingAddress.mobile_number,
+        country: addshippingAddress.country,
+        state: addshippingAddress.state,
+        house_no: addshippingAddress.house_no,
+        area: addshippingAddress.area,
+        city: addshippingAddress.city,
+        pincode: addshippingAddress.pincode
+        }
+        if(addressId){
+        params.address_id = addressId;
+        }
+
+        try {
+        const res = await axiosIntance.post(`/front/save_user_address`, params);
+
+        if (res.status === 200) {
+            get_user_addresses();
+            cancelAddress();
+        } else {
+            Swal.fire({
+            title: res.data.message,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+            })
+        }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+        setLoading(false);
+        }
+    }
+
+    const deleteAddress = async (id) => {
+        setLoading(true);        
+        try {
+        const res = await axiosIntance.post(`/front/deleteAddress`, { id });
+
+        if (res.status === 200) {
+            get_user_addresses();
+        } else {
+            Swal.fire({
+            title: res.data.message,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+            })
+        }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+        setLoading(false);
+        }
+    }
 
     const columns = useMemo(
         () => [
@@ -221,7 +354,34 @@ export default function UserProfile() {
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6">
                         <h2 className="text-lg font-semibold mb-4">Address Book</h2>
-                        <p>No addresses saved.</p>
+                        {loading ? (
+                            <Spinner />
+                        ) : (
+                            <>
+                            <div className="grid grid-cols-3 gap-4">
+                                {addresses && addresses.length > 0 ? addresses.map((address, index) => (
+                                    <div key={index} className="border p-4 rounded">
+                                        <h5 className="font-bold">{address.full_name}</h5>
+                                        <p>{address.house_no}, {address.area}, {address.city}, {address.state}, {address.country} - {address.pincode}</p>
+                                        <p>Mobile: {address.mobile_number}</p>
+                                        <button className="btn btn-primary btn-sm text-white-500 mt-2 !mr-2" onClick={() => {
+                                            editAddress(address);
+                                        }}>Edit</button>
+                                        <button className="btn btn-danger btn-sm mt-2" onClick={async () => {
+                                            if(window.confirm("Are you sure you want to delete this address?")){
+                                                deleteAddress(address.id);
+                                            }
+                                        }}>Delete</button>
+                                    </div>
+                                )) : (  
+                                    <p>No addresses found.</p>
+                                )}
+                            </div>
+                            <button className="bg-blue-500 text-white px-4 py-2 mt-2 rounded" onClick={() => {
+                                editAddress();
+                            }}>Add New Address</button>
+                            </>
+                        )}
                     </section>
                 );
             case "My Orders":
@@ -281,9 +441,9 @@ export default function UserProfile() {
                     <span className="text-lg font-bold">{user_data?.first_name} {user_data?.last_name}</span>
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
-                    <CIcon icon={cilEnvelopeLetter} size="l" className="w-5 h-5 mr-1" />
+                    <CIcon icon={cilEnvelopeLetter} size="lg" className="w-5 h-5 mr-1" />
                     <span className="mr-4">{user_data?.email}</span>
-                    <CIcon icon={cilPhone} size="l" className="w-5 h-5 mr-1" />
+                    <CIcon icon={cilPhone} size="lg" className="w-5 h-5 mr-1" />
                     <span> {user_data?.mobile_number}</span>
                 </div>
             </header>
@@ -318,69 +478,241 @@ export default function UserProfile() {
                     <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <>
-                        <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead className="mb-10">
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {products.length > 0 ? products.map((item, idx) => (
-                                <tr key={'table-'+idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td>
-                                        <div className="flex mb-2">
-                                            <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
-                                            <div className="ml-4">
-                                                <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
-                                                
-                                                    {item?.type === 'product' && 
-                                                    <span className='text-sm'>
-                                                        Delivery Time: {item?.delivery_time}<br />
-                                                        Weight: {item?.weight/1000} KG<br />
-                                                        Flavor: {item?.flavor}<br />
-                                                        Message: {item?.message}
-                                                    </span>
-                                                }</h5>
+                    {ploading ? 
+                        <Spinner />
+                     :
+                        <>
+                            <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead className="mb-10">
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {products.length > 0 ? products.map((item, idx) => (
+                                    <tr key={'table-'+idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td>
+                                            <div className="flex mb-2">
+                                                <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
+                                                <div className="ml-4">
+                                                    <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
+                                                    
+                                                        {item?.type === 'product' && 
+                                                        <span className='text-sm'>
+                                                            Delivery Time: {item?.delivery_time}<br />
+                                                            Weight: {item?.weight/1000} KG<br />
+                                                            Flavor: {item?.flavor}<br />
+                                                            Message: {item?.message}
+                                                        </span>
+                                                    }</h5>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
-                                
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td colSpan="3" className="text-center text-gray-500">No products found</td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="mt-4">
-                                <h5 className="font-bold">Shipping Address</h5>
-                                <p className="text-sm">
-                                    <span className='font-bold'>{shippingAddress?.full_name}</span><br />
-                                    {shippingAddress?.house_no}, {shippingAddress?.area},<br />
-                                    {shippingAddress?.city}, {shippingAddress?.state},<br />
-                                    {shippingAddress?.country} - {shippingAddress?.pincode}<br />
-                                    Mobile: {shippingAddress?.mobile_number}
-                                </p>
+                                        </td>
+                                        <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
+                                    
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan="3" className="text-center text-gray-500">No products found</td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                            <div className="grid grid-cols-2 gap-4">
+                                {shippingAddress?.full_name && (
+                                    <div className="mt-4">
+                                        <h5 className="font-bold">Shipping Address</h5>
+                                        <p className="text-sm">
+                                            <span className='font-bold'>{shippingAddress?.full_name}</span><br />
+                                            {shippingAddress?.house_no}, {shippingAddress?.area},<br />
+                                            {shippingAddress?.city}, {shippingAddress?.state},<br />
+                                            {shippingAddress?.country} - {shippingAddress?.pincode}<br />
+                                            Mobile: {shippingAddress?.mobile_number}
+                                        </p>
+                                    </div>
+                                )}
+                                {billingAddress?.full_name && (
+                                    <div className="mt-4">
+                                        <h5 className="font-bold">Billing Address</h5>
+                                        <p className="text-sm">
+                                            <span className='font-bold'>{billingAddress?.full_name}</span><br />
+                                            {billingAddress?.house_no}, {billingAddress?.area},<br />
+                                            {billingAddress?.city}, {billingAddress?.state},<br />
+                                            {billingAddress?.country} - {billingAddress?.pincode}<br />
+                                            Mobile: {billingAddress?.mobile_number}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
-                            <div className="mt-4">
-                                <h5 className="font-bold">Billing Address</h5>
-                                <p className="text-sm">
-                                    <span className='font-bold'>{billingAddress?.full_name}</span><br />
-                                    {billingAddress?.house_no}, {billingAddress?.area},<br />
-                                    {billingAddress?.city}, {billingAddress?.state},<br />
-                                    {billingAddress?.country} - {billingAddress?.pincode}<br />
-                                    Mobile: {billingAddress?.mobile_number}
-                                </p>
-                            </div>
-                        </div>
-                    </>
+                        </>
+                    }
                 </CModalBody>
             </CModal>
+
+            <Modal isOpen={addShippingModal} onClose={() => {
+                cancelAddress();
+            }} className="modal-dialog modal-lg">
+                <>
+                <p className="text-xl font-semibold mb-4">{addressId ? 'Edit' : 'Add'} Shipping Address</p>
+                <form onSubmit={e => {
+                    e.preventDefault();
+                    saveAddress()
+                }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="Full Name"
+                        value={addshippingAddress.full_name || ""}
+                        onChange={e => {
+                        setAddShippingaddress({ ...addshippingAddress, full_name: e.target.value })
+                        }}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="Mobile Number"
+                        value={addshippingAddress.mobile_number || ""}
+                        onChange={e => {
+                        setAddShippingaddress({ ...addshippingAddress, mobile_number: e.target.value });
+                        }}
+                        required
+                        maxLength={10}
+                    />
+                    <select
+                        className={'border rounded px-3 py-2'}
+                        value={addshippingAddress.country || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, country: e.target.value }); }}
+                        required
+                    >
+                        <option value="">Select Country</option>
+                        <option value="India">India</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="Japan">Japan</option>
+                        <option value="China">China</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Russia">Russia</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Switzerland">Switzerland</option>
+                        {/* Add more countries as needed */}
+                    </select>
+                    <select
+                        className={'border rounded px-3 py-2'}
+                        value={addshippingAddress.state || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, state: e.target.value }); }}
+                        required
+                    >
+                        <option value="">Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                        <option value="Ladakh">Ladakh</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Puducherry">Puducherry</option>
+                    </select>
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="Flat, House no., Building, Company, Apartment"
+                        value={addshippingAddress.house_no || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, house_no: e.target.value }); }}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="Area, Street, Sector, Village"
+                        value={addshippingAddress.area || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, area: e.target.value }); }}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className="border rounded px-3 py-2"
+                        placeholder="Landmark"
+                        value={addshippingAddress.landmark || ""}
+                        onChange={e => setAddShippingaddress({ ...addshippingAddress, landmark: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="City"
+                        value={addshippingAddress.city || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, city: e.target.value }); }}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className={'border rounded px-3 py-2'}
+                        placeholder="Pincode"
+                        value={addshippingAddress.pincode || ""}
+                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, pincode: e.target.value }); }}
+                        required
+                        maxLength={6}
+                    />
+                    </div>
+                    <div className="flex items-center mt-4 gap-3">
+                    <button
+                        type="submit"
+                        className="px-4 py-2 border rounded-full bg-[#bc4d5e] text-white mt-0"
+                    >
+                        Save Address
+                    </button>
+                    <button
+                        type="button"
+                        className="px-4 py-2 border rounded-full bg-black text-white mt-0"
+                        onClick={() => cancelAddress()}
+                    >
+                        Cancel
+                    </button>
+                    </div>
+                </form>
+                </>
+            </Modal>
         </div>
     );
 }

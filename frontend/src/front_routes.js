@@ -10,7 +10,7 @@ const Cart = React.lazy(() => import('./views/front/Cart'));
 const Login = React.lazy(() => import('./views/front/Login'));
 const ForgotPassword = React.lazy(() => import('./views/front/ForgotPassword'));
 const Register = React.lazy(() => import('./views/front/Register'));
-const Profile = React.lazy(() => import('./views/front/profile'));
+const Profile = React.lazy(() => import('./views/front/Profile'));
 const Checkout = React.lazy(() => import('./views/front/Checkout'));
 const OrderStatus = React.lazy(() => import('./views/front/OrderStatus'));
 const Policy = React.lazy(() => import('./views/front/Policy'));
@@ -20,6 +20,7 @@ const PrivacyPolicy = React.lazy(() => import('./views/front/PrivacyPolicy'));
 
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
+  { path: '/collections', exact: true, name: 'Products', element: AllProducts },
   { path: '/collections/:category_id', exact: true, name: 'Products', element: AllProducts },
   { path: '/collections/:category_id/:sub_category_id', exact: true, name: 'Products', element: AllProducts },
   { path: '/products/:product_id', exact: true, name: 'Products', element: ProductSingle },
