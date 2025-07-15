@@ -42,7 +42,7 @@ const Orderdetails = () => {
         }
     }, []);
 
-    console.log(order_data);
+    console.log(order_data?.order_details);
 
     const billingAddress = order_data?.order_details?.billing_address ? JSON.parse(order_data?.order_details?.billing_address) : {};
 
@@ -79,7 +79,14 @@ const Orderdetails = () => {
                             </tr>
                             <tr>
                                 <td className='font-medium pb-2'>Payment Status:</td>
-                                <td className='pb-2'><span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>{order_data?.order_details?.payment_status}</span></td>
+                                <td className='pb-2'>
+                                    {order_data?.order_details?.payment_status == 'Pending' ?
+                                        <span className='px-1 border-1 border-yellow-400 bg-yellow-300 rounded text-sm'>{order_data?.order_details?.payment_status}</span> : order_data?.order_details?.payment_status == 'success' ? 
+                                        <span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>{order_data?.order_details?.payment_status}</span> : order_data?.order_details?.payment_status == 'failed' ? 
+                                        <span className='px-1 border-1 border-red-400 bg-red-300 rounded text-sm'>{order_data?.order_details?.payment_status}</span> : ''
+                                    }
+                                        
+                                </td>
                             </tr>
                             <tr>
                                 <td className='font-medium pb-2'>Payment Date:</td>
@@ -172,11 +179,11 @@ const Orderdetails = () => {
                                 <td className='font-medium pb-2'>Order Status:</td>
                                 <td className='pb-2'>
                                     {
-                                        order_data?.order_details?.order_status === "Pending" ?
-                                            <span className='px-1 border-1 border-yellow-400 bg-green-300 rounded text-sm'>Pending</span> :
-                                            order_data?.order_details?.order_status === "cancelled" ?
-                                                <span className='px-1 border-1 border-green-400 bg-red-300 rounded text-sm'>Cancelled</span> :
-                                                order_data?.order_details?.order_status === "success" ?
+                                        order_data?.order_details?.order_status == "Pending" ?
+                                            <span className='px-1 border-1 border-yellow-400 bg-yellow-300 rounded text-sm'>Pending</span> :
+                                            order_data?.order_details?.order_status == "cancelled" ?
+                                                <span className='px-1 border-1 border-red-400 bg-red-300 rounded text-sm'>Cancelled</span> :
+                                                order_data?.order_details?.order_status == "success" ?
                                                     <span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>Success</span>
                                                     : ''
                                     }
@@ -186,11 +193,11 @@ const Orderdetails = () => {
                                 <td className='font-medium pb-2'>Delivery Status:</td>
                                 <td className='pb-2'>
                                     {
-                                        order_data?.order_details?.order_status === "Pending" ?
-                                            <span className='px-1 border-1 border-yellow-400 bg-green-300 rounded text-sm'>Pending</span> :
-                                            order_data?.order_details?.order_status === "cancelled" ?
-                                                <span className='px-1 border-1 border-green-400 bg-red-300 rounded text-sm'>Cancelled</span> :
-                                                order_data?.order_details?.order_status === "success" ?
+                                        order_data?.order_details?.delivery_status == "Pending" ?
+                                            <span className='px-1 border-1 border-yellow-400 bg-yellow-300 rounded text-sm'>Pending</span> :
+                                            order_data?.order_details?.delivery_status == "failed" ?
+                                                <span className='px-1 border-1 border-red-400 bg-red-300 rounded text-sm'>Cancelled</span> :
+                                                order_data?.order_details?.delivery_status == "success" ?
                                                     <span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>Success</span>
                                                     : ''
                                     }
