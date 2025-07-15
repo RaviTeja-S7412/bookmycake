@@ -9,6 +9,7 @@ const Props = React.lazy(() => import('./views/front/Props'));
 const Cart = React.lazy(() => import('./views/front/Cart'));
 const Login = React.lazy(() => import('./views/front/Login'));
 const ForgotPassword = React.lazy(() => import('./views/front/ForgotPassword'));
+const ResetPassword = React.lazy(() => import('./views/front/ResetPassword'));
 const Register = React.lazy(() => import('./views/front/Register'));
 const Profile = React.lazy(() => import('./views/front/Profile'));
 const Checkout = React.lazy(() => import('./views/front/Checkout'));
@@ -32,6 +33,7 @@ const front_routes = [
   {path: '/my-profile', exact: true, name: 'Profile', element: Profile},
   {path: '/order-status/:order_id', exact: true, name: 'Profile', element: OrderStatus},
   {path: '/forgot-password', exact: true, name: 'Forgot Password', element: ForgotPassword},
+  {path: '/reset-password', exact: true, name: 'Forgot Password', element: ResetPassword},
   {path: '/cancellation-and-refund-policy', exact: true, name: 'Policy', element: Policy},
   {path: '/contact', exact: true, name: 'Policy', element: Contact},
   {path: '/terms-and-conditions', exact: true, name: 'terms', element: Terms},

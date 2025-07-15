@@ -4,6 +4,7 @@ import {
     CCardBody,
     CCardHeader,
     CCol,
+    CFormSwitch,
     CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -37,6 +38,26 @@ const Users = () => {
         get_users_data();
     }, [])
 
+    const handleStatus = async (id, status) => {
+        setLoading(true);
+        const params = {
+            id: id,
+            status: status
+        }
+        try {
+            const res = await axiosIntance.post(`/admin/update_userstatus`, params);
+            if (res.status === 200) {
+                get_users_data();
+            } else {
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const columns = useMemo(
         () => [
             {
@@ -59,7 +80,25 @@ const Users = () => {
                 selector: (row) => `${row.email}`,
                 sortable: true,
             },
-           {
+            {
+                name: 'User Type',
+                selector: (row) => { return <span className='capitalize'>{row.user_type}</span>},
+                sortable: true,
+            },
+            {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 'Active' ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 'Active' : 'Inactive';
+                        handleStatus(row.id, status);
+                    }}
+                />,
+                sortable: true,
+            },
+            {
                 name: 'Registered Date',
                 selector: (row) => {
                     const date = new Date(row.registered_date);

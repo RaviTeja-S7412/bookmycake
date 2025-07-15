@@ -348,6 +348,9 @@ export default function UserProfile() {
         [],
     )
 
+    console.log(shippingAddress, billingAddress);
+    
+
     const renderSection = () => {
         switch (activeSection) {
             case "Address Book":
@@ -367,7 +370,7 @@ export default function UserProfile() {
                                         <button className="btn btn-primary btn-sm text-white-500 mt-2 !mr-2" onClick={() => {
                                             editAddress(address);
                                         }}>Edit</button>
-                                        <button className="btn btn-danger btn-sm mt-2" onClick={async () => {
+                                        <button className="btn btn-danger btn-sm mt-2 text-white" onClick={async () => {
                                             if(window.confirm("Are you sure you want to delete this address?")){
                                                 deleteAddress(address.id);
                                             }
