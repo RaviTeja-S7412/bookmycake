@@ -6,7 +6,7 @@ export default function DesignerCollections({data}) {
 
   const navigate = useNavigate();
   const settings = {
-    dots: true,
+    dots: false,
     arrows: false,
     infinite: data?.length > 2 ? true : false,
     speed: 1500,
