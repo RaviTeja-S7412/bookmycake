@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import Slider from "react-slick";
 
 import {
@@ -31,7 +31,7 @@ export default function HomeHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart)
-  const [openSearch, setOpenSearch] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const products = [
     { "id": 1, "name": "Laptop", "image": "assets/images/products/featured/almond.jpg" },
@@ -40,6 +40,10 @@ export default function HomeHeader() {
     { "id": 4, "name": "Keyboard", "image": "assets/images/products/featured/choconuts.jpg" },
     { "id": 5, "name": "Monitor", "image": "assets/images/products/featured/strawberry-chocolate.jpg" },
   ]
+
+  const openSearch = () => setIsVisible(true);
+  const closeSearch = () => setIsVisible(false);
+  const searchRef = useRef();
 
 
   useEffect(() => {
@@ -50,46 +54,23 @@ export default function HomeHeader() {
       }
     };
     getMenuItems();
-  }, []);
 
-  const settings = {
-    dots: true,
-    arrows: false,
-    infinite: true,
-    speed: 1500,
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    initialSlide: 0,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    cssEase: "linear",
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
+    function handleClickOutside(event) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsVisible(false);
       }
-    ]
-  };
+    }
+
+    if (isVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isVisible]);
 
   return (
     <header className="bg-white font-[Poppins]">
@@ -105,13 +86,15 @@ export default function HomeHeader() {
             type="text"
             placeholder="Search for cakes, occasion, flavor and more"
             className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
+            onClick={openSearch}
           />
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          {openSearch &&
-            <div className='w-full absolute left-0 text-sm font-semibold px-2 py-1 rounded-sm border border-gray-200 z-10 bg-white'>
+          {/* search modal section */}
+          {isVisible &&
+            <div className='w-full absolute left-0 text-sm font-semibold px-2 py-1 rounded-sm border border-gray-200 z-10 bg-white' ref={searchRef}>
               <div className='flex items-center gap-2 mt-2'>
-                <p className='mb-0'>Our Popular Searches</p>
-                <XMarkIcon className='w-5 cursor-pointer ml-auto' />
+                <p className='mb-0'>Search Suggestions</p>
+                <XMarkIcon className='w-5 cursor-pointer ml-auto' onClick={closeSearch} />
               </div>
               <div className='grid grid-cols-3 gap-1 mt-3'>
                 <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Birthday Cakes</span>
@@ -120,20 +103,22 @@ export default function HomeHeader() {
                 <span className='bg-gray-100 px-3 py-1 mb-1 rounded-full text-xs cursor-pointer border'>Eggless Cakes</span>
               </div>
               <div className='mt-3'>
-                <p>Our Popular Products</p>
-                <div className="slider-container">
-                  <Slider {...settings}>
+                <p>Search Products</p>
+                <div className="grid grid-cols-2 gap-1">
+                  <>
                     {products?.map((products, index) => (
                       <div key={index} className="p-2 cursor-pointer">
                         <div className="border border-[#b5b6b8] overflow-hidden relative">
-                          <img src={products?.image} alt={products?.image} className="w-full max-h-[290px] object-cover" />
-                        </div>
-                        <div className="bg-[#1f1f1f] text-[#ffb14f] text-center py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-xl mb-[30px]">
-                          {products?.name}
+                          <img src={products?.image} alt={products?.image} className="w-full max-h-[100px] object-cover" />
+                          <div className="absolute inset-0 bg-black/50"></div>
+                          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-2 flex">
+                            <div className="text-white text-sm font-semibold">{products.name}</div>
+                            <div className="text-white text-sm font-normal ml-auto">₹{products.price || '499'}</div>
+                          </div>
                         </div>
                       </div>
                     ))}
-                  </Slider>
+                  </>
                 </div>
               </div>
             </div>
