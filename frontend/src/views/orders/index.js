@@ -31,7 +31,7 @@ const Orders = () => {
         setLoading(true);
         setOrders([]);
         const params = {};
-        if(lastUrlindex == "today-orders"){
+        if (lastUrlindex == "today-orders") {
             params['date'] = new Date().toISOString().split('T')[0];
         }
 
@@ -42,8 +42,8 @@ const Orders = () => {
             } else {
             }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
             setLoading(false);
         }
@@ -51,25 +51,25 @@ const Orders = () => {
 
     const updatePaymentstatus = async () => {
         setLoading(true);
-        
+
         const params = {
             'payment_status': payment_status,
             "order_id": order_id
         };
 
         try {
-        const res = await axiosIntance.post(`/admin/orders/update_paymentstatus`, params);
+            const res = await axiosIntance.post(`/admin/orders/update_paymentstatus`, params);
 
-        if (res.status === 200) {
-            setPVisible(!pvisible)
-            setTimeout(() => {
-                location.reload();
-            },1000)
-        } else {
-        }
+            if (res.status === 200) {
+                setPVisible(!pvisible)
+                setTimeout(() => {
+                    location.reload();
+                }, 1000)
+            } else {
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
             setLoading(false);
         }
@@ -77,25 +77,25 @@ const Orders = () => {
 
     const updateDeliverstatus = async () => {
         setLoading(true);
-        
+
         const params = {
             'delivery_status': delivery_status,
             "order_id": order_id
         };
 
         try {
-        const res = await axiosIntance.post(`/admin/orders/update_deliverystatus`, params);
+            const res = await axiosIntance.post(`/admin/orders/update_deliverystatus`, params);
 
-        if (res.status === 200) {
-            setVisible(!visible)
-            setTimeout(() => {
-                location.reload();
-            },1000)
-        } else {
-        }
+            if (res.status === 200) {
+                setVisible(!visible)
+                setTimeout(() => {
+                    location.reload();
+                }, 1000)
+            } else {
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
             setLoading(false);
         }
@@ -130,9 +130,9 @@ const Orders = () => {
             {
                 name: 'Payment Type',
                 selector: (row) => {
-                    if(row.payment_type == "cod"){
+                    if (row.payment_type == "cod") {
                         return 'COD';
-                    }else{
+                    } else {
                         return 'Online';
                     }
                 },
@@ -148,11 +148,11 @@ const Orders = () => {
             {
                 name: 'Order Status',
                 selector: (row) => {
-                    if(row.order_status === "Pending"){
+                    if (row.order_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.order_status === "cancelled"){
+                    } else if (row.order_status === "cancelled") {
                         return <span className='badge  bg-red-500'>Cancelled</span>
-                    }else if(row.order_status === "success"){
+                    } else if (row.order_status === "success") {
                         return <span className='badge bg-green-500'>Success</span>
                     }
                 },
@@ -161,11 +161,11 @@ const Orders = () => {
             {
                 name: 'Payment Status',
                 selector: (row) => {
-                    if(row.payment_status === "Pending"){
+                    if (row.payment_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.payment_status === "failed"){
+                    } else if (row.payment_status === "failed") {
                         return <span className='badge  bg-red-500'>Failed</span>
-                    }else if(row.payment_status === "success"){
+                    } else if (row.payment_status === "success") {
                         return <span className='badge bg-green-500'>Success</span>
                     }
                 },
@@ -174,13 +174,13 @@ const Orders = () => {
             {
                 name: 'Delivery Status',
                 selector: (row) => {
-                    if(row.delivery_status === "Pending"){
+                    if (row.delivery_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.delivery_status === "failed"){
+                    } else if (row.delivery_status === "failed") {
                         return <span className='badge  bg-red-500'>Failed</span>
-                    }else if(row.delivery_status === "Delivered"){
+                    } else if (row.delivery_status === "Delivered") {
                         return <span className='badge bg-green-500'>Delivered</span>
-                    }else if(row.delivery_status === "out"){
+                    } else if (row.delivery_status === "out") {
                         return <span className='badge' style={{ backgroundColor: '#3b82f6', color: '#fff' }}>Out For Delivery</span>
                     }
                 },
@@ -200,13 +200,13 @@ const Orders = () => {
             {
                 name: 'Payment Date',
                 selector: (row) => {
-                    if(row.date_of_payment !== "0000-00-00 00:00:00"){
+                    if (row.date_of_payment !== "0000-00-00 00:00:00") {
                         const date = new Date(row.date_of_payment);
                         const day = String(date.getDate()).padStart(2, '0');
                         const month = String(date.getMonth() + 1).padStart(2, '0');
                         const year = date.getFullYear();
                         return `${day}-${month}-${year}`;
-                    }else{
+                    } else {
                         return '-';
                     }
                 },
@@ -216,25 +216,25 @@ const Orders = () => {
                 name: "Action",
                 cell: (row) => (
                     <>
-                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => navigate('/admin/orders/view-order?order_id='+row?.order_id)} className='mr-2'>
+                        <span title="View Order" style={{ cursor: 'pointer' }} onClick={() => navigate('/admin/orders/view-order?order_id=' + row?.order_id)} className='px-2 py-1 bg-gray-500 text-white rounded-md mr-2'>
                             <i className='fa fa-eye'></i>
                         </span>
-                        {row.delivery_status !== "Delivered" && (
-                            <span title="Update Delivery Status" style={{cursor: 'pointer'}} className='mr-2' onClick={() => {
+                        {row.delivery_status !== "Delivered" && row.payment_status === "success" &&(
+                            <span title="Update Delivery Status" style={{ cursor: 'pointer' }} className='px-2 py-1 bg-red-500 text-white rounded-md mr-2' onClick={() => {
                                 setDeliverystatus(row.delivery_status);
                                 setVisible(!visible);
                                 setOrderID(row.order_id);
                             }}>
-                                <i className='fa fa-edit'></i>
+                                <i className='fa fa-truck'></i>
                             </span>
                         )}
                         {(row.payment_type === 'cod' && row.payment_status !== "success" && row.delivery_status !== "Delivered") &&
-                            <span title="Update Payment Status" style={{cursor: 'pointer'}} onClick={() => {
+                            <span title="Update Payment Status" className='px-2 py-1 bg-green-500 text-white rounded-md mr-2' style={{ cursor: 'pointer' }} onClick={() => {
                                 setPaymentstatus(row.payment_status);
                                 setPVisible(!pvisible);
                                 setOrderID(row.order_id);
                             }}>
-                                <i className='fa fa-pen'></i>
+                                <i className='fa fa-money-bill'></i>
                             </span>
                         }
                     </>
@@ -252,8 +252,8 @@ const Orders = () => {
                         <strong>List Of Orders</strong>
                     </CCardHeader>
                     <CCardBody>
-                        {orders.length > 0 && 
-                        <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
+                        {orders.length > 0 &&
+                            <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
                     </CCardBody>
                 </CCard>
             </CCol>
@@ -265,7 +265,7 @@ const Orders = () => {
                     aria-labelledby="StaticBackdropExampleLabel"
                 >
                     <CModalHeader>
-                    <CModalTitle id="StaticBackdropExampleLabel">Update Delivery Status</CModalTitle>
+                        <CModalTitle id="StaticBackdropExampleLabel">Update Delivery Status</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <CCol md={12}>
@@ -279,10 +279,10 @@ const Orders = () => {
                         </CCol>
                     </CModalBody>
                     <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
-                        Close
-                    </CButton>
-                    <CButton color="primary" onClick={() => updateDeliverstatus()}>Submit</CButton>
+                        <CButton color="secondary" onClick={() => setVisible(false)}>
+                            Close
+                        </CButton>
+                        <CButton color="primary" onClick={() => updateDeliverstatus()}>Submit</CButton>
                     </CModalFooter>
                 </CModal>
                 <CModal
@@ -292,7 +292,7 @@ const Orders = () => {
                     aria-labelledby="StaticBackdropExampleLabel"
                 >
                     <CModalHeader>
-                    <CModalTitle id="StaticBackdropExampleLabel">Update Payment Status</CModalTitle>
+                        <CModalTitle id="StaticBackdropExampleLabel">Update Payment Status</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <CCol md={12}>
@@ -305,16 +305,16 @@ const Orders = () => {
                         </CCol>
                     </CModalBody>
                     <CModalFooter>
-                    <CButton color="secondary" onClick={() => setPVisible(false)}>
-                        Close
-                    </CButton>
-                    <CButton color="primary" onClick={() => updatePaymentstatus()}>Submit</CButton>
+                        <CButton color="secondary" onClick={() => setPVisible(false)}>
+                            Close
+                        </CButton>
+                        <CButton color="primary" onClick={() => updatePaymentstatus()}>Submit</CButton>
                     </CModalFooter>
                 </CModal>
             </>
         </CRow>
     )
-    
+
 }
 
 export default Orders
