@@ -12,6 +12,42 @@ export default function UserProfile() {
     const [ products, setProducts ] = useState([]);
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
 
+     const [formData, setFormData] = useState({
+    first_name: user_data?.first_name || '',
+    last_name: user_data?.last_name || '',
+    email: user_data?.email || '',
+    mobile_number: user_data?.mobile_number || ''
+  });
+
+    const [editMode, setEditMode] = useState(false);
+
+
+   const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const updateProfile = async () => {
+    try {
+      const payload = {
+        ...formData,
+        user_id: localStorage.getItem("user_id")
+      };
+
+      const res = await axiosIntance.post('/user/updateuserProfile', payload);
+      if (res.status === 200) {
+        alert(res.data.message);
+        localStorage.setItem("user_data", JSON.stringify(res.data.user));
+        setEditMode(false);
+        window.location.reload();
+      } else {
+        alert("Profile update failed.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    }
+  };
+
     const get_orders = async () => {
         setLoading(true);
         setOrders([]);
@@ -222,38 +258,82 @@ export default function UserProfile() {
                 );
             case "My Profile":
             default:
-                return (
-                    <section className="flex-1 bg-white shadow rounded p-6">
-                        <h2 className="text-lg font-semibold mb-4">Profile Details</h2>
-                        <form className="space-y-4">
+                // return (
+                //     <section className="flex-1 bg-white shadow rounded p-6">
+                //         <h2 className="text-lg font-semibold mb-4">Profile Details</h2>
+                //         <form className="space-y-4">
+                //             <div>
+                //                 <label className="block text-sm font-medium">First Name</label>
+                //                 <input className="w-full border rounded p-2" value={user_data?.first_name} readOnly />
+                //             </div>
+                //             <div>
+                //                 <label className="block text-sm font-medium">Last Name</label>
+                //                 <input className="w-full border rounded p-2" value={user_data?.last_name} readOnly />
+                //             </div>
+
+                //             <div>
+                //                 <label className="block text-sm font-medium">Email</label>
+                //                 <input
+                //                     className="w-full border rounded p-2"
+                //                     value={user_data?.email}
+                //                     readOnly />
+                //             </div>
+
+                //             <div>
+                //                 <label className="block text-sm font-medium">Mobile</label>
+                //                 <input
+                //                     className="w-full border rounded p-2"
+                //                     value={user_data?.mobile_number}
+                //                     readOnly />
+                //             </div>
+                            
+                //             <button className="bg-red-500 text-white px-4 py-2 rounded mt-2">
+                //                 Edit Profile
+                //             </button>
+                //         </form>
+                //     </section>
+                // );
+                   return (
+                        <section className="flex-1 bg-white shadow rounded p-6">
+                            <h2 className="text-lg font-semibold mb-4">Profile Details</h2>
+                            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); updateProfile(); }}>
                             <div>
-                                <label className="block text-sm font-medium">Name</label>
-                                <input className="w-full border rounded p-2" value={user_data?.first_name+' '+user_data?.last_name} readOnly />
+                                <label className="block text-sm font-medium">First Name</label>
+                                <input className="w-full border rounded p-2" name="first_name" value={formData.first_name} onChange={handleChange} readOnly={!editMode} />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium">Mobile</label>
-                                <input
-                                    className="w-full border rounded p-2"
-                                    value={user_data?.mobile_number}
-                                    readOnly
-                                />
+                                <label className="block text-sm font-medium">Last Name</label>
+                                <input className="w-full border rounded p-2" name="last_name" value={formData.last_name} onChange={handleChange} readOnly={!editMode} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium">Email</label>
-                                <input
-                                    className="w-full border rounded p-2"
-                                    value={user_data?.email}
-                                    readOnly
-                                />
+                                <input className="w-full border rounded p-2" name="email" value={formData.email} onChange={handleChange} readOnly={!editMode} />
                             </div>
-                            <button className="bg-red-500 text-white px-4 py-2 rounded mt-2">
-                                Edit Profile
-                            </button>
-                        </form>
-                    </section>
-                );
-        }
-    };
+                            <div>
+                                <label className="block text-sm font-medium">Mobile</label>
+                                <input className="w-full border rounded p-2" name="mobile_number" value={formData.mobile_number} onChange={handleChange} readOnly={!editMode} />
+                            </div>
+                            {!editMode ? (
+                                <button type="button" onClick={() => setEditMode(true)} className="bg-red-500 text-white px-4 py-2 rounded mt-2">Edit Profile</button>
+                            ) : (
+                                <div className="flex gap-2">
+                                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded mt-2">Save Changes</button>
+                                <button type="button" onClick={() => {
+                                    setEditMode(false);
+                                    setFormData({
+                                    first_name: user_data.first_name,
+                                    last_name: user_data.last_name,
+                                    email: user_data.email,
+                                    mobile_number: user_data.mobile_number
+                                    });
+                                }} className="bg-gray-400 text-white px-4 py-2 rounded mt-2">Cancel</button>
+                                </div>
+                            )}
+                            </form>
+                        </section>
+                        );
+                        }
+                    };
 
     return (
         <div className="bg-gray-100 flex flex-col items-center font-['poppins']">
