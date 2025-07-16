@@ -13,6 +13,7 @@ export default function UserProfile() {
     const [ loading, setLoading ] = useState(false);
     const [ ploading, setPLoading ] = useState(false);
     const [ addresses, setAddresses ] = useState(false);
+    const [editMode, setEditMode] = useState(false);
     const [ orders, setOrders ] = useState([]);
     const [ products, setProducts ] = useState([]);
     const [ shippingAddress, setShippingaddress ] = useState({});
@@ -33,6 +34,47 @@ export default function UserProfile() {
         pincode: '',
         mobile_number: ''
     });
+    const [formData, setFormData] = useState({
+        first_name: user_data?.first_name || '',
+        last_name: user_data?.last_name || '',
+        email: user_data?.email || '',
+        mobile_number: user_data?.mobile_number || ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const updateProfile = async () => {
+        const user_id = localStorage.getItem('user_id');
+        const params = {
+            user_id: user_id,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            email: formData.email,
+            mobile_number: formData.mobile_number
+        }
+
+        try {
+            const res = await axiosIntance.post(`/front/updateuserProfile`, params);
+
+            if (res.status === 200) {
+                localStorage.setItem("user_data", JSON.stringify(res.data.user_data));
+                location.reload();
+            } else {
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+        } catch (error) {
+        // console.error('Error fetching product:', error);
+        // Handle API error
+        } finally {
+        setLoading(false);
+        }
+    }
 
     const get_orders = async () => {
         setLoading(true);
@@ -406,30 +448,39 @@ export default function UserProfile() {
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6">
                         <h2 className="text-lg font-semibold mb-4">Profile Details</h2>
-                        <form className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium">Name</label>
-                                <input className="w-full border rounded p-2" value={user_data?.first_name+' '+user_data?.last_name} readOnly />
+                        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); updateProfile(); }}>
+                        <div>
+                            <label className="block text-sm font-medium">First Name</label>
+                            <input className="w-full border rounded p-2" name="first_name" value={formData.first_name} onChange={handleChange} readOnly={!editMode} />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium">Last Name</label>
+                            <input className="w-full border rounded p-2" name="last_name" value={formData.last_name} onChange={handleChange} readOnly={!editMode} />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium">Email</label>
+                            <input className="w-full border rounded p-2" name="email" value={formData.email} onChange={handleChange} readOnly={!editMode} />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium">Mobile</label>
+                            <input className="w-full border rounded p-2" name="mobile_number" value={formData.mobile_number} onChange={handleChange} readOnly={!editMode} />
+                        </div>
+                        {!editMode ? (
+                            <button type="button" onClick={() => setEditMode(true)} className="bg-red-500 text-white px-2 py-2 rounded mt-2">Edit Profile</button>
+                        ) : (
+                            <div className="flex gap-2">
+                            <button type="submit" className="bg-green-500 text-white px-2 py-2 rounded mt-2">Save Changes</button>
+                            <button type="button" onClick={() => {
+                                setEditMode(false);
+                                setFormData({
+                                    first_name: user_data.first_name,
+                                    last_name: user_data.last_name,
+                                    email: user_data.email,
+                                    mobile_number: user_data.mobile_number
+                                });
+                            }} className="bg-gray-400 text-white px-4 py-2 rounded mt-2">Cancel</button>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium">Mobile</label>
-                                <input
-                                    className="w-full border rounded p-2"
-                                    value={user_data?.mobile_number}
-                                    readOnly
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium">Email</label>
-                                <input
-                                    className="w-full border rounded p-2"
-                                    value={user_data?.email}
-                                    readOnly
-                                />
-                            </div>
-                            <button className="bg-red-500 text-white px-4 py-2 rounded mt-2">
-                                Edit Profile
-                            </button>
+                        )}
                         </form>
                     </section>
                 );
