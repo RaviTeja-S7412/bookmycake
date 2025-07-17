@@ -7,6 +7,8 @@ import ReactDatatable from "../../components/datatables/ReactDatatable";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/front/Spinner";
 import Modal from "../../components/Modal";
+import InvoiceDocument from "../../components/front/InvoiceDocument";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 export default function UserProfile() {
 
@@ -372,26 +374,30 @@ export default function UserProfile() {
                 },
                 sortable: true,
             },
-            /* {
+            {
                 name: "Action",
                 cell: (row) => (
                     <>
-                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => {
-                            setDeliverystatus(row.delivery_status);
-                            setVisible(!visible);
-                            setOrderID(row.order_id);
+                        <span title="Download Invoice" style={{cursor: 'pointer'}} onClick={() => {
+                            console.log(row);
+                            
+                            <PDFDownloadLink
+                                document={<InvoiceDocument invoiceData={row} />}
+                                fileName={`invoice_${invoiceData.invoiceNumber}.pdf`}
+                            >
+                                {({ loading }) => (
+                                <button>{loading ? 'Preparing...' : 'Download Invoice PDF'}</button>
+                                )}
+                            </PDFDownloadLink>
                         }} className='mr-2'>
-                            <i className='fa fa-eye'></i>
+                            <i className='fa fa-download'></i>
                         </span>
                     </>
                 ),
-            }, */
+            },
         ],
         [],
     )
-
-    console.log(shippingAddress, billingAddress);
-
 
     const renderSection = () => {
         switch (activeSection) {
