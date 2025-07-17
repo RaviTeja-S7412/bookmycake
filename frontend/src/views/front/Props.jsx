@@ -14,6 +14,27 @@ export default function Props() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
 
+  const [screenSize, setScreenSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (cart?.get_cart) {
       dispatch(getCart());
@@ -67,6 +88,11 @@ export default function Props() {
         Add More Fun To Celebration.....
       </h2>
 
+      <div>
+        <p>Width: {screenSize.width}</p>
+        <p>Height: {screenSize.height}</p>
+      </div>
+
       <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 mt-4">
         {cart?.prop_categories?.map((category) => (
           <button
@@ -82,58 +108,12 @@ export default function Props() {
         ))}
       </div>
       <div className="xl:flex lg:flex md:block sm:block">
-        <div className="xl:w-1/3 lg:w-1/2 md:w-full sm:w-full border-r-2 border-gray-200 sm:block max-h-[60vh] overflow-y-auto">
+        <div className="2xl:w-1/4 xl:w-1/4 md:w-full sm:w-full rwd-laptop-left border-r-2 border-gray-200 sm:block max-h-[50vh] overflow-y-auto p-2">
           <p className="text-black font-semibold text-lg">Selected Product</p>
-          <div class="w-[90%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
+          <div class="w-[100%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
             {/* <!-- Cake Image --> */}
             <img src="products/4.jpg" alt="Purple Flowers Cake"
-              class="w-40 h-40 object-cover rounded-lg shadow-md" />
-
-            {/* <!-- Cake Info --> */}
-            <div class="flex-1">
-              <p class="!text-md font-semibold text-gray-800 mb-0">Purple Flowers square Cake</p>
-              <p class="text-md text-gray-900 font-bold mt-2 mb-0">$200.00</p>
-
-              {/* <!-- Details --> */}
-              <div class="mt-1 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div>
-                  <span class="font-semibold text-gray-800">Flavour</span><br />
-                  Pineapple
-                </div>
-                <div>
-                  <span class="font-semibold text-gray-800">Weight</span><br />
-                  2 Kgs
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-[90%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
-            {/* <!-- Cake Image --> */}
-            <img src="products/4.jpg" alt="Purple Flowers Cake"
-              class="w-40 h-40 object-cover rounded-lg shadow-md" />
-
-            {/* <!-- Cake Info --> */}
-            <div class="flex-1">
-              <p class="!text-md font-semibold text-gray-800 mb-0">Purple Flowers square Cake</p>
-              <p class="text-md text-gray-900 font-bold mt-2 mb-0">$200.00</p>
-
-              {/* <!-- Details --> */}
-              <div class="mt-1 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div>
-                  <span class="font-semibold text-gray-800">Flavour</span><br />
-                  Pineapple
-                </div>
-                <div>
-                  <span class="font-semibold text-gray-800">Weight</span><br />
-                  2 Kgs
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-[90%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
-            {/* <!-- Cake Image --> */}
-            <img src="products/4.jpg" alt="Purple Flowers Cake"
-              class="w-40 h-40 object-cover rounded-lg shadow-md" />
+              class="w-20 h-20 object-cover rounded-lg shadow-md" />
 
             {/* <!-- Cake Info --> */}
             <div class="flex-1">
@@ -154,8 +134,8 @@ export default function Props() {
             </div>
           </div>
         </div>
-        <div className="xl:w-2/3 lg:w-1/2 md:w-full sm:w-full">
-          <div className="p-4 sm:p-6 bg-pink-50 font-[poppins]">
+        <div className="2xl:w-3/4 xl:w-3/4 md:w-full sm:w-full rwd-laptop-right">
+          <div className="p-4 sm:p-6 font-[poppins]">
             <div className="flex justify-center">
               <div className="w-full max-w-7xl">
                 {loading ? (

@@ -302,3 +302,15 @@
         display: block;
     }
 }
+
+/* Responsive styles for laptops (min-width: 1024px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .rwd-laptop-left {
+        width: 40%;
+        padding: 0.5rem;
+    }
+    .rwd-laptop-right {
+        width: 60%;
+        padding: 0.5rem;
+    }
+}
