@@ -56,7 +56,7 @@ export default function HomeHeader() {
             type="text"
             placeholder="Search for cakes, occasion, flavor and more"
             className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
-            defaultValue={searchParams?.get('search')}
+            value={searchParams?.get('search') ? searchParams?.get('search') : ''}
             onChange={(e) => navigate('/collections?search='+e.target.value)}
           />
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />

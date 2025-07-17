@@ -27,6 +27,7 @@ const AreasCrud = () => {
 
     const [city_name, setCityName] = useState('')
     const [area_name, setAreaName] = useState('')
+    const [pincode, setPinCode] = useState('')
     const [citiesList, setCities] = useState([])
 
     useEffect(() => {
@@ -42,7 +43,7 @@ const AreasCrud = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = {'city_id': city_name, 'area_name': area_name}
+        const formData = {'city_id': city_name, 'area_name': area_name, 'pincode': pincode};
 
         if(queryParams.get("id")){
             formData['id'] = queryParams.get("id");
@@ -73,6 +74,7 @@ const AreasCrud = () => {
             if(Object.keys(areas.area_data).length > 0){
                 setCityName(areas.area_data ? areas.area_data.city_id : '')
                 setAreaName(areas.area_data ? areas.area_data.area_name : '')
+                setPinCode(areas.area_data ? areas.area_data.pincode : '')
             }
         }
     }, [queryParams.get("id"), areas.get_singlearea])
@@ -111,6 +113,17 @@ const AreasCrud = () => {
                                     label="Area Name"
                                     onChange={(e) => setAreaName(e.target.value)}
                                     value={area_name}
+                                    required
+                                />
+                            </CCol>
+
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="text"
+                                    id="validationDefault01"
+                                    label="Pin Code"
+                                    onChange={(e) => setPinCode(e.target.value)}
+                                    value={pincode}
                                     required
                                 />
                             </CCol>

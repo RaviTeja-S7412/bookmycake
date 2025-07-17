@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 
 export default function CategoryCards({ categories }) {
+
+  const navigate = useNavigate();
 
   const settings = {
     dots: false,
@@ -47,7 +50,7 @@ export default function CategoryCards({ categories }) {
         <div className="slider-container">
           <Slider {...settings}>
             {categories?.map((cat, index) => (
-              <div className="p-2" key={index}>
+              <div className="p-2" key={index} onClick={() => navigate('/collections/' + cat.route)}>
                 <div
                   className="bg-[#bc4d5e] text-white rounded-3xl p-1 !flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-all duration-300"
                 >

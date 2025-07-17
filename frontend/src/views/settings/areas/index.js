@@ -3,6 +3,7 @@ import {
     CCard,
     CCardBody,
     CCardHeader,
+    CFormSwitch,
     CCol,
     CRow,
     CTab,
@@ -19,12 +20,14 @@ import { deleteArea, getAreas } from '../../../redux/actions/areas.actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { areaConstants } from '../../../redux/actions/constants'
 import Swal from 'sweetalert2'
+import axiosIntance from '../../../components/axios'
 
 const Areas = () => {
 
     const areas = useSelector(state => state.areas)
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const handleDelete = (id) => {
 
@@ -49,6 +52,26 @@ const Areas = () => {
         });
     }
 
+    const handleStatus = async (id, status) => {
+            setLoading(true);
+            const params = {
+                id: id,
+                status: status
+            }
+            try {
+                const res = await axiosIntance.post(`/admin/update_areastatus`, params);
+                if (res.status === 200) {
+                    dispatch({ type: areaConstants.GET_AREAS_REQUEST });
+                } else {
+                }
+            } catch (error) {
+            // console.error('Error fetching product:', error);
+            // Handle API error
+            } finally {
+                setLoading(false);
+            }
+        }
+
 
     useEffect(() => {
         if(areas.get_areas){
@@ -71,15 +94,35 @@ const Areas = () => {
                 selector: (row, key) => `${++key}`,
                 sortable: true,
             },
-            // {
-            //     name: 'City Name',
-            //     selector: (row) => `${row.city_name}`,
-            //     sortable: true,
-            // },
+            {
+                name: 'City Name',
+                selector: (row) => `${row.city_name}`,
+                sortable: true,
+            },
          
             {
                 name: 'Area Name',
                 selector: (row) => `${row.area_name}`,
+                sortable: true,
+            },
+
+            {
+                name: 'Pin Code',
+                selector: (row) => `${row.pincode}`,
+                sortable: true,
+            },
+            
+            {
+                name: 'Status',
+                selector: (row) => <CFormSwitch
+                    size="xl"
+                    defaultChecked={row?.status === 1 ? true : false}
+                    id={"formSwitchCheckDefaultXL" + row.id}
+                    onChange={(e) => {
+                        const status = e.target.checked ? 1 : 0;
+                        handleStatus(row.id, status);
+                    }}
+                />,
                 sortable: true,
             },
           

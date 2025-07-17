@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
+import Pagination from '../../components/front/Pagination';
+import Spinner from '../../components/front/Spinner';
 
 export default function Products() {
 
@@ -23,10 +25,10 @@ export default function Products() {
   const [maxPrice, setMaxprice] = useState(0);
   const [highestPrice, setHighestprice] = useState(0);
   const [filter, setFilter] = useState(false);
+  const [totalProducts, setTotalproducts] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12); // Adjust per page count as needed
-  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsperpage] = useState(12);
 
   const [sortOptions, setSortOptions] = useState([
     { name: 'Featured', value: 'latest', current: true },
@@ -42,10 +44,11 @@ export default function Products() {
 
   const getProducts = async (sort_by = '', search = '', min_price = '', max_price = '', selected_flavors = [], selected_weights = []) => {
     setLoading(true);
-
     const params = {
       "sort_by": sort_by,
-      "search": search
+      "search": search,
+      "limit": itemsPerPage,
+      "page": currentPage
     }
 
     if (min_price && max_price) {
@@ -74,16 +77,19 @@ export default function Products() {
       setProducts(res?.data?.products)
       setFlavors(res?.data?.flavors)
       setWeights(res?.data?.weights)
-      setHighestprice(res?.data?.highestPrice)
+      setHighestprice(res?.data?.highestPrice);
+      setTotalproducts(res?.data?.total);
+      setItemsperpage(res?.data?.limit);
+      setLoading(false);
     } else {
-
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     const search = searchParams.get('search') || "";
     getProducts(sortOptions?.find((option) => option.current)?.value, search);
-  }, [category_id, sub_category_id, searchParams?.get('search')]);
+  }, [category_id, sub_category_id, searchParams?.get('search'), currentPage]);
 
   const filterProducts = () => {
     const min_price = minPrice ? Number(minPrice) : Number(0);
@@ -91,7 +97,7 @@ export default function Products() {
     const selected_flavors = selectedFlavors.length > 0 ? selectedFlavors : [];
     const selected_weights = selectedWeights.length > 0 ? selectedWeights : [];
     const search = searchParams.get('search');
-    getProducts(sortOptions?.find((option) => option.current)?.value,search, min_price, max_price, selected_flavors, selected_weights);
+    getProducts(sortOptions?.find((option) => option.current)?.value, search, min_price, max_price, selected_flavors, selected_weights);
   }
 
   useEffect(() => {
@@ -191,7 +197,7 @@ export default function Products() {
                 {flavors?.length > 0 ? (
                   flavors.map((flavor, index) => (
                     <label for={`cbk1-${index}`} key={index}>
-                      <input type="checkbox" id={`cbk1-${index}`} onChange={(e) => handleFlavorchange(e.target.value)} value={flavor} />
+                      <input type="checkbox" id={`cbk1-${index}`} onChange={(e) => handleFlavorchange(e.target.value)} value={flavor} checked={selectedFlavors.includes(flavor)} />
                       <span className="cbx">
                         <svg width="12px" height="11px" viewBox="0 0 12 11">
                           <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -216,7 +222,7 @@ export default function Products() {
               {weights?.length > 0 ? (
                 weights?.sort((a, b) => a - b)?.map((weight, index) => (
                   <label for={`cbk-${index}`} key={'w' + index}>
-                    <input type="checkbox" id={`cbk-${index}`} onChange={(e) => handleWeightchange(e.target.value)} value={weight} />
+                    <input type="checkbox" id={`cbk-${index}`} onChange={(e) => handleWeightchange(e.target.value)} value={weight} checked={selectedWeights.includes(weight)} />
                     <span className="cbx">
                       <svg width="12px" height="11px" viewBox="0 0 12 11">
                         <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
@@ -233,7 +239,7 @@ export default function Products() {
         {/* Product Grid */}
         <div className="md:w-3/4 md:pl-6">
           <div className="flex justify-between items-center mb-4 bg-[#910f3f] p-2 sm:p-4 text-white">
-            <p className="poppins-semibold mb-0">{products?.length} products</p>
+            <p className="poppins-semibold mb-0">{totalProducts} products</p>
             <div>
               <label className="mr-2 font-medium text-sm">Sort by:</label>
               <select className="border rounded py-1 px-2 bg-white text-black"
@@ -248,7 +254,6 @@ export default function Products() {
               </select>
             </div>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Image loading state for each product */}
             {/*
@@ -263,7 +268,7 @@ export default function Products() {
               }, [products.length]);
 
               return products.map((product, index) => {
-                var startingSize = product.product_options?.sort((a, b) => a.price - b.price)?.[0];
+                var startingSize = product?.product_options && JSON.parse(product.product_options)?.sort((a, b) => a.price - b.price)?.[0];
                 const imgLoaded = imgLoadedArr[index] || false;
 
                 const handleImgLoad = () => {
@@ -275,50 +280,50 @@ export default function Products() {
                 };
 
                 return (
-                  <div key={index} className="shadow-md overflow-hidden bg-white ">
-                    <div className="relative">
-                      {!imgLoaded && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10 min-h-[220px]">
-                          <svg className="animate-spin h-8 w-8 text-[#910f3f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                          </svg>
-                        </div>
-                      )}
-                      <img
-                        src={import.meta.env.VITE_APIBASE_URL + product.product_image}
-                        alt={product.product_image}
-                        className={`w-full h-auto object-cover cursor-pointer max-h-[320px] transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-                        onClick={() => navigate('/products/' + product.route)}
-                        onLoad={handleImgLoad}
-                      />
-                    </div>
-                    <div className="p-2">
-                      <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/' + product.route)}>{product.product_name}</h6>
-                      {/* <p className="text-sm text-gray-600 mb-1">
-                    Earliest delivery: <span className="font-sm poppins-semibold">{cake.delivery}</span>
-                    </p> */}
-
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-lg poppins-bold mb-0">₹ {startingSize?.price}</p>
-                        {/* <div className="flex items-center">
-                      {[...Array(4)].map((_, i) => (
-                      <svg key={i} className="w-4 h-4 text-yellow-300 ms-1" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />  
-                      </svg>
-                      ))}
-                      <svg className="w-4 h-4 ms-1 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
-                      <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                      <span className="ml-2 text-gray-600 text-sm">({3})</span>
-                    </div> */}
+                  loading ? <div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
+                    <div class="animate-pulse">
+                      <div class="flex mb-4 rounded-sm dark:bg-gray-700">
+                        <svg width="300" height="220" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+                          <text x="30" y="80" class="svg-text">BookMyCake</text>
+                        </svg>
                       </div>
                     </div>
-                  </div>
+                  </div> :
+                    <div key={index} className="shadow-md overflow-hidden bg-white ">
+                      <div className="relative">
+                        {/* {!imgLoaded && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10 min-h-[220px]">
+                            <svg className="animate-spin h-8 w-8 text-[#910f3f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                            </svg>
+                          </div>
+                        )} */}
+                        <img
+                          src={import.meta.env.VITE_APIBASE_URL + product.product_image}
+                          alt={product.product_image}
+                          className={`w-full h-auto object-cover cursor-pointer max-h-[320px]`}
+                          onClick={() => navigate('/products/' + product.route)}
+                          onLoad={handleImgLoad}
+                        />
+                      </div>
+                      <div className="p-2">
+                        <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/' + product.route)}>{product.product_name}</h6>
+                        <div className="flex items-center justify-between mt-2">
+                          <p className="text-lg poppins-bold mb-0">₹ {startingSize?.price}</p>
+                        </div>
+                      </div>
+                    </div>
+
                 )
               });
             })()}
           </div>
+          {totalProducts > 0 ?
+            <div className='align-content-center'>
+              {totalProducts > itemsPerPage && <Pagination totalItems={totalProducts} itemsPerPage={itemsPerPage} setCurrPage={(page) => setCurrentPage(page)} />}
+            </div>
+          : <div className='text-center text-bold mt-20'>No Products Found</div>}
         </div>
 
       </div>

@@ -52,6 +52,9 @@ const ProductCrud = () => {
     const [product_old_image, setproductOldImage] = useState('')
     const [ingredeints, setIngredeints] = useState('')
     const [nutritional_info, setnutritional_info] = useState('')
+    const [meta_title, setMetatitle] = useState('')
+    const [meta_keywords, setMetakeywords] = useState('')
+    const [meta_description, setMetadescription] = useState('')
     const [shipping_info, setshipping_info] = useState('')
     const [isSize, setIssize] = useState(true)
     const [isFlavor, setIsflavor] = useState(true)
@@ -94,6 +97,9 @@ const ProductCrud = () => {
         setproductOldImage("");
         setIngredeints("");
         setnutritional_info("");
+        setMetatitle("");
+        setMetakeywords("");
+        setMetadescription("");
         setSku("");
         setIssize(false);
         setIsflavor(false);
@@ -105,7 +111,6 @@ const ProductCrud = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         const selectedOptions = [];
         if (isSize) selectedOptions.push('weight');
         if (isFlavor) selectedOptions.push('flavor');
@@ -120,6 +125,9 @@ const ProductCrud = () => {
         formData.append('product_description', product_desc)
         formData.append('ingredients', ingredeints)
         formData.append('nutritional_info', nutritional_info)
+        formData.append('meta_title', meta_title)
+        formData.append('meta_keywords', meta_keywords)
+        formData.append('meta_description', meta_description)
         formData.append('shipping', shipping_info)
         formData.append('isFeaturedproducts', isFeaturedproducts)
         formData.append('isCorporatecollections', isCorporatecollections)
@@ -165,6 +173,9 @@ const ProductCrud = () => {
                 setproductOldImage(products.product_data ? products.product_data.product_image : '')
                 setIngredeints(products.product_data ? products.product_data.ingredients : '')
                 setnutritional_info(products.product_data ? products.product_data.nutritional_info : '')
+                setMetatitle(products.product_data ? products.product_data.meta_title : '')
+                setMetakeywords(products.product_data ? products.product_data.meta_keywords : '')
+                setMetadescription(products.product_data ? products.product_data.meta_description : '')
                 setshipping_info(products.product_data ? products.product_data.shipping : '')
                 setSizes(products.product_data ? products.product_data.product_size && JSON.parse(products.product_data.product_size) : '')
                 setFlavors(products.product_data ? products.product_data.product_flavor && JSON.parse(products.product_data.product_flavor) : '')
@@ -345,7 +356,33 @@ const ProductCrud = () => {
                                     value={nutritional_info}
                                 />
                             </CCol>
+                             <CCol md={12}><CFormLabel className='fw-bold'>Meta Info</CFormLabel></CCol>
+                             <CCol md={6}>
+                                <CFormTextarea
+                                    label="Meta Title:"
+                                    rows={2}
+                                    onChange={(e) => setMetatitle(e.target.value)}
+                                    value={meta_title}
+                                />
+                            </CCol>
+                            <CCol md={6}>
+                                <CFormTextarea
+                                    label="Meta Keywords:"
+                                    rows={2}
+                                    onChange={(e) => setMetakeywords(e.target.value)}
+                                    value={meta_keywords}
+                                />
+                            </CCol>
 
+                             <CCol md={6}>
+                                <CFormTextarea
+                                    label="Meta Description:"
+                                    rows={2}
+                                    onChange={(e) => setMetadescription(e.target.value)}
+                                    value={meta_description}
+                                />
+                            </CCol>
+                           
                             <CCol md={12}><CFormLabel>Visible To:</CFormLabel></CCol>
                             <CCol md={2}>
                                 <CFormCheck
@@ -543,8 +580,8 @@ const ProductCrud = () => {
                             )}
 
                             <CCol xs={12}>
-                                <CButton color="primary" type="submit">
-                                    Submit
+                                <CButton color="primary" type="submit" disabled={products?.loading}>
+                                    {products?.loading ? 'Submitting' : 'Submit'}
                                 </CButton>
                             </CCol>
                         </CForm>
