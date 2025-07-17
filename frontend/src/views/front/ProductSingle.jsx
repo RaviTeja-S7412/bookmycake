@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addTocart } from "../../redux/actions/front/cart.actions";
 import InnerImageZoom from 'react-inner-image-zoom'
 import 'react-inner-image-zoom/lib/styles.min.css'
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 export default function ProductSingle() {
   const images = [
@@ -13,6 +15,7 @@ export default function ProductSingle() {
     "/assets/images/jungle-lion-cake-details.jpg", // Main Image
   ];
 
+  const [value, onChange] = useState(new Date());
   const { product_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,13 +56,13 @@ export default function ProductSingle() {
     const currentHour = now.getHours();
 
     if (selectedDay === 'Today') {
-      const futureSlots = allSlots.filter(slot => slot.start > (currentHour+1));
+      const futureSlots = allSlots.filter(slot => slot.start > (currentHour + 1));
       setAvailableSlots(futureSlots);
       setSelectedSlot(futureSlots.length > 0 ? futureSlots?.[0]?.label : '');
       setSelectedDate(now.toISOString().split('T')[0]);
     } else {
       // For Tomorrow or Calendar, show all slots
-      if(selectedDay === 'Tomorrow') {
+      if (selectedDay === 'Tomorrow') {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         setSelectedDate(tomorrow.toISOString().split('T')[0]);
@@ -104,8 +107,8 @@ export default function ProductSingle() {
   };
 
   const add_cart = () => {
-    
-    if(selectedDate === '') {
+
+    if (selectedDate === '') {
       Swal.fire({
         title: 'Error!',
         text: 'Please select date',
@@ -114,7 +117,7 @@ export default function ProductSingle() {
       })
       return;
     }
-    if(selectedSlot === '') {
+    if (selectedSlot === '') {
       Swal.fire({
         title: 'Error!',
         text: 'Please select time slot',
@@ -139,9 +142,9 @@ export default function ProductSingle() {
     };
     dispatch(addTocart(params));
 
-      setTimeout(() => {
-        navigate('/props');
-      }, 1000);
+    setTimeout(() => {
+      navigate('/props');
+    }, 1000);
   };
 
   useEffect(() => {
@@ -153,35 +156,34 @@ export default function ProductSingle() {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
+  // Calendar modal state
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+
   return (
     <div className="default-width mx-auto p-4 lg:grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
       {/* Image Gallery Section */}
       <div>
         {/* Main image */}
         <div>
-          {/* <img
-            
-          /> */}
-          <InnerImageZoom 
-          alt={product?.product_name}
-          src={import.meta.env.VITE_APIBASE_URL + product?.product_image} zoomSrc={import.meta.env.VITE_APIBASE_URL + product?.product_image}
-          className="rounded-2xl shadow-lg" />
+          <InnerImageZoom
+            alt={product?.product_name}
+            src={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+            zoomSrc={import.meta.env.VITE_APIBASE_URL + product?.product_image}
+            className="rounded-2xl shadow-lg"
+          />
         </div>
-
         {/* Down thumbnails */}
-        <div className="mt-3">
-
-        </div>
+        <div className="mt-3"></div>
       </div>
 
       {/* Product Info Section */}
       <div className="col-span-2">
         <h1 className="text-4xl font-bold mb-2">{product?.product_name}</h1>
-        <p className="text-3xl font-bold text-black mb-2">₹ {weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price}</p>
-        <p className="text-sm text-gray-500 mb-4">Tax included.</p>
-        <p className="mb-4 text-lg">
-          {product?.product_description}  
+        <p className="text-3xl font-bold text-black mb-2">
+          ₹ {weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price}
         </p>
+        <p className="text-sm text-gray-500 mb-4">Tax included.</p>
+        <p className="mb-4 text-lg">{product?.product_description}</p>
 
         {/* Flavor */}
         <div className="mb-4">
@@ -192,7 +194,9 @@ export default function ProductSingle() {
                 key={flavor}
                 onClick={() => {
                   setSelectedFlavor(flavor);
-                  const weights = product?.product_options.filter(product => product.flavor === flavor);
+                  const weights = product?.product_options.filter(
+                    (product) => product.flavor === flavor
+                  );
                   setSelectedWeight(weights?.[0]?.weight);
                   setWeights(weights);
                 }}
@@ -226,23 +230,6 @@ export default function ProductSingle() {
               ))}
             </div>
           </div>
-
-          {/* <div className="ml-8">
-            <p className="font-semibold mb-1">Select Area</p>
-            <select
-              id="area"
-              value={selectedArea}
-              onChange={(e) => setSelectedArea(e.target.value)}
-              className="border border-gray-300 rounded-md p-2 w-full"
-            >
-              <option value="">Choose an area</option>
-              {areas?.map((area, index) => (
-                <option key={index} value={area?.id}>
-                  {area?.area_name}
-                </option>
-              ))}
-            </select>
-          </div> */}
         </div>
 
         {/* Egg Option */}
@@ -251,13 +238,10 @@ export default function ProductSingle() {
           <div className="flex flex-wrap gap-2">
             {["Eggless"].map((eggoption) => (
               <button
-                // key={eggoption}
-                // onClick={() => setSelectedEggoption(eggoption)}
-                className={`px-4 py-2 border rounded-full ${
-                  'Eggless' === eggoption
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
-                }`}
+                className={`px-4 py-2 border rounded-full ${"Eggless" === eggoption
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
+                  }`}
               >
                 {eggoption}
               </button>
@@ -272,8 +256,15 @@ export default function ProductSingle() {
               {days.map((day) => (
                 <button
                   key={day}
-                  onClick={() => setSelectedDay(day)}
-                  className={`border px-4 py-2 rounded ${selectedDay === day ? 'bg-black text-white' : 'bg-white text-black'
+                  onClick={() => {
+                    setSelectedDay(day);
+                    if (day === "Calender") {
+                      setShowCalendarModal(true); // 👈 This opens the calendar modal
+                    }
+                  }}
+                  className={`border px-4 py-2 rounded ${selectedDay === day
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
                     }`}
                 >
                   {day}
@@ -288,20 +279,54 @@ export default function ProductSingle() {
                   onChange={() => setFixTime(true)}
                   className="mr-2"
                 />
-                <span className="ml-2">Fix Time Delivery - <strong>Free</strong></span>
+                <span className="ml-2">
+                  Fix Time Delivery - <strong>Free</strong>
+                </span>
               </div>
-              {selectedDay === 'Calender' && (
+              {selectedDay === "Calender" && (
                 <div className="mb-3 mt-3">
-                  <label className="text-sm font-bold">Choose a date:</label>
-                  <input
-                    type="date"
-                    value={tomorrow.toISOString().split('T')[0]}
-                    onChange={handleDateChange}
-                    className="ml-2 p-2 border rounded"
-                    min={
-                      tomorrow.toISOString().split('T')[0]
-                    } // Disable past dates
-                  />
+                  {/* Modal */}
+                  {showCalendarModal && (
+                    <div
+                      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+                      onClick={() => setShowCalendarModal(false)}
+                    >
+                      <div
+                        className="bg-white rounded-lg p-6 shadow-lg"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-lg font-semibold">
+                            Select Delivery Date
+                          </h2>
+                          <button
+                            className="text-gray-500 hover:text-black"
+                            onClick={() => setShowCalendarModal(false)}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                        <Calendar
+                          onChange={(date) => {
+                            onChange(date);
+                            setSelectedDate(
+                              date instanceof Date
+                                ? date.toISOString().split("T")[0]
+                                : ""
+                            );
+                            setShowCalendarModal(false);
+                          }}
+                          value={value}
+                          defaultView="day"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {selectedDate && (
+                    <div className="mt-2 text-sm text-gray-700 font-semibold">
+                      Selected Date: {selectedDate}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -317,15 +342,17 @@ export default function ProductSingle() {
                         key={slot.label}
                         onClick={() => setSelectedSlot(slot.label)}
                         className={`px-4 py-2 rounded border ${selectedSlot === slot.label
-                          ? 'bg-red-400 text-white'
-                          : 'bg-gray-100 text-gray-700'
+                          ? "bg-red-400 text-white"
+                          : "bg-gray-100 text-gray-700"
                           }`}
                       >
                         {slot.label}
                       </button>
                     ))
                   ) : (
-                    <p className="text-gray-500">No time slots available today.</p>
+                    <p className="text-gray-500">
+                      No time slots available today.
+                    </p>
                   )}
                 </div>
               </div>
@@ -342,27 +369,32 @@ export default function ProductSingle() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message here..."
               className="w-full border border-gray-300 rounded-md p-2"
-              maxLength="50"></textarea>
+              maxLength="50"
+            ></textarea>
           </div>
           <div className="w-1/2">
-            {cart?.cart_data?.filter((p) => p?.product_data?.route === product_id && p?.flavor === selectedFlavor && p?.weight == selectedWeight)?.length > 0 ?
+            {cart?.cart_data?.filter(
+              (p) =>
+                p?.product_data?.route === product_id &&
+                p?.flavor === selectedFlavor &&
+                p?.weight == selectedWeight
+            )?.length > 0 ? (
               <button
                 className={`px-4 py-2 border rounded-full bg-green-800 text-white w-full mt-3`}
-                onClick={() => navigate('/cart')}
+                onClick={() => navigate("/cart")}
               >
                 Go to Cart
               </button>
-              :
+            ) : (
               <button
                 className={`px-4 py-2 border rounded-full bg-black text-white w-full mt-3`}
                 onClick={() => add_cart()}
               >
                 Add to Cart
               </button>
-            }
+            )}
           </div>
         </div>
-
       </div>
     </div>
   );
