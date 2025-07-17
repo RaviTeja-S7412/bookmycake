@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/front/Spinner";
 import Modal from "../../components/Modal";
 import InvoiceDocument from "../../components/front/InvoiceDocument";
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 
 export default function UserProfile() {
 
@@ -376,24 +376,75 @@ export default function UserProfile() {
             },
             {
                 name: "Action",
-                cell: (row) => (
+                selector: (row) => {
+                    const [data, setData] = useState();
+                    const [iloading, setIloading] = useState();
+
+                    const fetchOrderDetails = async () => {
+                        try {
+                            const res = await axiosIntance.post(`/admin/orders/get_order_details`, { order_id: row?.order_id});
+
+                            if (res.status === 200) {
+                                console.log('res: ', res);
+                                setData(res?.data);
+                            } else {
+                                Swal.fire({
+                                    title: "Invoice Generation Failed",
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok'
+                                })
+                            }
+                        } catch (error) {
+                            // console.error('Error fetching product:', error);
+                            // Handle API error
+                        } finally {
+                            // setLoading(false);
+                        }
+                    }
+                    return (
+                        data ? (
+                            <BlobProvider document={<InvoiceDocument invoice={data} />}>
+                            {({ url, loading: pdfLoading }) =>
+                                pdfLoading ? (
+                                'Preparing...'
+                                ) : (
+                                <a href={url} download={`invoice-${row?.order_id}.pdf`}>
+                                    Download Invoice
+                                </a>
+                                )
+                            }
+                            </BlobProvider>
+                        ) : (
+                            <button onClick={fetchOrderDetails} disabled={iloading}>
+                                Generate Invoice
+                            </button>
+                        )
+                    )
+                }
+                /* (
                     <>
                         <span title="Download Invoice" style={{cursor: 'pointer'}} onClick={() => {
-                            console.log(row);
-                            
-                            <PDFDownloadLink
-                                document={<InvoiceDocument invoiceData={row} />}
-                                fileName={`invoice_${invoiceData.invoiceNumber}.pdf`}
+                            const invoiceData = {
+                                id: 'INV-001',
+                                date: '2025-07-17',
+                                customerName: 'John Doe',
+                                items: [
+                                    { description: 'Product A', quantity: 2, price: 50 },
+                                    { description: 'Service B', quantity: 1, price: 120 },
+                                ],
+                                total: 220,
+                            };
+                             <PDFDownloadLink
+                                document={<InvoiceDocument invoiceData={invoiceData} />}
+                                fileName="invoice.pdf"
                             >
-                                {({ loading }) => (
-                                <button>{loading ? 'Preparing...' : 'Download Invoice PDF'}</button>
-                                )}
+                                {({ loading }) => (loading ? 'Loading PDF...' : 'Download Invoice')}
                             </PDFDownloadLink>
                         }} className='mr-2'>
                             <i className='fa fa-download'></i>
                         </span>
                     </>
-                ),
+                ), */
             },
         ],
         [],
