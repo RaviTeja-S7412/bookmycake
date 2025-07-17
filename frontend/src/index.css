@@ -119,6 +119,11 @@
     margin: 0 auto;
 }
 
+.svg-text {
+      font-size: 48px;
+      fill: rgba(128, 128, 128, 0.279);
+}
+
 .slick-dots li.slick-active button:before {
     opacity: .75;
     color: #ffffff;
