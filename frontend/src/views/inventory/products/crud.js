@@ -111,7 +111,6 @@ const ProductCrud = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         const selectedOptions = [];
         if (isSize) selectedOptions.push('weight');
         if (isFlavor) selectedOptions.push('flavor');
@@ -581,8 +580,8 @@ const ProductCrud = () => {
                             )}
 
                             <CCol xs={12}>
-                                <CButton color="primary" type="submit">
-                                    Submit
+                                <CButton color="primary" type="submit" disabled={products?.loading}>
+                                    {products?.loading ? 'Submitting' : 'Submit'}
                                 </CButton>
                             </CCol>
                         </CForm>

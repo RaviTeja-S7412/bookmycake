@@ -87,12 +87,6 @@ export default function Props() {
       <h2 className="text-2xl sm:text-3xl font-bold text-center">
         Add More Fun To Celebration.....
       </h2>
-
-      <div>
-        <p>Width: {screenSize.width}</p>
-        <p>Height: {screenSize.height}</p>
-      </div>
-
       <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 mt-4">
         {cart?.prop_categories?.map((category) => (
           <button
