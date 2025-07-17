@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 const FrontFooter = () => {
   const navigate = useNavigate();
   return (
-    <div className='mt-5 bg-white'>
+    <div className='mt-5 bg-[#e7d9d9]'>
       <footer className="w-[90%] m-auto text-black py-8 font-[poppins]">
         <div className='grid lg:grid-cols-3 gap-4'>
           <div>

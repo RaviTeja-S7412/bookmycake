@@ -46,7 +46,7 @@ export default function CorporateCollections({ data }) {
   };
 
   return (
-    <div className="flex xl:flex-row lg:flex-row flex-col bg-black text-white">
+    <div className="flex xl:flex-row lg:flex-row flex-col bg-black text-white pt-2 !bg-[#ac8657]">
       {/* Left Content Block */}
       <div className="xl:w-2/5 lg:w-2/5 w-full bg-[#2e1e1c] p-[10px] sm:p-[40px] flex justify-center items-center">
         <div className="border border-2 border-white rounded-xl p-[10px] sm:p-[40px]">
