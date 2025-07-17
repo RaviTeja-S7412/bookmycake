@@ -245,6 +245,26 @@ export default function ProductSingle() {
           </div> */}
         </div>
 
+        {/* Egg Option */}
+        <div className="mb-4">
+          <p className="font-semibold mb-1">Egg Option</p>
+          <div className="flex flex-wrap gap-2">
+            {["Eggless"].map((eggoption) => (
+              <button
+                // key={eggoption}
+                // onClick={() => setSelectedEggoption(eggoption)}
+                className={`px-4 py-2 border rounded-full ${
+                  'Eggless' === eggoption
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                {eggoption}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="mb-4 xl:flex lg:flex block w-full">
           <div className="xl:w-1/2 lg:w-full w-full">
             <p className="font-semibold mb-1">Select Date & Time</p>

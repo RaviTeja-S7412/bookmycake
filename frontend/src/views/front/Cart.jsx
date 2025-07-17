@@ -609,9 +609,10 @@ export default function Cart() {
                   value={shippingAddress.country || ""}
                   onChange={e => { setShippingaddress({ ...shippingAddress, country: e.target.value }); }}
                   required
+                  disabled
                 >
-                  <option value="">Select Country</option>
                   <option value="India">India</option>
+                  <option value="India" selected>India</option>
                   <option value="United States">United States</option>
                   <option value="United Kingdom">United Kingdom</option>
                   <option value="Australia">Australia</option>

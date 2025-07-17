@@ -319,11 +319,11 @@ export default function Products() {
               });
             })()}
           </div>
-          {/* {!loading && */}
+          {totalProducts > 0 ?
             <div className='align-content-center'>
               <Pagination totalItems={totalProducts} itemsPerPage={itemsPerPage} setCurrPage={(page) => setCurrentPage(page)} />
             </div>
-          {/* } */}
+          : <div className='text-center text-bold mt-20'>No Products Found</div>}
         </div>
 
       </div>
