@@ -9,6 +9,7 @@ import Spinner from "../../components/front/Spinner";
 import Modal from "../../components/Modal";
 import InvoiceDocument from "../../components/front/InvoiceDocument";
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
+import InvoicePreview from "../../components/front/InvoicePreview";
 
 export default function UserProfile() {
 
@@ -27,6 +28,12 @@ export default function UserProfile() {
     const [addShippingModal, setAddshippingModal] = useState(false);
     const [addpdfModal, setAddpdfModal] = useState(false);
     const [addressId, setAddressID] = useState(false);
+    const [currentPass, setCurrentpass] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPass, setConfirmpass] = useState('');
+    const [invoiceModal, setInvoiceModal] = useState(false);
+    const [invoice_data, setInvoiceData] = useState();
+
     const [addshippingAddress, setAddShippingaddress] = useState({
         full_name: '',
         house_no: '',
@@ -64,6 +71,40 @@ export default function UserProfile() {
             if (res.status === 200) {
                 localStorage.setItem("user_data", JSON.stringify(res.data.user_data));
                 location.reload();
+            } else {
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+        } catch (error) {
+            // console.error('Error fetching product:', error);
+            // Handle API error
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const updatePassword = async () => {
+        const user_id = localStorage.getItem('user_id');
+        const params = {
+            user_id: user_id,
+            // current_password: currentPass,
+            password: password,
+            cpassword: confirmPass,
+        }
+
+        try {
+            const res = await axiosIntance.post(`/front/resetPassword`, params);
+
+            if (res.status === 200) {
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+                setTimeout(() => location.reload(), 2000)    
             } else {
                 Swal.fire({
                     title: res.data.message,
@@ -377,8 +418,9 @@ export default function UserProfile() {
             },
             {
                 name: "Action",
+                grow: 2,
                 selector: (row) => {
-                    const [data, setData] = useState();
+                    
                     const [iloading, setIloading] = useState();
 
                     const fetchOrderDetails = async () => {
@@ -387,8 +429,8 @@ export default function UserProfile() {
 
                             if (res.status === 200) {
                                 console.log('res: ', res);
-                                setData(res?.data);
-                                // setAddpdfModal(true);
+                                setInvoiceData(res?.data);
+                                setInvoiceModal(true);
                             } else {
                                 Swal.fire({
                                     title: "Invoice Generation Failed",
@@ -405,25 +447,11 @@ export default function UserProfile() {
                     }
 
                     return (
-                        data ? (
-                            <BlobProvider document={<InvoiceDocument invoice={data} />}>
-                                {({ url, loading: pdfLoading }) =>
-                                    pdfLoading ? (
-                                        'Preparing...'
-                                    ) : (
-                                        <a href={url} download={`invoice-${row?.order_id}.pdf`}>
-                                            Download Invoice
-                                        </a>
-                                    )
-                                }
-                            </BlobProvider>
-                        ) : (
-                            row?.payment_status == "success" ?
-                                <button className="bg-black p-2 !text-[12px] text-white" onClick={fetchOrderDetails} disabled={iloading}>
-                                    <CIcon icon={cibLibreoffice} /> Generate Invoice
-                                </button>
-                                : ''
-                        )
+                        row?.payment_status == "success" ?
+                            <button className="bg-black p-2 !text-[12px] text-white" onClick={fetchOrderDetails} disabled={iloading}>
+                                Generate Invoice
+                            </button>
+                            : ''
                     )
                 }
             },
@@ -526,18 +554,18 @@ export default function UserProfile() {
                             </div>
                             <div className="w-full p-2">
                                 <p className="font-semibold text-lg">Update Password</p>
-                                <form className="space-y-4 mt-4" onSubmit={(e) => { e.preventDefault(); navigate('/update-password'); }}>
-                                    <div>
+                                <form className="space-y-4 mt-4" onSubmit={(e) => { e.preventDefault(); updatePassword(); }}>
+                                    {/* <div>
                                         <label className="block text-sm font-medium">Current Password</label>
-                                        <input type="password" className="w-full border rounded p-2" name="current_password" placeholder="Enter current password" />
-                                    </div>
+                                        <input type="password" className="w-full border rounded p-2" name="current_password" placeholder="Enter current password" onChange={(e) => setCurrentpass(e.target.value)} required />
+                                    </div> */}
                                     <div>
                                         <label className="block text-sm font-medium">New Password</label>
-                                        <input type="password" className="w-full border rounded p-2" name="new_password" placeholder="Enter new password" />
+                                        <input type="password" className="w-full border rounded p-2" name="new_password" placeholder="Enter new password" onChange={(e) => setPassword(e.target.value)} required />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium">Confirm New Password</label>
-                                        <input type="password" className="w-full border rounded p-2" name="confirm_new_password" placeholder="Confirm new password" />
+                                        <input type="password" className="w-full border rounded p-2" name="confirm_new_password" placeholder="Confirm new password" onChange={(e) => setConfirmpass(e.target.value)} required />
                                     </div>
                                     <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mt-2">Update Password</button>
                                 </form>
@@ -547,24 +575,6 @@ export default function UserProfile() {
                 );
         }
     };
-
-    const invoiceModal = () => {
-        <>
-            {/* <Modal isOpen={addpdfModal} onClose={() => {
-                setAddpdfModal();
-            }} className="modal-dialog modal-lg">
-
-                <CModalHeader>
-                    <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
-                </CModalHeader>
-
-                <CModalBody>
-
-                </CModalBody>
-
-            </Modal> */}
-        </>
-    }
 
     return (
         <div className="bg-gray-100 flex flex-col items-center font-['poppins']">
@@ -848,15 +858,24 @@ export default function UserProfile() {
                 </>
             </Modal>
 
-            <Modal isOpen={addpdfModal} onClose={() => {
-                setAddpdfModal();
-            }} className="modal-dialog" size="lg">
-
+            <CModal
+                visible={invoiceModal}
+                onClose={() => setInvoiceModal(false)}
+                aria-labelledby="LiveDemoExampleLabel"
+                className="font-['poppins']"
+                size="lg"
+            >
+                <CModalHeader>
+                    <CModalTitle id="LiveDemoExampleLabel">Invoice</CModalTitle>
+                </CModalHeader>
                 <CModalBody>
-                    Subhash
+                    {invoice_data ?
+                        <InvoicePreview invoice={invoice_data} />
+                        :
+                        <p>No Data Found</p>
+                    }
                 </CModalBody>
-
-            </Modal>
+            </CModal>
         </div>
     );
 }

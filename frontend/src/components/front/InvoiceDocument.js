@@ -98,9 +98,8 @@ const InvoiceDocument = ({ invoice }) => {
 
           <View style={[{ textAlign: 'right', flex: 1 }]}>
             <Text style={styles.bold}>Payment Details:</Text>
-            <Text>Name: {order_datails.first_name + ' ' + order_datails.last_name}</Text>
-            <Text>Email: {order_datails.email}</Text>
-            <Text>Phone: {order_datails.mobile_number}</Text>
+            <Text>Order ID: {order_datails?.order_id}</Text>
+            <Text>Payment Mode: {order_datails?.payment_type}</Text>
           </View>
         </View>
 
