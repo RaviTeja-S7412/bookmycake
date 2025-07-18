@@ -54,40 +54,43 @@ export default function FeaturedCollection({ data }) {
         <div className="gap-4">
           <div className="slider-container">
             <Slider {...settings}>
-              {data.map((feature, index) => (
-                <div key={index} className="p-2 bg-white">
-                  <div
-                    className="feature-img rounded-lg overflow-hidden cursor-pointer"
-                    onClick={() => navigate('/products/' + feature?.route)}
-                  >
-                    <img
-                      src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
-                      alt={feature?.product_name}
-                      className="w-full h-48 object-cover"
-                    />
-                  </div>
-                  <div className="relative">
-                    {/* <div className="veg-icon flex mb-[7px] flex-wrap">
-                      <div className="w-[16px] h-[16px] border border-green-500 text-center bg-white mr-[7px] mt-[10px] relative rounded-[3px]">
-                        <span className="inline-block w-[8px] h-[8px] bg-[#3DA66E] rounded-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+              {data.map((feature, index) => {
+                var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
+                return (
+                  <div key={index} className="p-2 bg-white">
+                    <div
+                      className="feature-img rounded-lg overflow-hidden cursor-pointer"
+                      onClick={() => navigate('/products/' + feature?.route)}
+                    >
+                      <img
+                        src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
+                        alt={feature?.product_name}
+                        className="w-full h-48 object-cover"
+                      />
+                    </div>
+                    <div className="relative">
+                      {/* <div className="veg-icon flex mb-[7px] flex-wrap">
+                        <div className="w-[16px] h-[16px] border border-green-500 text-center bg-white mr-[7px] mt-[10px] relative rounded-[3px]">
+                          <span className="inline-block w-[8px] h-[8px] bg-[#3DA66E] rounded-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+                        </div>
+                      </div> */}
+                      <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                        <p className="font-semibold mt-2 mb-0">{feature?.product_name}</p>
                       </div>
-                    </div> */}
-                    <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
-                      <p className="font-semibold mt-2 mb-0">{feature?.product_name}</p>
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="font-medium mb-0">&#8377; 2145</p>
-                      <div className="p-1 cursor-pointer">
-                        <CIcon icon={cilBookmark} />
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="font-medium mb-0">₹ {startingSize?.price}</p>
+                        <div className="p-1 cursor-pointer">
+                          <CIcon icon={cilBookmark} />
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-yellow-500 text-sm">&#9733;</span>
+                        <span className="text-gray-600 ml-1">4.5 <small>(9k Reviews)</small></span>
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      <span className="text-yellow-500 text-sm">&#9733;</span>
-                      <span className="text-gray-600 ml-1">4.5 <small>(9k Reviews)</small></span>
-                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </Slider>
           </div>
         </div>

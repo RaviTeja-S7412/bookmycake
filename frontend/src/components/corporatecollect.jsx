@@ -71,27 +71,30 @@ export default function CorporateCollections({ data }) {
       <div className="xl:w-3/5 lg:w-3/5 w-full">
         <div className="slider-container">
           <Slider {...settings}>
-            {data?.map((feature, index) => (
-              <div key={index} className="relative d-block" onClick={() => navigate('/products/' + feature?.route)}>
-                <div className="relative group ins-brdr cursor-pointer">
-                  <img
-                    src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
-                    alt={feature?.product_name}
-                    className="object-cover object-center max-h-[300px] w-full"
-                  />
-                  {/* Black gradient overlay effect */}
-                  <div className="absolute bottom-0 left-0 right-0 h-50 bg-gradient-to-t from-black to-transparent z-0" />
-                  <div className="flex absolute bottom-5 left-0 right-0 text-center z-10 justify-between items-center px-4">
-                    <p className="text-white text-sm poppins-semibold font-[poppins] mb-0">
-                      {feature?.product_name}
-                    </p>
-                    <p className="text-white text-sm font-semibold mt-1 font-[poppins] mb-0">
-                      ₹ 1254
-                    </p>
+            {data?.map((feature, index) => {
+              var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
+              return(
+                <div key={index} className="relative d-block" onClick={() => navigate('/products/' + feature?.route)}>
+                  <div className="relative group ins-brdr cursor-pointer">
+                    <img
+                      src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
+                      alt={feature?.product_name}
+                      className="object-cover object-center max-h-[300px] w-full"
+                    />
+                    {/* Black gradient overlay effect */}
+                    <div className="absolute bottom-0 left-0 right-0 h-50 bg-gradient-to-t from-black to-transparent z-0" />
+                    <div className="flex absolute bottom-5 left-0 right-0 text-center z-10 justify-between items-center px-4">
+                      <p className="text-white text-sm poppins-semibold font-[poppins] mb-0">
+                        {feature?.product_name}
+                      </p>
+                      <p className="text-white text-sm font-semibold mt-1 font-[poppins] mb-0">
+                        ₹ {startingSize?.price}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )}
+            )}
           </Slider>
         </div>
       </div>
