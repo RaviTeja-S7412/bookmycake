@@ -48,9 +48,9 @@ const InvoiceDocument = ({ invoice }) => {
 
   const order_datails = invoice?.order_details
   const products = invoice?.products
-  
+
   const billingAddress = order_datails?.billing_address && JSON.parse(order_datails?.billing_address);
-  
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -60,35 +60,48 @@ const InvoiceDocument = ({ invoice }) => {
         {/* Invoice Header */}
         <View style={styles.header}>
           <Text style={{ fontSize: 20, marginBottom: 4 }}>Invoice</Text>
-          <Text>Invoice #: {"INV_000"+order_datails?.o_id}</Text>
+          <Text>Invoice #: {"INV_000" + order_datails?.o_id}</Text>
           <Text>Date: {new Date().toLocaleDateString()}</Text>
         </View>
 
         {/* Addresses */}
-        <View style={styles.section}>
-          <Text style={styles.bold}>Billing Address:</Text>
-          <Text>{billingAddress?.full_name}</Text>
-          <Text>{billingAddress?.house_no}, {billingAddress?.area},</Text>
-          <Text>{billingAddress?.city}, {billingAddress?.state},</Text>
-          <Text>{billingAddress?.country} - {billingAddress?.pincode},</Text>
-          <Text>Mobile: {billingAddress?.mobile_number}</Text>
+        <View style={[styles.section, { flexDirection: 'row', gap: 20 }]}>
+          {/* Billing Address */}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.bold}>Billing Address:</Text>
+            <Text>{billingAddress?.full_name}</Text>
+            <Text>{billingAddress?.house_no}, {billingAddress?.area},</Text>
+            <Text>{billingAddress?.city}, {billingAddress?.state},</Text>
+            <Text>{billingAddress?.country} - {billingAddress?.pincode},</Text>
+            <Text>Mobile: {billingAddress?.mobile_number}</Text>
+          </View>
+
+          {/* Shipping Address */}
+          <View style={[{ textAlign: 'right', flex: 1 }]}>
+            <Text style={styles.bold}>Shipping Address:</Text>
+            <Text>{order_datails?.full_name}</Text>
+            <Text>{order_datails?.house_no}, {order_datails?.area},</Text>
+            <Text>{order_datails?.city}, {order_datails?.state},</Text>
+            <Text>{order_datails?.country} - {order_datails?.pincode},</Text>
+            <Text>Mobile: {order_datails?.mobile_number}</Text>
+          </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.bold}>Shipping Address:</Text>
-          <Text>{order_datails?.full_name}</Text>
-          <Text>{order_datails?.house_no}, {order_datails?.area},</Text>
-          <Text>{order_datails?.city}, {order_datails?.state},</Text>
-          <Text>{order_datails?.country} - {order_datails?.pincode},</Text>
-          <Text>Mobile: {order_datails?.mobile_number}</Text>
-        </View>
+        <View style={[styles.section, { flexDirection: 'row', gap: 20, marginBottom: '20px' }]}>
+          {/* Customer Details */}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.bold}>Customer Details:</Text>
+            <Text>Name: {order_datails.first_name + ' ' + order_datails.last_name}</Text>
+            <Text>Email: {order_datails.email}</Text>
+            <Text>Phone: {order_datails.mobile_number}</Text>
+          </View>
 
-        {/* Customer Info */}
-        <View style={styles.section}>
-          <Text style={styles.bold}>Customer Details:</Text>
-          <Text>Name: {order_datails.first_name+' '+order_datails.last_name}</Text>
-          <Text>Email: {order_datails.email}</Text>
-          <Text>Phone: {order_datails.mobile_number}</Text>
+          <View style={[{ textAlign: 'right', flex: 1 }]}>
+            <Text style={styles.bold}>Payment Details:</Text>
+            <Text>Name: {order_datails.first_name + ' ' + order_datails.last_name}</Text>
+            <Text>Email: {order_datails.email}</Text>
+            <Text>Phone: {order_datails.mobile_number}</Text>
+          </View>
         </View>
 
         {/* Products */}
