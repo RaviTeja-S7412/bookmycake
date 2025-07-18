@@ -126,6 +126,8 @@ const Orderdetails = () => {
                                                 <div className="font-medium text-base">{item?.type === 'prop' ? item?.prop_name : item?.product_name}</div>
                                                 {item?.type === 'product' && <div className="text-xs text-gray-500 mb-1">Delivery Time: {item?.delivery_time}</div>}
                                                 {item?.type === 'product' && <span className="text-xs text-gray-600 bg-gray-100 py-0.5 rounded-full">Weight: {item?.weight / 1000} KG</span>}
+                                                {item?.type === 'product' && <div className="text-xs text-gray-500 mt-2">Flavor: {item?.flavor}</div>}
+                                                {item?.type === 'product' && <div className="text-xs text-gray-500 mt-2">Message: {item?.message}</div>}
                                             </div>
                                         </div>
                                     </td>
@@ -197,8 +199,8 @@ const Orderdetails = () => {
                                             <span className='px-1 border-1 border-yellow-400 bg-yellow-300 rounded text-sm'>Pending</span> :
                                             order_data?.order_details?.delivery_status == "failed" ?
                                                 <span className='px-1 border-1 border-red-400 bg-red-300 rounded text-sm'>Cancelled</span> :
-                                                order_data?.order_details?.delivery_status == "success" ?
-                                                    <span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>Success</span>
+                                                order_data?.order_details?.delivery_status == "Delivered" ?
+                                                    <span className='px-1 border-1 border-green-400 bg-green-300 rounded text-sm'>Delivered</span>
                                                     : ''
                                     }
                                 </td>

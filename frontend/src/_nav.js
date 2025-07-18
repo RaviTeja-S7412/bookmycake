@@ -70,6 +70,12 @@ const _nav = [
       }
     ],
   },
+   {
+    component: CNavItem,
+    name: 'Enquiries',
+    to: '/admin/enquires',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  },
   /* {
     component: CNavItem,
     name: 'Payments',

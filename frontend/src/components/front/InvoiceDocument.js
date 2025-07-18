@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Image,
 } from '@react-pdf/renderer';
-import axiosIntance from '../axios';
 
 // Styles
 const styles = StyleSheet.create({
@@ -47,18 +46,16 @@ const styles = StyleSheet.create({
 // PDF Document Component
 const InvoiceDocument = ({ invoice }) => {
 
-  const [data, setData] = useState();
   const order_datails = invoice?.order_details
   const products = invoice?.products
   
-  const grandTotal = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const billingAddress = order_datails?.billing_address && JSON.parse(order_datails?.billing_address);
-
+  
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Logo */}
-        {/* {logoUrl && <Image src={logoUrl} style={styles.logo} />} */}
+        <img src={import.meta.env.VITE_APIBASE_URL + 'products/logo.jpg'} style={styles.logo} />
 
         {/* Invoice Header */}
         <View style={styles.header}>
@@ -116,7 +113,7 @@ const InvoiceDocument = ({ invoice }) => {
         </View>
 
         <Text style={{ marginTop: 20, fontSize: 14 }}>
-          Grand Total: {order_datails?.total_amount}
+          Grand Total: {order_datails?.total_amount} Rs/-
         </Text>
       </Page>
     </Document>

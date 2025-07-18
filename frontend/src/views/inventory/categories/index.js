@@ -208,6 +208,11 @@ const Categories = () => {
                 sortable: true,
             },
             {
+                name: 'Category Description',
+                selector: (row) => `${row.category_desc}`,
+                sortable: true,
+            },
+            {
                 name: 'Status',
                 selector: (row) => <CFormSwitch
                     size="xl"
