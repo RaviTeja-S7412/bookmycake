@@ -55,8 +55,9 @@ export default function DesignerCollections({data}) {
                 <div className="border border-[#b5b6b8] overflow-hidden relative">
                   <img src={import.meta.env.VITE_APIBASE_URL + feature?.product_image} alt={feature?.product_name} className="w-full max-h-[290px] object-cover" />
                 </div>
-                <div className="bg-[#1f1f1f] text-[#ffb14f] text-center py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-xl mb-[30px]">
-                  {feature?.product_name}
+                <div className="bg-[#1f1f1f] flex text-[#ffb14f] py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-sm mb-[30px] px-3 justify-between">
+                  <p className="mb-0">{feature?.product_name}</p>
+                  <p className="mb-0">&#8377; 4512</p>
                 </div>
               </div>
             ))}

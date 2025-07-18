@@ -81,9 +81,14 @@ export default function CorporateCollections({ data }) {
                   />
                   {/* Black gradient overlay effect */}
                   <div className="absolute bottom-0 left-0 right-0 h-50 bg-gradient-to-t from-black to-transparent z-0" />
-                  <p className="absolute bottom-5 left-0 right-0 text-center text-white text-xl poppins-semibold font-[poppins] z-10">
-                    {feature?.product_name}
-                  </p>
+                  <div className="flex absolute bottom-5 left-0 right-0 text-center z-10 justify-between items-center px-4">
+                    <p className="text-white text-sm poppins-semibold font-[poppins] mb-0">
+                      {feature?.product_name}
+                    </p>
+                    <p className="text-white text-sm font-semibold mt-1 font-[poppins] mb-0">
+                      ₹ 1254
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
