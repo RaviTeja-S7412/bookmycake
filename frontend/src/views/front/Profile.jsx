@@ -7,17 +7,19 @@ import ReactDatatable from "../../components/datatables/ReactDatatable";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/front/Spinner";
 import Modal from "../../components/Modal";
+import InvoiceDocument from "../../components/front/InvoiceDocument";
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 
 export default function UserProfile() {
 
-    const [ loading, setLoading ] = useState(false);
-    const [ ploading, setPLoading ] = useState(false);
-    const [ addresses, setAddresses ] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [ploading, setPLoading] = useState(false);
+    const [addresses, setAddresses] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [ orders, setOrders ] = useState([]);
-    const [ products, setProducts ] = useState([]);
-    const [ shippingAddress, setShippingaddress ] = useState({});
-    const [ billingAddress, setBillingaddress ] = useState({});
+    const [orders, setOrders] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [shippingAddress, setShippingaddress] = useState({});
+    const [billingAddress, setBillingaddress] = useState({});
     const navigate = useNavigate();
     const user_data = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : {};
     const [activeSection, setActiveSection] = React.useState("My Profile");
@@ -69,10 +71,10 @@ export default function UserProfile() {
                 })
             }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
@@ -83,19 +85,19 @@ export default function UserProfile() {
         const params = {
             user_id: localStorage.getItem('user_id')
         };
-        
-        try {
-        const res = await axiosIntance.post(`/front/orders/get_userorders`, params);
 
-        if (res.status === 200) {
-            setOrders(res.data.orders)
-        } else {
-        }
+        try {
+            const res = await axiosIntance.post(`/front/orders/get_userorders`, params);
+
+            if (res.status === 200) {
+                setOrders(res.data.orders)
+            } else {
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -106,19 +108,19 @@ export default function UserProfile() {
         const params = {
             user_id: localStorage.getItem('user_id')
         };
-        
-        try {
-        const res = await axiosIntance.post(`/front/get_user_addresses`, params);
 
-        if (res.status === 200) {
-            setAddresses(res.data.user_addresses)
-        } else {
-        }
+        try {
+            const res = await axiosIntance.post(`/front/get_user_addresses`, params);
+
+            if (res.status === 200) {
+                setAddresses(res.data.user_addresses)
+            } else {
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -148,33 +150,33 @@ export default function UserProfile() {
             } else {
             }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
             setPLoading(false);
         }
     };
-    
+
     useEffect(() => {
         get_orders();
         get_user_addresses();
     }, [])
 
     useEffect(() => {
-        if(!localStorage.getItem('user_id')){
+        if (!localStorage.getItem('user_id')) {
             navigate('/login');
         }
     }, []);
 
     const editAddress = (address) => {
-        if(address){
+        if (address) {
             setAddShippingaddress(address);
             setAddressID(address.id);
-        }else{
+        } else {
             setAddShippingaddress({
                 full_name: '',
                 house_no: '',
-                area: '',      
+                area: '',
                 city: '',
                 state: '',
                 country: '',
@@ -189,7 +191,7 @@ export default function UserProfile() {
         setAddShippingaddress({
             full_name: '',
             house_no: '',
-            area: '',      
+            area: '',
             city: '',
             state: '',
             country: '',
@@ -203,60 +205,60 @@ export default function UserProfile() {
     const saveAddress = async () => {
         const user_id = localStorage.getItem('user_id');
         const params = {
-        user_id: user_id,
-        full_name: addshippingAddress.full_name,
-        mobile_number: addshippingAddress.mobile_number,
-        country: addshippingAddress.country,
-        state: addshippingAddress.state,
-        house_no: addshippingAddress.house_no,
-        area: addshippingAddress.area,
-        city: addshippingAddress.city,
-        pincode: addshippingAddress.pincode
+            user_id: user_id,
+            full_name: addshippingAddress.full_name,
+            mobile_number: addshippingAddress.mobile_number,
+            country: addshippingAddress.country,
+            state: addshippingAddress.state,
+            house_no: addshippingAddress.house_no,
+            area: addshippingAddress.area,
+            city: addshippingAddress.city,
+            pincode: addshippingAddress.pincode
         }
-        if(addressId){
-        params.address_id = addressId;
+        if (addressId) {
+            params.address_id = addressId;
         }
 
         try {
-        const res = await axiosIntance.post(`/front/save_user_address`, params);
+            const res = await axiosIntance.post(`/front/save_user_address`, params);
 
-        if (res.status === 200) {
-            get_user_addresses();
-            cancelAddress();
-        } else {
-            Swal.fire({
-            title: res.data.message,
-            icon: 'error',
-            confirmButtonText: 'Ok'
-            })
-        }
+            if (res.status === 200) {
+                get_user_addresses();
+                cancelAddress();
+            } else {
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
     const deleteAddress = async (id) => {
-        setLoading(true);        
+        setLoading(true);
         try {
-        const res = await axiosIntance.post(`/front/deleteAddress`, { id });
+            const res = await axiosIntance.post(`/front/deleteAddress`, { id });
 
-        if (res.status === 200) {
-            get_user_addresses();
-        } else {
-            Swal.fire({
-            title: res.data.message,
-            icon: 'error',
-            confirmButtonText: 'Ok'
-            })
-        }
+            if (res.status === 200) {
+                get_user_addresses();
+            } else {
+                Swal.fire({
+                    title: res.data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
         } catch (error) {
-        // console.error('Error fetching product:', error);
-        // Handle API error
+            // console.error('Error fetching product:', error);
+            // Handle API error
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
@@ -272,7 +274,7 @@ export default function UserProfile() {
                 selector: (row) => {
                     return (
                         <>
-                            <span title="View Order Details" style={{cursor: 'pointer', color: 'blue'}} onClick={() => {
+                            <span title="View Order Details" style={{ cursor: 'pointer', color: 'blue' }} onClick={() => {
                                 getOrderdetails(row?.order_id);
                                 setVisible(!visible);
                             }} className='mr-2'>
@@ -296,11 +298,11 @@ export default function UserProfile() {
             {
                 name: 'Order Status',
                 selector: (row) => {
-                    if(row.order_status === "Pending"){
+                    if (row.order_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.order_status === "cancelled"){
+                    } else if (row.order_status === "cancelled") {
                         return <span className='badge  bg-red-500'>Cancelled</span>
-                    }else if(row.order_status === "success"){
+                    } else if (row.order_status === "success") {
                         return <span className='badge bg-green-500'>Success</span>
                     }
                 },
@@ -309,11 +311,11 @@ export default function UserProfile() {
             {
                 name: 'Payment Status',
                 selector: (row) => {
-                    if(row.payment_status === "Pending"){
+                    if (row.payment_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.payment_status === "failed"){
+                    } else if (row.payment_status === "failed") {
                         return <span className='badge  bg-red-500'>Failed</span>
-                    }else if(row.payment_status === "success"){
+                    } else if (row.payment_status === "success") {
                         return <span className='badge bg-green-500'>Success</span>
                     }
                 },
@@ -322,13 +324,13 @@ export default function UserProfile() {
             {
                 name: 'Delivery Status',
                 selector: (row) => {
-                    if(row.delivery_status === "Pending"){
+                    if (row.delivery_status === "Pending") {
                         return <span className='badge bg-yellow-500'>Pending</span>
-                    }else if(row.delivery_status === "failed"){
+                    } else if (row.delivery_status === "failed") {
                         return <span className='badge  bg-red-500'>Failed</span>
-                    }else if(row.delivery_status === "Delivered"){
+                    } else if (row.delivery_status === "Delivered") {
                         return <span className='badge bg-green-500'>Delivered</span>
-                    }else if(row.delivery_status === "out"){
+                    } else if (row.delivery_status === "out") {
                         return <span className='badge' style={{ backgroundColor: '#3b82f6', color: '#fff' }}>Out For Delivery</span>
                     }
                 },
@@ -348,13 +350,13 @@ export default function UserProfile() {
             {
                 name: 'Payment Date',
                 selector: (row) => {
-                    if(row.date_of_payment !== "0000-00-00 00:00:00"){
+                    if (row.date_of_payment !== "0000-00-00 00:00:00") {
                         const date = new Date(row.date_of_payment);
                         const day = String(date.getDate()).padStart(2, '0');
                         const month = String(date.getMonth() + 1).padStart(2, '0');
                         const year = date.getFullYear();
                         return `${day}-${month}-${year}`;
-                    }else{
+                    } else {
                         return '-';
                     }
                 },
@@ -364,34 +366,89 @@ export default function UserProfile() {
                 name: 'Payment Type',
                 grow: 2,
                 selector: (row) => {
-                    if(row.payment_type == "cod"){
+                    if (row.payment_type == "cod") {
                         return 'Cash On Delivery'
-                    }else{
+                    } else {
                         return 'Online';
                     }
                 },
                 sortable: true,
             },
-            /* {
+            {
                 name: "Action",
-                cell: (row) => (
+                selector: (row) => {
+                    const [data, setData] = useState();
+                    const [iloading, setIloading] = useState();
+
+                    const fetchOrderDetails = async () => {
+                        try {
+                            const res = await axiosIntance.post(`/admin/orders/get_order_details`, { order_id: row?.order_id});
+
+                            if (res.status === 200) {
+                                console.log('res: ', res);
+                                setData(res?.data);
+                            } else {
+                                Swal.fire({
+                                    title: "Invoice Generation Failed",
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok'
+                                })
+                            }
+                        } catch (error) {
+                            // console.error('Error fetching product:', error);
+                            // Handle API error
+                        } finally {
+                            // setLoading(false);
+                        }
+                    }
+                    return (
+                        data ? (
+                            <BlobProvider document={<InvoiceDocument invoice={data} />}>
+                            {({ url, loading: pdfLoading }) =>
+                                pdfLoading ? (
+                                'Preparing...'
+                                ) : (
+                                <a href={url} download={`invoice-${row?.order_id}.pdf`}>
+                                    Download Invoice
+                                </a>
+                                )
+                            }
+                            </BlobProvider>
+                        ) : (
+                            <button onClick={fetchOrderDetails} disabled={iloading}>
+                                Generate Invoice
+                            </button>
+                        )
+                    )
+                }
+                /* (
                     <>
-                        <span title="View Order" style={{cursor: 'pointer'}} onClick={() => {
-                            setDeliverystatus(row.delivery_status);
-                            setVisible(!visible);
-                            setOrderID(row.order_id);
+                        <span title="Download Invoice" style={{cursor: 'pointer'}} onClick={() => {
+                            const invoiceData = {
+                                id: 'INV-001',
+                                date: '2025-07-17',
+                                customerName: 'John Doe',
+                                items: [
+                                    { description: 'Product A', quantity: 2, price: 50 },
+                                    { description: 'Service B', quantity: 1, price: 120 },
+                                ],
+                                total: 220,
+                            };
+                             <PDFDownloadLink
+                                document={<InvoiceDocument invoiceData={invoiceData} />}
+                                fileName="invoice.pdf"
+                            >
+                                {({ loading }) => (loading ? 'Loading PDF...' : 'Download Invoice')}
+                            </PDFDownloadLink>
                         }} className='mr-2'>
-                            <i className='fa fa-eye'></i>
+                            <i className='fa fa-download'></i>
                         </span>
                     </>
-                ),
-            }, */
+                ), */
+            },
         ],
         [],
     )
-
-    console.log(shippingAddress, billingAddress);
-    
 
     const renderSection = () => {
         switch (activeSection) {
@@ -403,28 +460,28 @@ export default function UserProfile() {
                             <Spinner />
                         ) : (
                             <>
-                            <div className="grid grid-cols-3 gap-4">
-                                {addresses && addresses.length > 0 ? addresses.map((address, index) => (
-                                    <div key={index} className="border p-4 rounded">
-                                        <h5 className="font-bold">{address.full_name}</h5>
-                                        <p>{address.house_no}, {address.area}, {address.city}, {address.state}, {address.country} - {address.pincode}</p>
-                                        <p>Mobile: {address.mobile_number}</p>
-                                        <button className="btn btn-primary btn-sm text-white-500 mt-2 !mr-2" onClick={() => {
-                                            editAddress(address);
-                                        }}>Edit</button>
-                                        <button className="btn btn-danger btn-sm mt-2 text-white" onClick={async () => {
-                                            if(window.confirm("Are you sure you want to delete this address?")){
-                                                deleteAddress(address.id);
-                                            }
-                                        }}>Delete</button>
-                                    </div>
-                                )) : (  
-                                    <p>No addresses found.</p>
-                                )}
-                            </div>
-                            <button className="bg-blue-500 text-white px-4 py-2 mt-2 rounded" onClick={() => {
-                                editAddress();
-                            }}>Add New Address</button>
+                                <div className="grid grid-cols-3 gap-4">
+                                    {addresses && addresses.length > 0 ? addresses.map((address, index) => (
+                                        <div key={index} className="border p-4 rounded">
+                                            <h5 className="font-bold">{address.full_name}</h5>
+                                            <p>{address.house_no}, {address.area}, {address.city}, {address.state}, {address.country} - {address.pincode}</p>
+                                            <p>Mobile: {address.mobile_number}</p>
+                                            <button className="btn btn-primary btn-sm text-white-500 mt-2 !mr-2" onClick={() => {
+                                                editAddress(address);
+                                            }}>Edit</button>
+                                            <button className="btn btn-danger btn-sm mt-2 text-white" onClick={async () => {
+                                                if (window.confirm("Are you sure you want to delete this address?")) {
+                                                    deleteAddress(address.id);
+                                                }
+                                            }}>Delete</button>
+                                        </div>
+                                    )) : (
+                                        <p>No addresses found.</p>
+                                    )}
+                                </div>
+                                <button className="bg-blue-500 text-white px-4 py-2 mt-2 rounded" onClick={() => {
+                                    editAddress();
+                                }}>Add New Address</button>
                             </>
                         )}
                     </section>
@@ -448,40 +505,62 @@ export default function UserProfile() {
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6">
                         <h2 className="text-lg font-semibold mb-4">Profile Details</h2>
-                        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); updateProfile(); }}>
-                        <div>
-                            <label className="block text-sm font-medium">First Name</label>
-                            <input className="w-full border rounded p-2" name="first_name" value={formData.first_name} onChange={handleChange} readOnly={!editMode} />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium">Last Name</label>
-                            <input className="w-full border rounded p-2" name="last_name" value={formData.last_name} onChange={handleChange} readOnly={!editMode} />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium">Email</label>
-                            <input className="w-full border rounded p-2" name="email" value={formData.email} onChange={handleChange} readOnly={!editMode} />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium">Mobile</label>
-                            <input className="w-full border rounded p-2" name="mobile_number" value={formData.mobile_number} onChange={handleChange} readOnly={!editMode} />
-                        </div>
-                        {!editMode ? (
-                            <button type="button" onClick={() => setEditMode(true)} className="bg-red-500 text-white px-2 py-2 rounded mt-2">Edit Profile</button>
-                        ) : (
-                            <div className="flex gap-2">
-                            <button type="submit" className="bg-green-500 text-white px-2 py-2 rounded mt-2">Save Changes</button>
-                            <button type="button" onClick={() => {
-                                setEditMode(false);
-                                setFormData({
-                                    first_name: user_data.first_name,
-                                    last_name: user_data.last_name,
-                                    email: user_data.email,
-                                    mobile_number: user_data.mobile_number
-                                });
-                            }} className="bg-gray-400 text-white px-4 py-2 rounded mt-2">Cancel</button>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="w-full p-2">
+                                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); updateProfile(); }}>
+                                    <div>
+                                        <label className="block text-sm font-medium">First Name</label>
+                                        <input className="w-full border rounded p-2" name="first_name" value={formData.first_name} onChange={handleChange} readOnly={!editMode} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium">Last Name</label>
+                                        <input className="w-full border rounded p-2" name="last_name" value={formData.last_name} onChange={handleChange} readOnly={!editMode} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium">Email</label>
+                                        <input className="w-full border rounded p-2" name="email" value={formData.email} onChange={handleChange} readOnly={!editMode} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium">Mobile</label>
+                                        <input className="w-full border rounded p-2" name="mobile_number" value={formData.mobile_number} onChange={handleChange} readOnly={!editMode} />
+                                    </div>
+                                    {!editMode ? (
+                                        <button type="button" onClick={() => setEditMode(true)} className="bg-red-500 text-white px-2 py-2 rounded mt-2">Edit Profile</button>
+                                    ) : (
+                                        <div className="flex gap-2">
+                                            <button type="submit" className="bg-green-500 text-white px-2 py-2 rounded mt-2">Save Changes</button>
+                                            <button type="button" onClick={() => {
+                                                setEditMode(false);
+                                                setFormData({
+                                                    first_name: user_data.first_name,
+                                                    last_name: user_data.last_name,
+                                                    email: user_data.email,
+                                                    mobile_number: user_data.mobile_number
+                                                });
+                                            }} className="bg-gray-400 text-white px-4 py-2 rounded mt-2">Cancel</button>
+                                        </div>
+                                    )}
+                                </form>
                             </div>
-                        )}
-                        </form>
+                            <div className="w-full p-2">
+                                <p className="font-semibold text-lg">Update Password</p>
+                                <form className="space-y-4 mt-4" onSubmit={(e) => { e.preventDefault(); navigate('/update-password'); }}>
+                                    <div>
+                                        <label className="block text-sm font-medium">Current Password</label>
+                                        <input type="password" className="w-full border rounded p-2" name="current_password" placeholder="Enter current password" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium">New Password</label>
+                                        <input type="password" className="w-full border rounded p-2" name="new_password" placeholder="Enter new password" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium">Confirm New Password</label>
+                                        <input type="password" className="w-full border rounded p-2" name="confirm_new_password" placeholder="Confirm new password" />
+                                    </div>
+                                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mt-2">Update Password</button>
+                                </form>
+                            </div>
+                        </div>
                     </section>
                 );
         }
@@ -532,9 +611,9 @@ export default function UserProfile() {
                     <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    {ploading ? 
+                    {ploading ?
                         <Spinner />
-                     :
+                        :
                         <>
                             <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="mb-10">
@@ -544,33 +623,33 @@ export default function UserProfile() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {products.length > 0 ? products.map((item, idx) => (
-                                    <tr key={'table-'+idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td>
-                                            <div className="flex mb-2">
-                                                <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL+item?.prop_image : import.meta.env.VITE_APIBASE_URL+item?.product_image} className="w-20" />
-                                                <div className="ml-4">
-                                                    <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
-                                                    
-                                                        {item?.type === 'product' && 
-                                                        <span className='text-sm'>
-                                                            Delivery Time: {item?.delivery_time}<br />
-                                                            Weight: {item?.weight/1000} KG<br />
-                                                            Flavor: {item?.flavor}<br />
-                                                            Message: {item?.message}
-                                                        </span>
-                                                    }</h5>
+                                    {products.length > 0 ? products.map((item, idx) => (
+                                        <tr key={'table-' + idx} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <td>
+                                                <div className="flex mb-2">
+                                                    <img src={item?.type === 'prop' ? import.meta.env.VITE_APIBASE_URL + item?.prop_image : import.meta.env.VITE_APIBASE_URL + item?.product_image} className="w-20" />
+                                                    <div className="ml-4">
+                                                        <h5 className="font-bold !mb-1">{item?.type === 'prop' ? item?.prop_name : item?.product_name}<br />
+
+                                                            {item?.type === 'product' &&
+                                                                <span className='text-sm'>
+                                                                    Delivery Time: {item?.delivery_time}<br />
+                                                                    Weight: {item?.weight / 1000} KG<br />
+                                                                    Flavor: {item?.flavor}<br />
+                                                                    Message: {item?.message}
+                                                                </span>
+                                                            }</h5>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
-                                    
-                                    </tr>
-                                )) : (
-                                    <tr>
-                                        <td colSpan="3" className="text-center text-gray-500">No products found</td>
-                                    </tr>
-                                )}
+                                            </td>
+                                            <td className="text-center font-bold text-md">₹ {item?.product_price} ({item?.qty})</td>
+
+                                        </tr>
+                                    )) : (
+                                        <tr>
+                                            <td colSpan="3" className="text-center text-gray-500">No products found</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                             <div className="grid grid-cols-2 gap-4">
@@ -608,163 +687,163 @@ export default function UserProfile() {
                 cancelAddress();
             }} className="modal-dialog modal-lg">
                 <>
-                <p className="text-xl font-semibold mb-4">{addressId ? 'Edit' : 'Add'} Shipping Address</p>
-                <form onSubmit={e => {
-                    e.preventDefault();
-                    saveAddress()
-                }}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="Full Name"
-                        value={addshippingAddress.full_name || ""}
-                        onChange={e => {
-                        setAddShippingaddress({ ...addshippingAddress, full_name: e.target.value })
-                        }}
-                        required
-                    />
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="Mobile Number"
-                        value={addshippingAddress.mobile_number || ""}
-                        onChange={e => {
-                        setAddShippingaddress({ ...addshippingAddress, mobile_number: e.target.value });
-                        }}
-                        required
-                        maxLength={10}
-                    />
-                    <select
-                        className={'border rounded px-3 py-2'}
-                        value={addshippingAddress.country || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, country: e.target.value }); }}
-                        required
-                    >
-                        <option value="">Select Country</option>
-                        <option value="India">India</option>
-                        <option value="United States">United States</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Germany">Germany</option>
-                        <option value="France">France</option>
-                        <option value="Singapore">Singapore</option>
-                        <option value="United Arab Emirates">United Arab Emirates</option>
-                        <option value="Japan">Japan</option>
-                        <option value="China">China</option>
-                        <option value="Brazil">Brazil</option>
-                        <option value="South Africa">South Africa</option>
-                        <option value="New Zealand">New Zealand</option>
-                        <option value="Italy">Italy</option>
-                        <option value="Spain">Spain</option>
-                        <option value="Russia">Russia</option>
-                        <option value="Mexico">Mexico</option>
-                        <option value="Netherlands">Netherlands</option>
-                        <option value="Switzerland">Switzerland</option>
-                        {/* Add more countries as needed */}
-                    </select>
-                    <select
-                        className={'border rounded px-3 py-2'}
-                        value={addshippingAddress.state || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, state: e.target.value }); }}
-                        required
-                    >
-                        <option value="">Select State</option>
-                        <option value="Andhra Pradesh">Andhra Pradesh</option>
-                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                        <option value="Assam">Assam</option>
-                        <option value="Bihar">Bihar</option>
-                        <option value="Chhattisgarh">Chhattisgarh</option>
-                        <option value="Goa">Goa</option>
-                        <option value="Gujarat">Gujarat</option>
-                        <option value="Haryana">Haryana</option>
-                        <option value="Himachal Pradesh">Himachal Pradesh</option>
-                        <option value="Jharkhand">Jharkhand</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <option value="Kerala">Kerala</option>
-                        <option value="Madhya Pradesh">Madhya Pradesh</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Manipur">Manipur</option>
-                        <option value="Meghalaya">Meghalaya</option>
-                        <option value="Mizoram">Mizoram</option>
-                        <option value="Nagaland">Nagaland</option>
-                        <option value="Odisha">Odisha</option>
-                        <option value="Punjab">Punjab</option>
-                        <option value="Rajasthan">Rajasthan</option>
-                        <option value="Sikkim">Sikkim</option>
-                        <option value="Tamil Nadu">Tamil Nadu</option>
-                        <option value="Telangana">Telangana</option>
-                        <option value="Tripura">Tripura</option>
-                        <option value="Uttar Pradesh">Uttar Pradesh</option>
-                        <option value="Uttarakhand">Uttarakhand</option>
-                        <option value="West Bengal">West Bengal</option>
-                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                        <option value="Chandigarh">Chandigarh</option>
-                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                        <option value="Ladakh">Ladakh</option>
-                        <option value="Lakshadweep">Lakshadweep</option>
-                        <option value="Puducherry">Puducherry</option>
-                    </select>
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="Flat, House no., Building, Company, Apartment"
-                        value={addshippingAddress.house_no || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, house_no: e.target.value }); }}
-                        required
-                    />
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="Area, Street, Sector, Village"
-                        value={addshippingAddress.area || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, area: e.target.value }); }}
-                        required
-                    />
-                    <input
-                        type="text"
-                        className="border rounded px-3 py-2"
-                        placeholder="Landmark"
-                        value={addshippingAddress.landmark || ""}
-                        onChange={e => setAddShippingaddress({ ...addshippingAddress, landmark: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="City"
-                        value={addshippingAddress.city || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, city: e.target.value }); }}
-                        required
-                    />
-                    <input
-                        type="text"
-                        className={'border rounded px-3 py-2'}
-                        placeholder="Pincode"
-                        value={addshippingAddress.pincode || ""}
-                        onChange={e => { setAddShippingaddress({ ...addshippingAddress, pincode: e.target.value }); }}
-                        required
-                        maxLength={6}
-                    />
-                    </div>
-                    <div className="flex items-center mt-4 gap-3">
-                    <button
-                        type="submit"
-                        className="px-4 py-2 border rounded-full bg-[#bc4d5e] text-white mt-0"
-                    >
-                        Save Address
-                    </button>
-                    <button
-                        type="button"
-                        className="px-4 py-2 border rounded-full bg-black text-white mt-0"
-                        onClick={() => cancelAddress()}
-                    >
-                        Cancel
-                    </button>
-                    </div>
-                </form>
+                    <p className="text-xl font-semibold mb-4">{addressId ? 'Edit' : 'Add'} Shipping Address</p>
+                    <form onSubmit={e => {
+                        e.preventDefault();
+                        saveAddress()
+                    }}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="Full Name"
+                                value={addshippingAddress.full_name || ""}
+                                onChange={e => {
+                                    setAddShippingaddress({ ...addshippingAddress, full_name: e.target.value })
+                                }}
+                                required
+                            />
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="Mobile Number"
+                                value={addshippingAddress.mobile_number || ""}
+                                onChange={e => {
+                                    setAddShippingaddress({ ...addshippingAddress, mobile_number: e.target.value });
+                                }}
+                                required
+                                maxLength={10}
+                            />
+                            <select
+                                className={'border rounded px-3 py-2'}
+                                value={addshippingAddress.country || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, country: e.target.value }); }}
+                                required
+                            >
+                                <option value="">Select Country</option>
+                                <option value="India">India</option>
+                                <option value="United States">United States</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Germany">Germany</option>
+                                <option value="France">France</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                <option value="Japan">Japan</option>
+                                <option value="China">China</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Switzerland">Switzerland</option>
+                                {/* Add more countries as needed */}
+                            </select>
+                            <select
+                                className={'border rounded px-3 py-2'}
+                                value={addshippingAddress.state || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, state: e.target.value }); }}
+                                required
+                            >
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                <option value="Chandigarh">Chandigarh</option>
+                                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                                <option value="Lakshadweep">Lakshadweep</option>
+                                <option value="Puducherry">Puducherry</option>
+                            </select>
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="Flat, House no., Building, Company, Apartment"
+                                value={addshippingAddress.house_no || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, house_no: e.target.value }); }}
+                                required
+                            />
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="Area, Street, Sector, Village"
+                                value={addshippingAddress.area || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, area: e.target.value }); }}
+                                required
+                            />
+                            <input
+                                type="text"
+                                className="border rounded px-3 py-2"
+                                placeholder="Landmark"
+                                value={addshippingAddress.landmark || ""}
+                                onChange={e => setAddShippingaddress({ ...addshippingAddress, landmark: e.target.value })}
+                            />
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="City"
+                                value={addshippingAddress.city || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, city: e.target.value }); }}
+                                required
+                            />
+                            <input
+                                type="text"
+                                className={'border rounded px-3 py-2'}
+                                placeholder="Pincode"
+                                value={addshippingAddress.pincode || ""}
+                                onChange={e => { setAddShippingaddress({ ...addshippingAddress, pincode: e.target.value }); }}
+                                required
+                                maxLength={6}
+                            />
+                        </div>
+                        <div className="flex items-center mt-4 gap-3">
+                            <button
+                                type="submit"
+                                className="px-4 py-2 border rounded-full bg-[#bc4d5e] text-white mt-0"
+                            >
+                                Save Address
+                            </button>
+                            <button
+                                type="button"
+                                className="px-4 py-2 border rounded-full bg-black text-white mt-0"
+                                onClick={() => cancelAddress()}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </>
             </Modal>
         </div>

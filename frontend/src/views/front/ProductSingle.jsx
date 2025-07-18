@@ -15,7 +15,15 @@ export default function ProductSingle() {
     "/assets/images/jungle-lion-cake-details.jpg", // Main Image
   ];
 
-  const [value, onChange] = useState(new Date());
+  const today = new Date();
+  const currentDay = today.getDate();
+  today.setDate(currentDay + 2);
+
+  const dayAfterTomorrow = new Date();
+  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+  dayAfterTomorrow.setHours(0, 0, 0, 0);
+  
+  const [value, onChange] = useState(today.toDateString());
   const { product_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -158,6 +166,14 @@ export default function ProductSingle() {
 
   // Calendar modal state
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const cartDate = () => {
+    const date = new Date(selectedDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`
+  }
 
   return (
     <div className="default-width mx-auto p-4 lg:grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
@@ -317,6 +333,7 @@ export default function ProductSingle() {
                             setShowCalendarModal(false);
                           }}
                           value={value}
+                          minDate={dayAfterTomorrow}
                           defaultView="day"
                         />
                       </div>
@@ -324,7 +341,7 @@ export default function ProductSingle() {
                   )}
                   {selectedDate && (
                     <div className="mt-2 text-sm text-gray-700 font-semibold">
-                      Selected Date: {selectedDate}
+                      Selected Date: {cartDate()}
                     </div>
                   )}
                 </div>
