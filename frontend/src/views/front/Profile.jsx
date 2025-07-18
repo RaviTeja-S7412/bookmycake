@@ -1,6 +1,6 @@
 import React, { use, useEffect, useMemo, useState } from "react";
 import { CIcon } from '@coreui/icons-react';
-import { cilEnvelopeLetter, cilPhone, cilUser, cilPencil } from '@coreui/icons';
+import { cilEnvelopeLetter, cilPhone, cilUser, cilPencil, cibLibreoffice } from '@coreui/icons';
 import { CTable, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import axiosIntance from "../../components/axios";
 import ReactDatatable from "../../components/datatables/ReactDatatable";
@@ -25,6 +25,7 @@ export default function UserProfile() {
     const [activeSection, setActiveSection] = React.useState("My Profile");
     const [visible, setVisible] = useState(false);
     const [addShippingModal, setAddshippingModal] = useState(false);
+    const [addpdfModal, setAddpdfModal] = useState(false);
     const [addressId, setAddressID] = useState(false);
     const [addshippingAddress, setAddShippingaddress] = useState({
         full_name: '',
@@ -382,11 +383,12 @@ export default function UserProfile() {
 
                     const fetchOrderDetails = async () => {
                         try {
-                            const res = await axiosIntance.post(`/admin/orders/get_order_details`, { order_id: row?.order_id});
+                            const res = await axiosIntance.post(`/admin/orders/get_order_details`, { order_id: row?.order_id });
 
                             if (res.status === 200) {
                                 console.log('res: ', res);
                                 setData(res?.data);
+                                setAddpdfModal(true);
                             } else {
                                 Swal.fire({
                                     title: "Invoice Generation Failed",
@@ -405,22 +407,22 @@ export default function UserProfile() {
                     return (
                         data ? (
                             <BlobProvider document={<InvoiceDocument invoice={data} />}>
-                            {({ url, loading: pdfLoading }) =>
-                                pdfLoading ? (
-                                'Preparing...'
-                                ) : (
-                                <a href={url} download={`invoice-${row?.order_id}.pdf`}>
-                                    Download Invoice
-                                </a>
-                                )
-                            }
+                                {({ url, loading: pdfLoading }) =>
+                                    pdfLoading ? (
+                                        'Preparing...'
+                                    ) : (
+                                        <a href={url} download={`invoice-${row?.order_id}.pdf`}>
+                                            Download Invoice
+                                        </a>
+                                    )
+                                }
                             </BlobProvider>
                         ) : (
-                            row?.payment_status == "success" ? 
-                                <button onClick={fetchOrderDetails} disabled={iloading}>
-                                    Generate Invoice {row?.payment_status}
+                            row?.payment_status == "success" ?
+                                <button className="bg-black p-2 !text-[12px] text-white" onClick={fetchOrderDetails} disabled={iloading}>
+                                    <CIcon icon={cibLibreoffice} /> Generate Invoice
                                 </button>
-                            : ''
+                                : ''
                         )
                     )
                 }
@@ -468,6 +470,7 @@ export default function UserProfile() {
             case "My Orders":
                 return (
                     <section className="flex-1 bg-white shadow rounded p-6 overflow-x-auto">
+                        <small></small>
                         <h2 className="text-lg font-semibold mb-4">My Orders</h2>
                         {orders.length > 0 && <ReactDatatable columns={columns} data={orders} actions={false} loading={loading} />}
                     </section>
@@ -545,13 +548,31 @@ export default function UserProfile() {
         }
     };
 
+    const invoiceModal = () => {
+        <>
+            {/* <Modal isOpen={addpdfModal} onClose={() => {
+                setAddpdfModal();
+            }} className="modal-dialog modal-lg">
+
+                <CModalHeader>
+                    <CModalTitle id="LiveDemoExampleLabel">Product Details</CModalTitle>
+                </CModalHeader>
+
+                <CModalBody>
+
+                </CModalBody>
+
+            </Modal> */}
+        </>
+    }
+
     return (
         <div className="bg-gray-100 flex flex-col items-center font-['poppins']">
             <header className="w-full bg-white shadow p-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <CIcon icon={cilUser} size="xl" />
                     <span className="text-lg font-bold">{user_data?.first_name} {user_data?.last_name}</span>
-                    
+
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
                     <CIcon icon={cilEnvelopeLetter} size="lg" className="w-5 h-5 mr-1" />
@@ -825,6 +846,16 @@ export default function UserProfile() {
                         </div>
                     </form>
                 </>
+            </Modal>
+
+            <Modal isOpen={addpdfModal} onClose={() => {
+                setAddpdfModal();
+            }} className="modal-dialog" size="lg">
+
+                <CModalBody>
+                    Subhash
+                </CModalBody>
+
             </Modal>
         </div>
     );
