@@ -56,10 +56,9 @@ export default function CorporateCollections({ data }) {
               alt="Corporate Collection"
               className=""
             />
-            <h2 className="text-xl text-white poppins-semibold ml-5 mt-3">Corporate Collections</h2>
+            <h2 className="text-xl text-white poppins-semibold ml-5 mt-3">Why BMC for your Corporate Cakes:</h2>
           </div>
-          <p className="text-xl text-white poppins-regular mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
-            Lorem ipsum dolor sit amet.</p>
+          <p className="text-xl text-white poppins-regular mt-4">At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.</p>
 
           <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4" onClick={() => navigate('/collections/corporate-cakes')}>
             Explore

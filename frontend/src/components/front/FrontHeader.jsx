@@ -14,7 +14,7 @@ import {
   PopoverPanel,
 } from '@headlessui/react';
 import {
-  Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon
+  Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon, EnvelopeIcon, PhoneIcon
 } from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu";
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -64,9 +64,9 @@ export default function HomeHeader() {
 
         {/* Right: Support + Icons */}
         <div className="flex items-center gap-4 min-w-[250px] justify-end">
-          <div className="text-xs text-right leading-tight">
-            <div className="font-semibold">24/7 Support Center</div>
-            <div className="text-black font-bold text-sm">+91 9560804758</div>
+          <div className="text-xs text-left leading-tight">
+            <div className="flex text-black font-bold text-sm items-center mb-2"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.com</div>
+            <div className="flex text-black font-bold text-sm items-center"><PhoneIcon className='h-5 w-5 mr-2' />+91 9990026799</div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
