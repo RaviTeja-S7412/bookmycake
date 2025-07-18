@@ -44,6 +44,11 @@ export default function HomeHeader() {
 
   return (
     <header className="bg-white font-[Poppins]">
+      <div>
+        <div className="bg-gray-200 text-[#bc4d5e] text-center py-2 text-sm font-[500]">
+          <span>Book My Cake - Har Teohar Ka Cake: Book My Cake | Freshness home delivered</span>
+        </div>
+      </div>
       <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
         {/* Left: Logo + City */}
         <div className="flex justify-center w-full sm:w-[unset] items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
