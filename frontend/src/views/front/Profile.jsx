@@ -401,6 +401,7 @@ export default function UserProfile() {
                             // setLoading(false);
                         }
                     }
+
                     return (
                         data ? (
                             <BlobProvider document={<InvoiceDocument invoice={data} />}>
@@ -415,36 +416,14 @@ export default function UserProfile() {
                             }
                             </BlobProvider>
                         ) : (
-                            <button onClick={fetchOrderDetails} disabled={iloading}>
-                                Generate Invoice
-                            </button>
+                            row?.payment_status == "success" ? 
+                                <button onClick={fetchOrderDetails} disabled={iloading}>
+                                    Generate Invoice {row?.payment_status}
+                                </button>
+                            : ''
                         )
                     )
                 }
-                /* (
-                    <>
-                        <span title="Download Invoice" style={{cursor: 'pointer'}} onClick={() => {
-                            const invoiceData = {
-                                id: 'INV-001',
-                                date: '2025-07-17',
-                                customerName: 'John Doe',
-                                items: [
-                                    { description: 'Product A', quantity: 2, price: 50 },
-                                    { description: 'Service B', quantity: 1, price: 120 },
-                                ],
-                                total: 220,
-                            };
-                             <PDFDownloadLink
-                                document={<InvoiceDocument invoiceData={invoiceData} />}
-                                fileName="invoice.pdf"
-                            >
-                                {({ loading }) => (loading ? 'Loading PDF...' : 'Download Invoice')}
-                            </PDFDownloadLink>
-                        }} className='mr-2'>
-                            <i className='fa fa-download'></i>
-                        </span>
-                    </>
-                ), */
             },
         ],
         [],
@@ -572,6 +551,7 @@ export default function UserProfile() {
                 <div className="flex items-center gap-2">
                     <CIcon icon={cilUser} size="xl" />
                     <span className="text-lg font-bold">{user_data?.first_name} {user_data?.last_name}</span>
+                    
                 </div>
                 <div className="text-sm text-gray-600 flex items-center">
                     <CIcon icon={cilEnvelopeLetter} size="lg" className="w-5 h-5 mr-1" />

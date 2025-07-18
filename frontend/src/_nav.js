@@ -72,7 +72,7 @@ const _nav = [
   },
    {
     component: CNavItem,
-    name: 'Contact Us',
+    name: 'Enquiries',
     to: '/admin/enquires',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },

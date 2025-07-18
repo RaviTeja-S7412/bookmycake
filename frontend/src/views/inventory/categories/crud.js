@@ -7,7 +7,8 @@ import {
     CRow,
     CCard,
     CCardHeader,
-    CCardBody
+    CCardBody,
+    CFormTextarea
   } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createCategory, get_singlecategory, updateCategory } from '../../../redux/actions/categories.actions';
@@ -25,6 +26,7 @@ const CategoryCrud = () => {
     const [category_name, setCategoryName] = useState('')
     const [category_image, setCategoryImage] = useState('')
     const [category_old_image, setCategoryOldImage] = useState('')
+    const [category_desc, setCategoryDesc] = useState('')
 
     useEffect(() => {
         dispatch({type: categoryConstants.CATEGORIES_RESET})
@@ -42,6 +44,7 @@ const CategoryCrud = () => {
         const formData = new FormData()
         formData.append('category_name', category_name)
         formData.append('file', category_image)
+        formData.append('category_desc', category_desc)
         if(queryParams.get("id")){
             formData.append('id', queryParams.get("id"))
             formData.append('old_image', category_old_image)
@@ -71,6 +74,7 @@ const CategoryCrud = () => {
         }else{
             if(Object.keys(categories.category_data).length > 0){
                 setCategoryName(categories.category_data ? categories.category_data.category_name : '')
+                setCategoryDesc(categories.category_data ? categories.category_data.category_desc : '')
                 setCategoryOldImage(categories.category_data ? categories.category_data.category_image : '')
             }
         }
@@ -103,6 +107,16 @@ const CategoryCrud = () => {
                                     label="Category Image"
                                     onChange={(e) => setCategoryImage(e.target.files[0])}
                                     required={queryParams.get("id") ? false : true}
+                                />
+                            </CCol>
+                            <CCol md={4}>
+                                <CFormTextarea
+                                    rows={3}
+                                    id="validationDefault03"
+                                    label="Category Description"
+                                    value={category_desc}
+                                    onChange={(e) => setCategoryDesc(e.target.value)}
+                                    required
                                 />
                             </CCol>
                             <CCol xs={12}>
