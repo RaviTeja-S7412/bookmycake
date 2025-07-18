@@ -3,6 +3,7 @@ import React from 'react'
 
 // admin
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
+const Profile = React.lazy(() => import('./views/profile/updateProfile'));
 const Login = React.lazy(() => import('./views/Login'));
 const Users = React.lazy(() => import('./views/users'));
 const Enquires = React.lazy(() => import('./views/enquires'));
@@ -27,6 +28,7 @@ const Banners = React.lazy(() => import('./views/settings/banners'));
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
   { path: '/admin/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/admin/updateProfile', name: 'Profile', element: Profile },
   { path: '/admin/users', name: 'Users', element: Users },
   { path: '/admin/enquires', name: 'Enquires', element: Enquires},
   { path: '/admin/inventory/products', name: 'Products', element: Products },
