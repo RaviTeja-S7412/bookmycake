@@ -19,6 +19,9 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [designerProducts, setDesignerProducts] = useState([]);
   const [corporateProducts, setCorporateProducts] = useState([]);
+  const [birthdayCollections, setBirthdaycollections] = useState([]);
+  const [pastries_smallcakes, setPastriessmallcakes] = useState([]);
+  const [indian_fusioncakes, setIndianfusioncakes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
 
@@ -33,12 +36,18 @@ export default function Home() {
       setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));
       setDesignerProducts(res?.data?.selectedProducts?.filter(product => product.isDesignercollections === 'true'));
       setCorporateProducts(res?.data?.selectedProducts?.filter(product => product.isCorporatecollections === 'true'));
+      setBirthdaycollections(res?.data?.selectedProducts?.filter(product => product.isBirthdaycollection === 'true'));
+      setPastriessmallcakes(res?.data?.selectedProducts?.filter(product => product.isPastries === 'true'));
+      setIndianfusioncakes(res?.data?.selectedProducts?.filter(product => product.isIndianfusioncakes === 'true'));
       setBanners(res?.data?.banners);
       setCategories(res?.data?.categories);
     } else {
       setFeaturedProducts([]);
       setDesignerProducts([]);
       setCorporateProducts([]);
+      setBirthdaycollections([]);
+      setPastriessmallcakes([]);
+      setIndianfusioncakes([]);
       setBanners([]);
       setCategories([]);
     }
@@ -52,6 +61,7 @@ export default function Home() {
 
   return (
     <>
+    {loading ? <Spinner /> : (
       <div className="mx-auto w-full">
         {banners?.length > 0 && (
           <Carousel data={banners} />
@@ -64,9 +74,8 @@ export default function Home() {
           <DesignerCollections data={designerProducts} />
         )}
         <Sweetfullcakes />
-        <BirthdayCollection />
-        <Pastries />
-        <IndianCollection />
+        <BirthdayCollection data={birthdayCollections} />
+        <Pastries data={pastries_smallcakes} />
         {corporateProducts?.length > 0 && (
           <CorporateCollections data={corporateProducts} />
         )}
@@ -76,9 +85,10 @@ export default function Home() {
             <Reviews />
           </div>
         </section>
+        <IndianCollection data={indian_fusioncakes} />
 
         </div>
-      }
+      )}
     </>
   )
 }

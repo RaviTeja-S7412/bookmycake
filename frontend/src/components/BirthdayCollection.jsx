@@ -4,56 +4,18 @@ import Slider from "react-slick";
 import CIcon from '@coreui/icons-react'
 import { cilBookmark } from '@coreui/icons'
 
-export default function BirthdayCollection() {
-
-    const products = [
-        {
-            product_name: "Balloons Rounded Designer Cake",
-            product_image: "/assets/images/products/featured/buscuite.jpg",
-            route: "balloons-rounded-designer-cake",
-            product_options: JSON.stringify([{ weight: 1000, price: 4571 }]),
-            is_veg: true
-        },
-        {
-            product_name: "Princess Group Photo Cake",
-            product_image: "/assets/images/products/featured/almond.jpg",
-            route: "balloons-rounded-designer-cake",
-            product_options: JSON.stringify([{ weight: 1000, price: 800 }]),
-            is_veg: true
-        },
-        {
-            product_name: "Paw Patrol Designer Cake",
-            product_image: "/assets/images/products/featured/cheese.jpg",
-            route: "balloons-rounded-designer-cake",
-            product_options: JSON.stringify([{ weight: 1000, price: 4578 }]),
-            is_veg: true
-        },
-        {
-            product_name: "Unicorn Rainbow Cake",
-            product_image: "/assets/images/products/featured/choconuts.jpg",
-            route: "balloons-rounded-designer-cake",
-            product_options: JSON.stringify([{ weight: 1000, price: 1234 }]),
-            is_veg: true
-        },
-        {
-            product_name: "First Birthday Cake - Blue",
-            product_image: "/assets/images/products/featured/strawberry-chocolate.jpg",
-            route: "balloons-rounded-designer-cake",
-            product_options: JSON.stringify([{ weight: 1000, price: 4569 }]),
-            is_veg: true
-        },
-    ]
+export default function BirthdayCollection({ data }) {
 
     const navigate = useNavigate();
     const settings = {
         dots: false,
         arrows: false,
-        infinite: products?.length > 2 ? true : false,
+        infinite: data?.length > 2 ? true : false,
         speed: 1500,
         slidesToShow: 4,
         slidesToScroll: 3,
         initialSlide: 0,
-        autoplay: products?.length > 2 ? true : false,
+        autoplay: data?.length > 2 ? true : false,
         autoplaySpeed: 3000,
         cssEase: "linear",
         responsive: [
@@ -91,16 +53,17 @@ export default function BirthdayCollection() {
                 <div className="slider-container">
                     <Slider {...settings}>
                         {
-                            products.map((feature, index) => {
-                                const options = JSON.parse(feature.product_options);
-                                const price = options[0]?.price || 0;
+                            data.map((feature, index) => {
+                                const options = feature?.product_options && JSON.parse(feature.product_options);
+                                var price = options?.sort((a, b) => a.price - b.price)?.[0];
+                                var size = options?.sort((a, b) => a.weight - b.weight)?.[0];
                                 return (
-                                    <div key={index} className="p-2">
+                                    <div key={index} className="p-2" onClick={() => navigate('/products/' + feature?.route)}>
                                         <div className="!bg-white rounded">
                                             <div className="relative feature-img overflow-hidden">
                                                 <div className="p-3 rounded-lg flex justify-between">
                                                     <p className="font-semibold mb-0">{feature.product_name}</p>
-                                                    <p className="font-medium mb-0">₹ {price}</p>
+                                                    <p className="font-medium mb-0">₹ {price?.price}</p>
                                                 </div>
                                                 {/* Veg icon on image */}
                                                 <div className="relative">
@@ -108,14 +71,14 @@ export default function BirthdayCollection() {
                                                         <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
                                                     </div>
                                                     <img
-                                                        src={feature.product_image}
+                                                        src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
                                                         alt={feature.product_name}
                                                         className="w-full max-h-[290px] object-cover cursor-pointer"
                                                     />
                                                 </div>
                                                 <div className="p-1 rounded-lg">
                                                     <div className="flex justify-between mt-2">
-                                                        <p className="mb-0">Weight: {options[0]?.weight ? options[0].weight / 1000 + " kg" : "N/A"}</p>
+                                                        <p className="mb-0">Weight: {size?.weight / 1000 + " kg"}</p>
                                                         <p className="mb-0 cursor-pointer"><CIcon icon={cilBookmark} /></p>
                                                     </div>
                                                 </div>

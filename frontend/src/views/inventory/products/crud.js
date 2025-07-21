@@ -62,6 +62,9 @@ const ProductCrud = () => {
     const [isDesignercollections, setDesignercollections] = useState("false")
     const [isCorporatecollections, setCorporatecollections] = useState("false")
     const [isFeaturedproducts, setFeaturedproducts] = useState("false")
+    const [isBirtdaysAnniversaries, setBirtdaysAnniversaries] = useState("false")
+    const [isPastriesSmallCakes, setPastriesSmallCakes] = useState("false")
+    const [isIndianFusionCakes, setIndianFusionCakes] = useState("false")
     const [sku, setSku] = useState('')
     const [sizes, setSizes] = useState([{ kg: '', unit: 'kg', price: '' }]);
     const [flavors, setFlavors] = useState([{flavor: ''}]);
@@ -132,6 +135,9 @@ const ProductCrud = () => {
         formData.append('isFeaturedproducts', isFeaturedproducts)
         formData.append('isCorporatecollections', isCorporatecollections)
         formData.append('isDesignercollections', isDesignercollections)
+        formData.append('isBirthdaycollection', isBirtdaysAnniversaries)
+        formData.append('isPastries', isPastriesSmallCakes)
+        formData.append('isIndianfusioncakes', isIndianFusionCakes)
 
         formData.append('product_size', JSON.stringify(sizes))
         formData.append('product_flavor', JSON.stringify(flavors))
@@ -409,6 +415,33 @@ const ProductCrud = () => {
                                     label="Featured Products"
                                     onChange={() => setFeaturedproducts(isFeaturedproducts == "true" ? "false" : "true")}
                                     checked={isFeaturedproducts == "true" ? "checked" : ''}
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault12"
+                                    label="Birtdays & Anniversaries"
+                                    onChange={() => setBirtdaysAnniversaries(isBirtdaysAnniversaries == "true" ? "false" : "true")}
+                                    checked={isBirtdaysAnniversaries == "true" ? "checked" : ''}
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault13"
+                                    label="Indian Fusion Cakes"
+                                    onChange={() => setIndianFusionCakes(isIndianFusionCakes == "true" ? "false" : "true")}
+                                    checked={isIndianFusionCakes == "true" ? "checked" : ''}
+                                />
+                            </CCol>
+                            <CCol md={2}>
+                                <CFormCheck
+                                    type="checkbox"
+                                    id="validationDefault14"
+                                    label="Pastries & Small Cakes"
+                                    onChange={() => setPastriesSmallCakes(isPastriesSmallCakes == "true" ? "false" : "true")}
+                                    checked={isPastriesSmallCakes == "true" ? "checked" : ''}
                                 />
                             </CCol>
 
