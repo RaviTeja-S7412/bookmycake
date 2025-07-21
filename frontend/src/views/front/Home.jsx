@@ -8,6 +8,7 @@ import CorporateCollections from "../../components/corporatecollect";
 import FeaturedCollection from "../../components/FeaturedCollection";
 import axiosIntance from "../../components/axios";
 import { useEffect, useState } from "react";
+import Spinner from "../../components/front/Spinner";
 
 export default function Home() {
 
@@ -38,38 +39,42 @@ export default function Home() {
       setBanners([]);
       setCategories([]);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
     getSelectedProducts();
   }, []);
+  
 
   return (
     <>
-      <div className="mx-auto w-full">
-        {banners?.length > 0 && (
-          <Carousel data={banners} />
-        )}
-        <CategoryCards categories={categories} />
-        {featuredProducts?.length > 0 && (
-          <FeaturedCollection data={featuredProducts} />
-        )}
-        {designerProducts?.length > 0 && (
-          <DesignerCollections data={designerProducts} />
-        )}
-        <Sweetfullcakes />
-        {corporateProducts?.length > 0 && (
-          <CorporateCollections data={corporateProducts} />
-        )}
+      {loading ? <Spinner /> :
+        <div className="mx-auto w-full">
+          {banners?.length > 0 && (
+            <Carousel data={banners} />
+          )}
+          <CategoryCards categories={categories} />
+          {featuredProducts?.length > 0 && (
+            <FeaturedCollection data={featuredProducts} />
+          )}
+          {designerProducts?.length > 0 && (
+            <DesignerCollections data={designerProducts} />
+          )}
+          <Sweetfullcakes />
+          {corporateProducts?.length > 0 && (
+            <CorporateCollections data={corporateProducts} />
+          )}
 
-        <section className="default-width mx-auto my-3">
-          <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
-          <div className="mt-6">
-            <Reviews />
-          </div>
-        </section>
+          <section className="default-width mx-auto my-3">
+            <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
+            <div className="mt-6">
+              <Reviews />
+            </div>
+          </section>
 
-      </div>
+        </div>
+      }
     </>
   )
 }

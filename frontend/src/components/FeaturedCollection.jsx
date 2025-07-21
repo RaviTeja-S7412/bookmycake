@@ -83,10 +83,13 @@ export default function FeaturedCollection({ data }) {
                           <CIcon icon={cilBookmark} />
                         </div>
                       </div>
-                      <div className="flex items-center">
-                        <span className="text-yellow-500 text-sm">&#9733;</span>
-                        <span className="text-gray-600 ml-1">4.5 <small>(9k Reviews)</small></span>
-                      </div>
+                        <div className="flex items-center">
+                          <span className="text-yellow-500 text-sm">&#9733;</span>
+                          {feature?.ratings_count > 0 ? 
+                            <span className="text-gray-600 ml-1">{feature?.avg_rating} <small>({feature?.ratings_count} {feature?.ratings_count > 1 ? 'Reviews' : 'Review'})</small></span>
+                            : <span className="text-gray-600 ml-1">No Reviews</span>
+                          }
+                        </div>
                     </div>
                   </div>
                 )

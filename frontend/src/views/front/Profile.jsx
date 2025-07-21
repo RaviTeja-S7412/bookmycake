@@ -32,8 +32,13 @@ export default function UserProfile() {
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmpass] = useState('');
     const [invoiceModal, setInvoiceModal] = useState(false);
-    const [invoice_data, setInvoiceData] = useState();
-
+    const [feedbackModal, setFeedbackModal] = useState(false);
+    const [feedbackOrderId, setFeedbackOrderID] = useState('');
+    const [invoice_data, setInvoiceData] = useState(false);
+    const [feedbackRating, setFeedbackrating] = useState('');
+    const [feedbackMessage, setFeedbackmessage] = useState('');
+    
+    console.log('invoice_data: ', invoice_data);
     const [addshippingAddress, setAddShippingaddress] = useState({
         full_name: '',
         house_no: '',
@@ -428,7 +433,6 @@ export default function UserProfile() {
                             const res = await axiosIntance.post(`/admin/orders/get_order_details`, { order_id: row?.order_id });
 
                             if (res.status === 200) {
-                                console.log('res: ', res);
                                 setInvoiceData(res?.data);
                                 setInvoiceModal(true);
                             } else {
@@ -446,12 +450,44 @@ export default function UserProfile() {
                         }
                     }
 
+                    const get_feedback = async () => {
+                        try {
+                            const res = await axiosIntance.post(`/front/get_feedback`, { order_id: row?.order_id, user_id: localStorage.getItem('user_id') });
+                            console.log('res: ', res);
+
+                            if (res.status === 200) {
+                                setFeedbackrating(res?.data?.feedback?.rating);
+                                setFeedbackmessage(res?.data?.feedback?.message);
+                            } else {
+                            }
+                            setFeedbackOrderID(row?.order_id);
+                            setFeedbackModal(true)
+                        } catch (error) {
+                            // console.error('Error fetching product:', error);
+                            // Handle API error
+                        } finally {
+                            // setLoading(false);
+                        }
+                    }
+
                     return (
-                        row?.payment_status == "success" ?
-                            <button className="bg-black p-2 !text-[12px] text-white" onClick={fetchOrderDetails} disabled={iloading}>
-                                Generate Invoice
-                            </button>
-                            : ''
+                        <>
+                            {row?.payment_status == "success" && (
+                                <>
+                                    <button className="bg-black p-2 !text-[12px] text-white mt-2" onClick={fetchOrderDetails} disabled={iloading}>
+                                        Generate Invoice
+                                    </button>
+                                    <br />
+                                </>
+                            )}
+                            {row?.delivery_status == "Delivered" && (
+                                <button className="bg-green-500 p-2 !text-[12px] text-white mt-2 mb-2" onClick={() => {
+                                    get_feedback();
+                                }}>
+                                    Give Feedback
+                                </button>
+                            )}
+                        </>
                     )
                 }
             },
@@ -874,6 +910,90 @@ export default function UserProfile() {
                         :
                         <p>No Data Found</p>
                     }
+                </CModalBody>
+            </CModal>
+            <CModal
+                visible={feedbackModal}
+                onClose={() => setFeedbackModal(false)}
+                aria-labelledby="LiveDemoExampleLabel"
+                className="font-['poppins']"
+                size="lg"
+            >
+                <CModalHeader>
+                    <CModalTitle id="LiveDemoExampleLabel">Feedback</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                <div className="flex flex-col gap-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Your Rating</label>
+                        <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <span
+                                    key={star}
+                                    className={`cursor-pointer text-2xl ${star <= (feedbackRating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}
+                                    onClick={() => setFeedbackrating(star)}
+                                    role="button"
+                                    aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                                >
+                                    ★
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Your Feedback</label>
+                        <textarea
+                            className="w-full border rounded p-2"
+                            rows={4}
+                            placeholder="Write your feedback here..."
+                            value={feedbackMessage || ""}
+                            onChange={e => setFeedbackmessage(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            className="bg-green-500 text-white px-4 py-2 rounded"
+                            onClick={async () => {
+                                if(!feedbackRating){
+                                    Swal.fire({
+                                        title: "Please provide a rating",
+                                        icon: 'warning',
+                                        confirmButtonText: 'Ok'
+                                    });
+                                    return;
+                                }
+                                try {
+                                    setLoading(true);
+                                    await axiosIntance.post('/front/submit_feedback', {
+                                        order_id: feedbackOrderId,
+                                        rating: feedbackRating,
+                                        feedback: feedbackMessage,
+                                        user_id: localStorage.getItem('user_id'),
+                                    });
+                                    setFeedbackModal(false);
+                                    
+                                } catch (e) {
+                                    Swal.fire({
+                                        title: "Failed to submit feedback.",
+                                        icon: 'warning',
+                                        confirmButtonText: 'Ok'
+                                    });
+                                    return;
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }}
+                        >
+                            Submit
+                        </button>
+                        <button
+                            className="bg-gray-400 text-white px-4 py-2 rounded"
+                            onClick={() => setFeedbackModal(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
                 </CModalBody>
             </CModal>
         </div>
