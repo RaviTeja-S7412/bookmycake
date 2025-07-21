@@ -17,7 +17,7 @@ import {
   Bars3Icon, XMarkIcon, ChevronDownIcon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon, EnvelopeIcon, PhoneIcon
 } from '@heroicons/react/24/outline';
 import NavBarItems from "../../Data/NavMenu";
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import axiosIntance from '../axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart } from '../../redux/actions/front/cart.actions';
@@ -62,7 +62,7 @@ export default function HomeHeader() {
             placeholder="Search for cakes, occasion, flavor and more"
             className="w-full border rounded-full pl-10 pr-4 py-2 text-sm"
             value={searchParams?.get('search') ? searchParams?.get('search') : ''}
-            onChange={(e) => navigate('/collections?search='+e.target.value)}
+            onChange={(e) => navigate('/collections?search=' + e.target.value)}
           />
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
@@ -70,8 +70,8 @@ export default function HomeHeader() {
         {/* Right: Support + Icons */}
         <div className="flex items-center gap-4 min-w-[250px] justify-end">
           <div className="text-xs text-left leading-tight">
-            <div className="flex text-black font-bold text-sm items-center mb-2"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</div>
-            <div className="flex text-black font-bold text-sm items-center"><PhoneIcon className='h-5 w-5 mr-2' />+91 9990026799</div>
+            <div className="flex text-black font-bold text-sm items-center mb-2"><NavLink to="/" className="flex items-center mb-0 text-black"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</NavLink></div>
+            <div className="flex text-black font-bold text-sm items-center"><NavLink to="/" className="flex items-center mb-0 text-black"><PhoneIcon className='h-5 w-5 mr-2' />+91 9990026799</NavLink></div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
@@ -84,17 +84,17 @@ export default function HomeHeader() {
             </div>
             <div className="cursor-pointer icon-user">
               <UserIcon className="h-7 w-7 text-gray-600" onClick={() => localStorage.getItem('user_id') ? '' : navigate('/login')} />
-                {localStorage.getItem('user_id') ? 
-                  <ul className="profil-drop">
-                    <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
-                    <hr className='!m-2' />
-                    <li className='block' onClick={() => {
-                      localStorage.clear();
-                      navigate('/login')
-                    }}>Logout</li>
-                  </ul>
-                  : ''
-                }
+              {localStorage.getItem('user_id') ?
+                <ul className="profil-drop">
+                  <li className='block' onClick={() => navigate('/my-profile')}>Profile</li>
+                  <hr className='!m-2' />
+                  <li className='block' onClick={() => {
+                    localStorage.clear();
+                    navigate('/login')
+                  }}>Logout</li>
+                </ul>
+                : ''
+              }
             </div>
           </div>
         </div>

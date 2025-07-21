@@ -1,8 +1,10 @@
 // components/DesignerCollections.jsx
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import CIcon from '@coreui/icons-react'
+import { cilBookmark } from '@coreui/icons'
 
-export default function DesignerCollections({data}) {
+export default function DesignerCollections({ data }) {
 
   const navigate = useNavigate();
   const settings = {
@@ -52,17 +54,27 @@ export default function DesignerCollections({data}) {
           <Slider {...settings}>
             {data?.map((feature, index) => {
               var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
-              return(
-                <div key={index} className="p-2 cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
-                  <div className="border border-[#b5b6b8] overflow-hidden relative">
+              return (
+                <div key={index} className="p-2">
+                  <div className="border border-[#b5b6b8] overflow-hidden relative cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                    <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border border-green-500 bg-white rounded flex items-center justify-center">
+                      <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
+                    </div>
                     <img src={import.meta.env.VITE_APIBASE_URL + feature?.product_image} alt={feature?.product_name} className="w-full max-h-[290px] object-cover" />
                   </div>
-                  <div className="bg-[#1f1f1f] flex text-[#ffb14f] py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-sm mb-[30px] px-3 justify-between">
-                    <p className="mb-0">{feature?.product_name}</p>
-                    <p className="mb-0">₹ {startingSize?.price}</p>
+                  <div className="bg-[#1f1f1f] text-[#ffb14f] py-[10px] font-[poppins] poppins-medium shadow-md w-4/5 mx-auto mt-[-20px] z-10 relative border border-[#b5b6b8] text-sm  px-3 justify-between">
+                    <div className="flex justify-between">
+                      <p className="mb-0">{feature?.product_name}</p>
+                      <p className="mb-0">₹ {startingSize?.price}</p>
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <p className="mb-0">Weight: {startingSize?.weight ? startingSize.weight / 1000 : ''} kg</p>
+                      <p className="mb-0 cursor-pointer"><CIcon icon={cilBookmark} /></p>
+                    </div>
                   </div>
                 </div>
-              )}
+              )
+            }
             )}
           </Slider>
         </div>

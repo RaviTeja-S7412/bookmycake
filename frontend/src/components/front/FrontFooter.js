@@ -5,7 +5,7 @@ const FrontFooter = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   return (
-    <div className='mt-5 bg-orange-100 font-[poppins]'>
+    <div className='mt-5 bg-[#fbd6db] font-[poppins]'>
       <footer class="default-width text-red-600 px-0 py-10">
         {/* <!-- Newsletter Subscription --> */}
         <div class="mb-10 xl:grid xl:grid-cols-2 2xl:grid 2xl:grid-cols-2 lg:grid lg:grid-cols-2 block gap-4">
