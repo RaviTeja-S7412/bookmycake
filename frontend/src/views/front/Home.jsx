@@ -2,9 +2,10 @@ import Carousel from "../../components/carousel/Carousel"
 import Reviews from "../../components/reviews/Reviews"
 import Products from "../../Data/Products"
 import CategoryCards from "../../components/categorycards";
+import BirthdayCollection from "../../components/BirthdayCollection";
 import Sweetfullcakes from "../../components/sweetfullcakes";
 import CorporateCollections from "../../components/corporatecollect";
- import DesignerCollections from "../../components/DesignerCollections";
+import DesignerCollections from "../../components/DesignerCollections";
 import FeaturedCollection from "../../components/FeaturedCollection";
 import axiosIntance from "../../components/axios";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ export default function Home() {
       customer_type: localStorage?.getItem('user_type') ? localStorage?.getItem('user_type') : 'retail'
     };
     const res = await axiosIntance.get(`/admin/get_homepage_data?customer_type=${params.customer_type}`);
-    
+
     if (res.status === 200) {
       setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));
       setDesignerProducts(res?.data?.selectedProducts?.filter(product => product.isDesignercollections === 'true'));
@@ -58,10 +59,10 @@ export default function Home() {
           <DesignerCollections data={designerProducts} />
         )}
         <Sweetfullcakes />
+        <BirthdayCollection />
         {corporateProducts?.length > 0 && (
           <CorporateCollections data={corporateProducts} />
         )}
-
         <section className="default-width mx-auto my-3">
           <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
           <div className="mt-6">
