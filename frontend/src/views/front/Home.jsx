@@ -9,6 +9,8 @@ import DesignerCollections from "../../components/DesignerCollections";
 import FeaturedCollection from "../../components/FeaturedCollection";
 import axiosIntance from "../../components/axios";
 import { useEffect, useState } from "react";
+import Pastries from "../../components/Pastries";
+import IndianCollection from "../../components/IndianCollection";
 
 export default function Home() {
 
@@ -60,6 +62,8 @@ export default function Home() {
         )}
         <Sweetfullcakes />
         <BirthdayCollection />
+        <Pastries />
+        <IndianCollection />
         {corporateProducts?.length > 0 && (
           <CorporateCollections data={corporateProducts} />
         )}

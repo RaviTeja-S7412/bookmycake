@@ -102,11 +102,17 @@ export default function BirthdayCollection() {
                                                     <p className="font-semibold mb-0">{feature.product_name}</p>
                                                     <p className="font-medium mb-0">₹ {price}</p>
                                                 </div>
-                                                <img
-                                                    src={feature.product_image}
-                                                    alt={feature.product_name}
-                                                    className="w-full max-h-[290px] object-cover cursor-pointer"
-                                                />
+                                                {/* Veg icon on image */}
+                                                <div className="relative">
+                                                    <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border border-green-500 bg-white rounded flex items-center justify-center">
+                                                        <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
+                                                    </div>
+                                                    <img
+                                                        src={feature.product_image}
+                                                        alt={feature.product_name}
+                                                        className="w-full max-h-[290px] object-cover cursor-pointer"
+                                                    />
+                                                </div>
                                                 <div className="p-1 rounded-lg">
                                                     <div className="flex justify-between mt-2">
                                                         <p className="mb-0">Weight: {options[0]?.weight ? options[0].weight / 1000 + " kg" : "N/A"}</p>
