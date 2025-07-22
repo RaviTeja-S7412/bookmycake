@@ -45,7 +45,7 @@ export default function HomeHeader() {
   return (
     <header className="bg-white font-[Poppins]">
       <div>
-        <div className="bg-gray-200 text-[#bc4d5e] text-center py-2 text-sm font-[500]">
+        <div className="bg-[#ed1016] text-[#fff] text-center py-2 text-sm font-[500]">
           <span>Book My Cake - Har Teohar Ka Cake: Book My Cake | Freshness home delivered</span>
         </div>
       </div>
@@ -70,8 +70,8 @@ export default function HomeHeader() {
         {/* Right: Support + Icons */}
         <div className="flex items-center gap-4 min-w-[250px] justify-end">
           <div className="text-xs text-left leading-tight">
-            <div className="flex text-black font-bold text-sm items-center mb-2"><NavLink to="/" className="flex items-center mb-0 text-black"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</NavLink></div>
-            <div className="flex text-black font-bold text-sm items-center"><NavLink to="/" className="flex items-center mb-0 text-black"><PhoneIcon className='h-5 w-5 mr-2' />+91 9990026799</NavLink></div>
+            <div className="flex text-black text-sm items-center mb-2"><NavLink to="/" className="flex items-center mb-0 text-black !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</NavLink></div>
+            <div className="flex text-black text-sm items-center"><NavLink to="/" className="flex items-center mb-0 text-black !no-underline"><PhoneIcon className='h-5 w-5 mr-2' />+91 9990026799</NavLink></div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Track Order</span>
@@ -103,7 +103,7 @@ export default function HomeHeader() {
 
 
       {/* Desktop navigation bar - only visible on large screens */}
-      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#bc4d5e]">
+      <nav className="hidden lg:flex justify-center gap-6 text-sm font-medium text-white px-2 border-t bg-[#ed1016]">
         <div className="flex gap-4">
           {menuItems.map((item) => (
             <div

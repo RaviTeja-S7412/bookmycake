@@ -52,7 +52,7 @@ export default function CategoryCards({ categories }) {
             {categories?.map((cat, index) => (
               <div className="p-2" key={index} onClick={() => navigate('/collections/' + cat.route)}>
                 <div
-                  className="bg-[#bc4d5e] text-white rounded-3xl p-1 shadow-md hover:shadow-lg transition-all duration-300"
+                  className="bg-[#ed1016] text-white rounded-3xl p-1 shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <img src={import.meta.env.VITE_APIBASE_URL + cat.category_image} alt={cat.category_name} className="mb-3 lg:w-[30%] text-center mx-auto" />
                   <div className="text-center poppins-semibold">{cat.category_name}</div>

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import CIcon from '@coreui/icons-react'
+import { cilBookmark } from '@coreui/icons'
 
 
 export default function CorporateCollections({ data }) {
@@ -46,19 +48,19 @@ export default function CorporateCollections({ data }) {
   };
 
   return (
-    <div className="flex xl:flex-row lg:flex-row flex-col bg-black text-white !bg-[#ac8657]">
+    <div className="flex xl:flex-row lg:flex-row flex-col bg-black !bg-[#ac8657] font-[poppins]">
       {/* Left Content Block */}
-      <div className="xl:w-2/5 lg:w-2/5 w-full bg-[#2e1e1c] p-[10px] sm:p-[40px] flex justify-center items-center">
-        <div className="border border-2 border-white rounded-xl p-[10px] sm:p-[40px]">
+      <div className="xl:w-2/5 lg:w-2/5 w-full bg-[#fff] p-[10px] sm:p-[40px] flex justify-center items-center">
+        <div className="border border-2 !border-[#ed1016] rounded-xl p-[10px] sm:p-[40px]">
           <div className="d-flex items-center">
             <img
               src="assets/images/candle-cake.png"
               alt="Corporate Collection"
               className=""
             />
-            <h2 className="text-xl text-white poppins-semibold ml-5 mt-3">Why BMC for your Corporate Cakes:</h2>
+            <h2 className="text-xl !text-[#ed1016] poppins-semibold ml-5 mt-3">Why BMC for your Corporate Cakes:</h2>
           </div>
-          <p className="text-xl text-white poppins-regular mt-4">At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.</p>
+          <p className="text-xl !text-[#ed1016] poppins-regular mt-4">At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.</p>
 
           <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4" onClick={() => navigate('/collections/corporate-cakes')}>
             Explore
@@ -72,27 +74,41 @@ export default function CorporateCollections({ data }) {
           <Slider {...settings}>
             {data?.map((feature, index) => {
               var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
-              return(
-                <div key={index} className="relative d-block" onClick={() => navigate('/products/' + feature?.route)}>
-                  <div className="relative group ins-brdr cursor-pointer">
+              return (
+                <div key={index} className="p-2 bg-white" onClick={() => navigate('/products/' + feature?.route)}>
+                  <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer">
+                    {/* Veg icon on image */}
+                    <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border-2 border-green-500 bg-white flex items-center justify-center">
+                      <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
+                    </div>
                     <img
                       src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
-                      alt={feature?.product_name}
-                      className="object-cover object-center max-h-[300px] w-full"
+                      alt={feature.product_name}
+                      className="w-full h-48 object-cover"
+                      onClick={() => navigate('/products/' + feature?.route)}
                     />
-                    {/* Black gradient overlay effect */}
-                    <div className="absolute bottom-0 left-0 right-0 h-50 bg-gradient-to-t from-black to-transparent z-0" />
-                    <div className="flex absolute bottom-5 left-0 right-0 text-center z-10 justify-between items-center px-4">
-                      <p className="text-white text-sm poppins-semibold font-[poppins] mb-0">
-                        {feature?.product_name}
-                      </p>
-                      <p className="text-white text-sm font-semibold mt-1 font-[poppins] mb-0">
-                        ₹ {startingSize?.price}
-                      </p>
+                  </div>
+                  <div className="relative">
+                    <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                      <p className="font-semibold mt-2 mb-0">{feature.product_name}</p>
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="font-medium mb-0">₹ {startingSize?.price}</p>
+                      <div className="p-1 cursor-pointer">
+                        <CIcon icon={cilBookmark} />
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-yellow-500 text-sm">&#9733;</span>
+                      {feature?.ratings_count > 0 ?
+                        <span className="text-gray-600 ml-1">{Number(feature?.avg_rating).toFixed(0)} <small>({feature?.ratings_count} {feature?.ratings_count > 1 ? 'Reviews' : 'Review'})</small></span>
+                        : <span className="text-gray-600 ml-1">No Reviews</span>
+                      }
                     </div>
                   </div>
                 </div>
-              )}
+              )
+            }
             )}
           </Slider>
         </div>
