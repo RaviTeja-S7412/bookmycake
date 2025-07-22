@@ -30,7 +30,7 @@ export default function Contact() {
 
 
     return (
-        <div className="sm:w-5xl font-[Poppins] mx-auto px-5">
+        <div className="default-width font-[Poppins] mx-auto px-5">
             <form className="space-y-4 max-w-3xl w-full mx-auto" onSubmit={handleSubmit}>
                 <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 mb-3">Contact</h2>
                

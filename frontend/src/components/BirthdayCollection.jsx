@@ -67,7 +67,7 @@ export default function BirthdayCollection({ data }) {
                                                 </div>
                                                 {/* Veg icon on image */}
                                                 <div className="relative">
-                                                    <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border border-green-500 bg-white rounded flex items-center justify-center">
+                                                    <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border-2 border-green-500 bg-white flex items-center justify-center">
                                                         <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
                                                     </div>
                                                     <img

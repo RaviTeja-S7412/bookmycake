@@ -6,7 +6,7 @@ export default function Policy() {
 
 
     return (
-        <div className="sm:w-7xl font-[Poppins] mx-auto">
+        <div className="default-width font-[Poppins] mx-auto">
             <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900">Cancellation and Refund Policy</h2>
             <ul className="list-disc list-inside text-gray-700 mt-4 leading-10">
                 <li>As all orders are customized as per the customer’s requirement and are perishable in nature, refund on any cancellation is not possible on the same day</li>
