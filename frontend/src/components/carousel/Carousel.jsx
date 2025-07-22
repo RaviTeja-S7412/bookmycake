@@ -14,7 +14,7 @@ import './styles.css';
 // import required modules
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 
-export default function Carousel({data}) {
+export default function Carousel({ data }) {
   return (
     <>
       <Swiper
@@ -33,7 +33,7 @@ export default function Carousel({data}) {
       >
         {
           data?.map(image => (
-            <SwiperSlide className='relative'>
+            <SwiperSlide key={image.id || image._id || image.image} className='relative'>
               <img src={import.meta.env.VITE_APIBASE_URL + image?.image} alt={image.name} className='w-full' />
               {/* Black overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>

@@ -62,8 +62,8 @@ export default function BirthdayCollection({ data }) {
                                         <div className="!bg-white rounded">
                                             <div className="relative feature-img overflow-hidden">
                                                 <div className="p-3 rounded-lg flex justify-between">
-                                                    <p className="font-semibold mb-0">{feature.product_name}</p>
-                                                    <p className="font-medium mb-0">₹ {price?.price}</p>
+                                                    <p className="font-semibold mb-0 text-ellipsis overflow-hidden whitespace-nowrap">{feature.product_name}</p>
+                                                    <p className="font-medium mb-0 text-ellipsis overflow-hidden whitespace-nowrap">₹ {price?.price}</p>
                                                 </div>
                                                 {/* Veg icon on image */}
                                                 <div className="relative">
