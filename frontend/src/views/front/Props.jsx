@@ -108,24 +108,24 @@ export default function Props() {
           <div className="2xl:w-1/4 xl:w-1/4 md:w-full sm:w-full rwd-laptop-left border-r-2 border-gray-200 sm:block max-h-[50vh] overflow-y-auto p-2">
             <p className="text-black font-semibold text-lg">Selected Product</p>
             {selectedItems?.map((si) => 
-              <div class="w-[100%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
+              <div className="w-[100%] bg-white border-2 border-gray-200 rounded-md p-2 flex items-center space-x-6 mb-2">
                 {/* <!-- Cake Image --> */}
                 <img src={import.meta.env.VITE_APIBASE_URL + si?.product_data?.product_image} alt={si?.product_data?.product_name}
-                  class="w-20 h-20 object-cover rounded-lg shadow-md" />
+                  className="w-20 h-20 object-cover rounded-lg shadow-md" />
 
                 {/* <!-- Cake Info --> */}
-                <div class="flex-1">
-                  <p class="!text-md font-semibold text-gray-800 mb-0">{si?.product_data?.product_name}</p>
-                  <p class="text-md text-gray-900 font-bold mt-2 mb-0">₹ {si?.product_price}</p>
+                <div className="flex-1">
+                  <p className="!text-md font-semibold text-gray-800 mb-0">{si?.product_data?.product_name}</p>
+                  <p className="text-md text-gray-900 font-bold mt-2 mb-0">₹ {si?.product_price}</p>
 
                   {/* <!-- Details --> */}
-                  <div class="mt-1 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                  <div className="mt-1 grid grid-cols-2 gap-4 text-sm text-gray-600">
                     <div>
-                      <span class="font-semibold text-gray-800">Flavour</span><br />
+                      <span className="font-semibold text-gray-800">Flavour</span><br />
                       {si?.flavor}
                     </div>
                     <div>
-                      <span class="font-semibold text-gray-800">Weight</span><br />
+                      <span className="font-semibold text-gray-800">Weight</span><br />
                       {si?.weight/1000} KG
                     </div>
                   </div>

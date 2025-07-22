@@ -4,9 +4,9 @@ const Services = () => {
 
     return (
         <>
-        <body class="index-page">
+        <body className="index-page">
 
-            <main class="main">
+            <main className="main">
                 services
             </main>
 

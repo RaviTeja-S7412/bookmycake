@@ -47,7 +47,7 @@ const WidgetsDropdown = (props) => {
   }
 
   return (
-    <div class="grid grid-cols-4 gap-3 font-[poppins]">
+    <div className="grid grid-cols-4 gap-3 font-[poppins]">
       <div className='shadow-sm p-4 cursor-pointer rounded-md bg-[#00ab92] text-white' onClick={() => navigate('/admin/users')} >
         <span className="bg-blue-100 text-blue-600 rounded-full p-2 inline-flex items-center justify-center shadow-sm">
           <img src="/assets/icons/dashboard/user.png" alt="User Icon" />

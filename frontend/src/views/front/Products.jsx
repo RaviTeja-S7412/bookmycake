@@ -280,11 +280,11 @@ export default function Products() {
                 };
 
                 return (
-                  loading ? <div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
-                    <div class="animate-pulse">
-                      <div class="flex mb-4 rounded-sm dark:bg-gray-700">
+                  loading ? <div className="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
+                    <div className="animate-pulse">
+                      <div className="flex mb-4 rounded-sm dark:bg-gray-700">
                         <svg width="300" height="220" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-                          <text x="30" y="80" class="svg-text">BookMyCake</text>
+                          <text x="30" y="80" className="svg-text">BookMyCake</text>
                         </svg>
                       </div>
                     </div>
