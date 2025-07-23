@@ -48,7 +48,7 @@ export default function CorporateCollections({ data }) {
   };
 
   return (
-    <div className="flex xl:flex-row lg:flex-row flex-col bg-black !bg-[#ac8657] font-[poppins]">
+    <div className="flex xl:flex-row lg:flex-row flex-col bg-white font-[poppins]">
       {/* Left Content Block */}
       <div className="xl:w-2/5 lg:w-2/5 w-full bg-[#fff] p-[10px] sm:p-[40px] flex justify-center items-center">
         <div className="border border-2 !border-[#ed1016] rounded-xl p-[10px] sm:p-[40px]">

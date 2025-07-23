@@ -314,7 +314,7 @@ export default function Products() {
                       </div>
                       <div className="relative">
                         <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + product.route)}>
-                          <p className="font-semibold mt-2 mb-0">{product.product_name}</p>
+                          <p className="font-semibold mt-2 mb-0 text-ellipsis overflow-hidden whitespace-nowrap">{product.product_name}</p>
                         </div>
                         <div className="flex items-center justify-between mt-2">
                           <p className="font-medium mb-0">₹ {startingSize?.price}</p>

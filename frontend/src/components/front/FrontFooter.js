@@ -6,7 +6,7 @@ const FrontFooter = () => {
   const currentYear = new Date().getFullYear();
   return (
     <>
-      <div className='bg-gray-200 font-[poppins]'>
+      <div className='!bg-[#ffe9d9] font-[poppins]'>
         <footer className="default-width text-red-600 px-0 pt-10">
           {/* <!-- Newsletter Subscription --> */}
           <div className="mb-10 xl:grid xl:grid-cols-2 2xl:grid 2xl:grid-cols-2 lg:grid lg:grid-cols-2 block gap-4">

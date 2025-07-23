@@ -68,7 +68,7 @@ export default function DesignerCollections({ data }) {
                   </div>
                   <div className="relative">
                     <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
-                      <p className="font-semibold mt-2 mb-0">{feature?.product_name}</p>
+                      <p className="font-semibold mt-2 mb-0 text-ellipsis overflow-hidden whitespace-nowrap">{feature?.product_name}</p>
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <p className="font-medium mb-0">₹ {startingSize?.price}</p>
