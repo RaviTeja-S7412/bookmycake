@@ -165,7 +165,7 @@ export default function Products() {
 
       <div className="flex flex-wrap md:flex-nowrap">
         {/* Sidebar Filters */}
-        <div className="md:w-1/4 p-4 bg-[#910f3f] mb-6 md:mb-0 text-white" style={{ height: 'fit-content' }}>
+        <div className="md:w-1/4 p-4 bg-[#ed1016] mb-6 md:mb-0 text-white" style={{ height: 'fit-content' }}>
           {/* Price */}
           <div onClick={() => setShowPrice(!showPrice)} className="flex justify-between items-center cursor-pointer mb-1">
             <h6 className="poppins-semibold mb-0">Price</h6>
@@ -238,7 +238,7 @@ export default function Products() {
 
         {/* Product Grid */}
         <div className="md:w-3/4 md:pl-6">
-          <div className="flex justify-between items-center mb-4 bg-[#910f3f] p-2 sm:p-4 text-white">
+          <div className="flex justify-between items-center mb-4 bg-[#ed1016] p-2 sm:p-4 text-white">
             <p className="poppins-semibold mb-0">{totalProducts} products</p>
             <div>
               <label className="mr-2 font-medium text-sm">Sort by:</label>
