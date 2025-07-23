@@ -5,6 +5,8 @@ import axiosIntance from "../../components/axios";
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
 import Pagination from '../../components/front/Pagination';
 import Spinner from '../../components/front/Spinner';
+import CIcon from '@coreui/icons-react'
+import { cilBookmark } from '@coreui/icons'
 
 export default function Products() {
 
@@ -289,8 +291,8 @@ export default function Products() {
                       </div>
                     </div>
                   </div> :
-                    <div key={index} className="shadow-md overflow-hidden bg-white ">
-                      <div className="relative">
+                    <div key={index} className="shadow-md p-2 bg-white ">
+                      <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer">
                         {!imgLoaded && (
                           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10 min-h-[220px]">
                             <svg className="animate-spin h-8 w-8 text-[#910f3f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -305,16 +307,28 @@ export default function Products() {
                         <img
                           src={import.meta.env.VITE_APIBASE_URL + product.product_image}
                           alt={product.product_image}
-                          className={`w-full h-auto object-cover cursor-pointer max-h-[320px]`}
+                          className={`w-full h-48 object-cover cursor-pointer max-h-[320px]`}
                           onClick={() => navigate('/products/' + product.route)}
                           onLoad={handleImgLoad}
                         />
                       </div>
-                      <div className="p-2">
-                        <h6 className="text-lg poppins-semibold cursor-pointer" onClick={() => navigate('/products/' + product.route)}>{product.product_name}</h6>
-                        <div className="flex items-center justify-between mt-2">
-                          <p className="text-lg poppins-bold mb-0">₹ {startingSize?.price}</p>
+                      <div className="relative">
+                        <div className="feature-title cursor-pointer" onClick={() => navigate('/products/' + product.route)}>
+                          <p className="font-semibold mt-2 mb-0">{product.product_name}</p>
                         </div>
+                        <div className="flex items-center justify-between mt-2">
+                          <p className="font-medium mb-0">₹ {startingSize?.price}</p>
+                          <div className="p-1 cursor-pointer">
+                            <CIcon icon={cilBookmark} />
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="text-yellow-500 text-sm">&#9733;</span>
+                            {product?.ratings_count > 0 ?
+                              <span className="text-gray-600 ml-1">{Number(product?.avg_rating).toFixed(0)} <small>({product?.ratings_count} {product?.ratings_count > 1 ? 'Reviews' : 'Review'})</small></span>
+                              : <span className="text-gray-600 ml-1">No Reviews</span>
+                            }
+                          </div>
                       </div>
                     </div>
 
