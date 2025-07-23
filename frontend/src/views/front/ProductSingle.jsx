@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axiosIntance from "../../components/axios";
 import Swal from 'sweetalert2'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,6 +8,8 @@ import InnerImageZoom from 'react-inner-image-zoom'
 import 'react-inner-image-zoom/lib/styles.min.css'
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import CIcon from '@coreui/icons-react'
+import { cilBookmark } from '@coreui/icons'
 
 export default function ProductSingle() {
   const images = [
@@ -22,7 +24,7 @@ export default function ProductSingle() {
   const dayAfterTomorrow = new Date();
   dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
   dayAfterTomorrow.setHours(0, 0, 0, 0);
-  
+
   const [value, onChange] = useState(today.toDateString());
   const { product_id } = useParams();
   const navigate = useNavigate();
@@ -195,10 +197,24 @@ export default function ProductSingle() {
       {/* Product Info Section */}
       <div className="col-span-2">
         <h1 className="text-4xl font-bold mb-2">{product?.product_name}</h1>
+        {/* Ratings Section */}
+
+        <div className="flex items-center mb-2">
+          <div className="flex items-center mr-4">
+            <span className="text-yellow-500 text-sm">&#9733;</span>
+            {product?.ratings_count > 0 ?
+              <span className="text-gray-600 ml-1">{Number(product?.avg_rating).toFixed(0)} <small>({product?.ratings_count} {product?.ratings_count > 1 ? 'Reviews' : 'Review'})</small></span>
+              : <span className="text-gray-600 ml-1">No Reviews</span>
+            }
+          </div>
+          <div className="flex items-center">
+            <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline"><CIcon icon={cilBookmark} /> Add to Whishlist</NavLink>
+          </div>
+        </div>
         <p className="text-3xl font-bold text-black mb-2">
           ₹ {weights?.filter((w) => w.weight === selectedWeight)?.[0]?.price}
         </p>
-        <p className="text-sm text-gray-500 mb-4">Tax included.</p>
+        <p className="text-sm text-gray-500 mb-2">Tax included.</p>
         <p className="mb-4 text-lg">{product?.product_description}</p>
 
         {/* Flavor */}
