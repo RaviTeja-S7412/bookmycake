@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import axiosIntance from '../axios';
 
 const FrontFooter = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await axiosIntance.post(`/front/save_subscribe`, {email: email});
+    // console.log('res: ', res);
+    if (res.status === 200) {
+      setTimeout(() => {
+        location.reload()
+      }, 2000);
+    }
+  }
   return (
     <>
       <div className='bg-gray-200 font-[poppins]'>
@@ -14,11 +28,13 @@ const FrontFooter = () => {
               <h1 className="text-2xl font-bold mb-2">Subscribe to our Newsletter</h1>
             </div>
             <div>
-              <form className="flex justify-center mx-auto border-2 border-red-500 rounded-md">
+              <form className="flex justify-center mx-auto border-2 border-red-500 rounded-md" onSubmit={(e) => handleSubmit(e)}>
                 <input
                   type="email"
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-2 rounded-l-md focus:outline-none"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <button type="submit" className="px-4 py-2 rounded-r-md">
                   →

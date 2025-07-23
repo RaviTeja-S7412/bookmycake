@@ -22,6 +22,7 @@ const PrivacyPolicy = React.lazy(() => import('./views/front/PrivacyPolicy'));
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
   { path: '/collections', exact: true, name: 'Products', element: AllProducts },
+  { path: '/collections/shop-all', exact: true, name: 'Products', element: AllProducts },
   { path: '/collections/:category_id', exact: true, name: 'Products', element: AllProducts },
   { path: '/collections/:category_id/:sub_category_id', exact: true, name: 'Products', element: AllProducts },
   { path: '/products/:product_id', exact: true, name: 'Products', element: ProductSingle },
