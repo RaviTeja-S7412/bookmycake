@@ -23,12 +23,14 @@ const PropsCrud = React.lazy(() => import('./views/settings/props/crud'));
 const Orders = React.lazy(() => import('./views/orders'));
 const OrderDetails = React.lazy(() => import('./views/orders/orderDetails'));
 const Banners = React.lazy(() => import('./views/settings/banners'));
+const Subscribers = React.lazy(() => import('./views/subscribers'));
 
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
   { path: '/admin/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/admin/users', name: 'Users', element: Users },
   { path: '/admin/enquires', name: 'Enquires', element: Enquires},
+  { path: '/admin/subscribers', name: 'Subscribers', element: Subscribers},
   { path: '/admin/inventory/products', name: 'Products', element: Products },
   { path: '/admin/inventory/create-product', name: 'Products/Create Product', element: ProductCrud },
   { path: '/admin/inventory/update-product', name: 'Products/Update Product', element: ProductCrud },

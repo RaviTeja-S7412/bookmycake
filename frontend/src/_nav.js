@@ -70,18 +70,18 @@ const _nav = [
       }
     ],
   },
-   {
+  {
     component: CNavItem,
     name: 'Enquiries',
     to: '/admin/enquires',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
-  /* {
+  {
     component: CNavItem,
-    name: 'Payments',
-    to: '/theme/colors',
-    icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
-  }, */
+    name: 'Subscribers',
+    to: '/admin/subscribers',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  },
   {
     component: CNavGroup,
     name: 'Settings',

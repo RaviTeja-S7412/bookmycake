@@ -256,7 +256,7 @@ export default function Products() {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className={`grid grid-cols-1 sm:grid-cols-${loading ? '1' : '2'} lg:grid-cols-${loading ? '1' : '4'} gap-6`}>
             {/* Image loading state for each product */}
             {/*
               We'll use an array of booleans, one for each product, to track image loading.
@@ -268,6 +268,13 @@ export default function Products() {
               useEffect(() => {
                 setImgLoadedArr(Array(products.length).fill(false));
               }, [products.length]);
+              if (loading) {
+                return (
+                  <div className="mx-auto w-full max-w-sm text-center">
+                    <Spinner />
+                  </div>
+                )
+              }
 
               return products.map((product, index) => {
                 var startingSize = product?.product_options && JSON.parse(product.product_options)?.sort((a, b) => a.price - b.price)?.[0];
@@ -340,7 +347,7 @@ export default function Products() {
             <div className='align-content-center'>
               {totalProducts > itemsPerPage && <Pagination totalItems={totalProducts} itemsPerPage={itemsPerPage} setCurrPage={(page) => setCurrentPage(page)} />}
             </div>
-            : <div className='text-center text-bold mt-20'>No Products Found</div>}
+            : !loading && <div className='text-center text-bold mt-20'>No Products Found</div>}
         </div>
 
       </div>

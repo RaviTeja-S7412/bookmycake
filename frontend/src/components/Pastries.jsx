@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import CIcon from '@coreui/icons-react'
 import { cilBookmark } from '@coreui/icons'
+import Wishlist from "./front/Wishlist";
 
 export default function Pastries({ data }) {
 
@@ -88,7 +89,7 @@ export default function Pastries({ data }) {
                         data.map((feature, index) => {
                             var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
                             return (
-                                <div key={index} className="p-2 bg-white" onClick={() => navigate('/products/' + feature?.route)}>
+                                <div key={index} className="p-2 bg-white">
                                     <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer">
                                         {/* Veg icon on image */}
                                         <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border-2 border-green-500 bg-white flex items-center justify-center">
@@ -108,7 +109,7 @@ export default function Pastries({ data }) {
                                         <div className="flex items-center justify-between mt-2">
                                             <p className="font-medium mb-0">₹ {startingSize?.price}</p>
                                             <div className="p-1 cursor-pointer">
-                                                <CIcon icon={cilBookmark} />
+                                                <Wishlist product_id={feature?.pr_id} status={''} />
                                             </div>
                                         </div>
                                         <div className="flex items-center">
@@ -125,7 +126,7 @@ export default function Pastries({ data }) {
                     }
                 </div>
                 <div className="text-center">
-                    <button className="px-5 py-2 border rounded-full bg-red-500 text-white mt-5 border-2 border-white">View All</button>
+                    <button className="px-5 py-2 border rounded-full bg-red-500 text-white mt-5 border-2 border-white" onClick={() => navigate('/collections/pastry-small-cakes')}>View All</button>
                 </div>
             </div>
         </section>
