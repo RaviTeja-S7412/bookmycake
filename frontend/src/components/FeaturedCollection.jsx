@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import CIcon from '@coreui/icons-react'
 import { cilBookmark } from '@coreui/icons'
+import Wishlist from "./front/Wishlist";
 
 export default function FeaturedCollection({ data }) {
 
@@ -56,7 +57,7 @@ export default function FeaturedCollection({ data }) {
                 var startingSize = feature?.product_options && JSON.parse(feature.product_options)?.sort((a, b) => a.price - b.price)?.[0];
                 return (
                   <div key={index} className="p-2 bg-white">
-                    <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer" onClick={() => navigate('/products/' + feature?.route)}>
+                    <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer">
                       {/* Veg icon on image */}
                       <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border-2 border-green-500 bg-white flex items-center justify-center">
                         <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
@@ -65,6 +66,7 @@ export default function FeaturedCollection({ data }) {
                         src={import.meta.env.VITE_APIBASE_URL + feature?.product_image}
                         alt={feature?.product_name}
                         className="w-full h-48 object-cover"
+                        onClick={() => navigate('/products/' + feature?.route)}
                       />
                     </div>
                     <div className="relative">
@@ -74,7 +76,7 @@ export default function FeaturedCollection({ data }) {
                       <div className="flex items-center justify-between mt-2">
                         <p className="font-medium mb-0">₹ {startingSize?.price}</p>
                         <div className="p-1 cursor-pointer">
-                          <CIcon icon={cilBookmark} />
+                          <Wishlist product_id={feature?.pr_id} isWishlisted={feature?.isWishlisted} />
                         </div>
                       </div>
                       <div className="flex items-center">

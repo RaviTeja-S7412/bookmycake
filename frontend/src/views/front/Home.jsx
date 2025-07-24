@@ -27,10 +27,14 @@ export default function Home() {
 
   const getSelectedProducts = async () => {
     setLoading(true);
+    const user_id = localStorage.getItem('user_id');
     const params = {
       customer_type: localStorage?.getItem('user_type') ? localStorage?.getItem('user_type') : 'retail'
     };
-    const res = await axiosIntance.get(`/admin/get_homepage_data?customer_type=${params.customer_type}`);
+    if(user_id) {
+      params.user_id = user_id;
+    }
+    const res = await axiosIntance.get(`/admin/get_homepage_data?customer_type=${params.customer_type}&user_id=${params.user_id}`);
 
     if (res.status === 200) {
       setFeaturedProducts(res?.data?.selectedProducts?.filter(product => product.isFeaturedproducts === 'true'));

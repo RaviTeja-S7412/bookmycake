@@ -47,6 +47,7 @@ export default function ProductSingle() {
   const [weights, setWeights] = useState([]);
   const [areas, setAreas] = useState([]);
   const [message, setMessage] = useState('');
+  const [wishlisted, setWishlisted] = useState(''); // Default wishlist status
 
   const days = ['Today', 'Tomorrow', 'Calender'];
 
@@ -90,7 +91,8 @@ export default function ProductSingle() {
     setLoading(true);
 
     const params = {
-      route: product_id
+      route: product_id,
+      user_id: localStorage.getItem('user_id')
     };
 
     try {
@@ -105,6 +107,7 @@ export default function ProductSingle() {
         const weights = fetchedProduct?.product_options.filter(product => product.flavor === uniqueFlavors?.[0]);
         setSelectedWeight(weights?.[0]?.weight);
         setWeights(weights);
+        setWishlisted(fetchedProduct?.isWishlisted || 'Inactive'); // Set initial wishlist status
         setAreas(res.data.areas || []);
       } else {
       }
@@ -177,6 +180,35 @@ export default function ProductSingle() {
     return `${day}-${month}-${year}`
   }
 
+  const addToWishlist = async (status) => {
+    const userId = localStorage.getItem('user_id');
+      if (!userId) {
+        Swal.fire({
+          title: 'Please login to add items to wishlist',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+      setWishlisted(status);
+      const params = {
+        product_id: product?.id,
+        user_id: userId,
+        status: status
+      };
+      try {
+        const response = await axiosIntance.post(`/front/add_to_wishlist`, params);
+        if (response.status === 200) {
+          // setIsWishlisted(!isWishlisted);
+        } else {
+          
+        }
+      } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        // alert('An error occurred while adding to wishlist');
+      }
+    };
+
   return (
     <div className="default-width mx-auto p-4 lg:grid grid-cols-3 md:grid-cols-3 gap-4 font-[poppins]">
       {/* Image Gallery Section */}
@@ -208,7 +240,15 @@ export default function ProductSingle() {
             }
           </div>
           <div className="flex items-center">
-            <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline"><CIcon icon={cilBookmark} /> Add to Whishlist</NavLink>
+            { wishlisted === 'Active' ?
+              <span className="!text-red-600 hover:text-red-800 !no-underline cursor-pointer" onClick={() => addToWishlist("Inactive")}>
+                <i className='fa-solid fa-bookmark text-red-500'></i> Remove From Wishlist
+              </span> :
+              <span className="!text-red-600 hover:text-red-800 !no-underline cursor-pointer" onClick={() => addToWishlist("Active")}>
+                <i className='fa-regular fa-bookmark'></i> Add to Wishlist
+              </span>
+            }
+              {/* <span className="!text-red-600 hover:text-red-800 !no-underline"><CIcon icon={cilBookmark} /> Add to Wishlist</span> */}
           </div>
         </div>
         <p className="text-3xl font-bold text-black mb-2">
