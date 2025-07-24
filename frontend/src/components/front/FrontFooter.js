@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axiosIntance from '../axios';
+import {
+  EnvelopeIcon, PhoneIcon
+} from '@heroicons/react/24/outline';
 
 const FrontFooter = () => {
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ const FrontFooter = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axiosIntance.post(`/front/save_subscribe`, {email: email});
+    const res = await axiosIntance.post(`/front/save_subscribe`, { email: email });
     // console.log('res: ', res);
     if (res.status === 200) {
       setTimeout(() => {
@@ -53,7 +56,16 @@ const FrontFooter = () => {
                   /></span>
                 </NavLink>
               </div>
-              <div className='flex gap-4 mt-4'>
+              <div className='mt-1 2xl:w-[70%] xl:w-[70%] w-full'>
+                <p className="text-sm mt-2">
+                  At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.
+                </p>
+              </div>
+              <div className="text-xs text-left leading-tight">
+                <div className="flex text-sm items-center mb-2"><a href="mailto:info@bookmycake.co" className="flex items-center mb-0 !text-red-600 !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.com</a></div>
+                <div className="flex text-black text-sm items-center"><a href="tel:9870318105" className="flex items-center mb-0 !text-red-600 !no-underline"><PhoneIcon className='h-5 w-5 mr-2' />+91 9870318105</a></div>
+              </div>
+              <div className='flex gap-4 my-4'>
                 <div>
                   <NavLink to={"https://www.facebook.com/BookMyCakeIN"} target="_blank">
                     <img
@@ -131,9 +143,9 @@ const FrontFooter = () => {
                     <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Coupons & Offers</NavLink>
                     </li>
-                    <li className="mb-2">
+                    {/* <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Download App</NavLink>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </div>
@@ -143,7 +155,7 @@ const FrontFooter = () => {
       </div>
       <div className="text-center py-3 w-full bg-[#fbd6db] font-[poppins]">
         <p className="text-sm text-red-600 mb-0">
-          &copy; {currentYear} Bookmycake Pvt Ltd | U15146DL2021PTC389546 | 10823005001700
+          &copy; {currentYear} Bookmycake Pvt Ltd | <b>CIN:</b> U15146DL2021PTC389546 | <b>Fassi No:</b> 10823005001700
         </p>
       </div>
     </>
