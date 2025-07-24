@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 
 export default function Wishlist({product_id, isWishlisted}) {
   
-  const addToWishlist = async () => {
+  const [wishlisted, setWishlisted] = useState(isWishlisted);
+  const addToWishlist = async (status) => {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
       Swal.fire({
@@ -26,7 +27,7 @@ export default function Wishlist({product_id, isWishlisted}) {
       });
       return;
     }
-    const status = (isWishlisted == '') || (isWishlisted == 'Inactive') ? 'Active' : 'Inactive';
+    setWishlisted(status);
     const params = {
       product_id: product_id,
       user_id: userId,
@@ -46,9 +47,9 @@ export default function Wishlist({product_id, isWishlisted}) {
   };
 
   return (
-    // isWishlisted ?
-      // <i className='fa-solid fa-bookmark text-red-500' onClick={() => addToWishlist()}></i> :
-      <i className='fa-regular fa-bookmark' onClick={() => ''}></i>
+    wishlisted === 'Active' ?
+      <i className='fa-solid fa-bookmark text-red-500' onClick={() => addToWishlist("Inactive")}></i> :
+      <i className='fa-regular fa-bookmark' onClick={() => addToWishlist("Active")}></i>
   
   );
 }

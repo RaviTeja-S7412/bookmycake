@@ -7,6 +7,7 @@ import Pagination from '../../components/front/Pagination';
 import Spinner from '../../components/front/Spinner';
 import CIcon from '@coreui/icons-react'
 import { cilBookmark } from '@coreui/icons'
+import Wishlist from '../../components/front/Wishlist';
 
 export default function Products() {
 
@@ -47,6 +48,7 @@ export default function Products() {
   const getProducts = async (sort_by = '', search = '', min_price = '', max_price = '', selected_flavors = [], selected_weights = []) => {
     setLoading(true);
     const params = {
+      "user_id": localStorage.getItem('user_id'),
       "sort_by": sort_by,
       "search": search,
       "limit": itemsPerPage,
@@ -326,7 +328,7 @@ export default function Products() {
                         <div className="flex items-center justify-between mt-2">
                           <p className="font-medium mb-0">₹ {startingSize?.price}</p>
                           <div className="p-1 cursor-pointer">
-                            <CIcon icon={cilBookmark} />
+                            <Wishlist product_id={product?.product_id} isWishlisted={product?.isWishlisted} />
                           </div>
                         </div>
                         <div className="flex items-center">

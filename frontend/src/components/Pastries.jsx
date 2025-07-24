@@ -51,39 +51,6 @@ export default function Pastries({ data }) {
         <section className='bg-[#e6e7eb] bg-cover bg-no-repeat font-[poppins]'>
             <div className="default-width py-5">
                 <h4 className="sm:!text-4xl poppins-semibold mb-4">Pastries & Small Cakes</h4>
-                {/* <div className="slider-container">
-                     <Slider {...settings}>
-                        {
-                            products.map((feature, index) => {
-                                const options = JSON.parse(feature.product_options);
-                                const price = options[0]?.price || 0;
-                                return (
-                                    <div key={index} className="p-2">
-                                        <div className="!bg-white rounded">
-                                            <div className="relative feature-img overflow-hidden">
-                                                <div className="p-3 rounded-lg flex justify-between">
-                                                    <p className="font-semibold mb-0">{feature.product_name}</p>
-                                                    <p className="font-medium mb-0">₹ {price}</p>
-                                                </div>
-                                                <img
-                                                    src={feature.product_image}
-                                                    alt={feature.product_name}
-                                                    className="w-full max-h-[290px] object-cover cursor-pointer"
-                                                />
-                                                <div className="p-1 rounded-lg">
-                                                    <div className="flex justify-between mt-2">
-                                                        <p className="mb-0">Weight: {options[0]?.weight ? options[0].weight / 1000 + " kg" : "N/A"}</p>
-                                                        <p className="mb-0 cursor-pointer"><CIcon icon={cilBookmark} /></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                    </Slider>
-                </div> */}
                 <div className="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-4">
                     {
                         data.map((feature, index) => {
@@ -109,7 +76,7 @@ export default function Pastries({ data }) {
                                         <div className="flex items-center justify-between mt-2">
                                             <p className="font-medium mb-0">₹ {startingSize?.price}</p>
                                             <div className="p-1 cursor-pointer">
-                                                <Wishlist product_id={feature?.pr_id} status={''} />
+                                                <Wishlist product_id={feature?.pr_id} isWishlisted={feature?.isWishlisted} />
                                             </div>
                                         </div>
                                         <div className="flex items-center">
