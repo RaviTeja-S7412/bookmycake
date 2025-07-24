@@ -47,7 +47,7 @@ export default function BirthdayCollection({ data }) {
     };
 
     return (
-        <section className='bg-[url(/assets/images/designer-bg.jpg)] bg-cover bg-no-repeat bg-center font-[poppins]'>
+        <section className='bg-[#e6e7eb] bg-cover bg-no-repeat bg-center font-[poppins]'>
             <div className="default-width py-10">
                 <h4 className="sm:!text-4xl poppins-semibold text-gray-800 mb-4">Birthdays & Anniversaries</h4>
                 <div className="slider-container">
