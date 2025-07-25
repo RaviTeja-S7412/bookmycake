@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../components/axios";
-import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 
 export default function Careers() {
 
@@ -46,7 +46,7 @@ export default function Careers() {
                         <h4 className="!font-semibold">The Bakery & Confectionary Chef</h4>
                     </div>
                     <div className="ml-auto">
-                        <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={openModal}>Apply</button>
+                        <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={() => setVisible(!visible)}>Apply</button>
                     </div>
                 </div>
                 {/* Job Entities */}
@@ -81,17 +81,20 @@ export default function Careers() {
                 </div>
             </div>
             <CModal
-                // visible={feedbackModal}
-                // onClose={() => setFeedbackModal(false)}
-                className="font-['poppins']"
-                size="lg"
+                visible={visible}
+                onClose={() => setVisible(false)}
+                aria-labelledby="LiveDemoExampleLabel"
             >
                 <CModalHeader>
-                    <CModalTitle>Apply Job</CModalTitle>
+                    <CModalTitle id="LiveDemoExampleLabel">Modal title</CModalTitle>
                 </CModalHeader>
-                <CModalBody>
-
-                </CModalBody>
+                <CModalBody>Woohoo, you're reading this text in a modal!</CModalBody>
+                <CModalFooter>
+                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                        Close
+                    </CButton>
+                    <CButton color="primary">Save changes</CButton>
+                </CModalFooter>
             </CModal>
         </div>
     );
