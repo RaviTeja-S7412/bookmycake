@@ -3,38 +3,38 @@ import Slider from "react-slick";
 
 const reviews = [
     {
-        name: "Ashwini B.",
-        date: "1/20/2025",
+        name: "Aviral Prakash",
+        date: "1 Year ago",
         rating: 5,
-        review: "Good.",
-        itemType: "Real Madrid Cake",
+        review: "Food: 4/5  |  Service: 5/5  |  Atmosphere: 5/5",
+        itemType: "Rasmali Cake Jar",
         avatar: "/assets/images/avatars/1.jpg",
         image: "/assets/images/real_madrid.jpg"
     },
     {
-        name: "Amarendra Swain",
-        date: "1/20/2025",
+        name: "Baisaki Jana",
+        date: "2 years ago",
         rating: 5,
-        review: "Great Taste.",
-        itemType: "Chocolate Cake with Biscuits",
+        review: "Good....❤ it's really awesome..🥰",
+        itemType: "Photo Cake",
         avatar: "/assets/images/avatars/2.jpg",
         image: "/assets/images/delicious-cake-with-biscuits.jpg"
     },
     {
-        name: "Manoj",
-        date: "1/20/2025",
+        name: "Prachi Sharma",
+        date: "3 years ago",
         rating: 5,
-        review: "Awesome.",
-        itemType: "Creamy with Blueberry Cake",
+        review: "Fresh",
+        itemType: "Freshly Baked Cake",
         avatar: "/assets/images/avatars/3.jpg",
         image: "/assets/images/high-angle-delicious-chocolate-cake-concept.jpg"
     },
     {
-        name: "Rashi Khanna",
-        date: "1/20/2025",
+        name: "Sachin Singla",
+        date: "7 years ago",
         rating: 4,
         review: "Delicious.",
-        itemType: "Chocolate Indulgence Cake",
+        itemType: "Chocolate Cake",
         avatar: "/assets/images/avatars/4.jpg",
         image: "/assets/images/front-view-round-chocolate-cake-stand.jpg",
     },
@@ -91,7 +91,7 @@ export default function Carousel() {
                             <div className="bg-white border border-black font-[poppins] min-h-[400px] max-h-[400px] overflow-hidden">
                                 <div className='review_body p-4'>
                                     <div className="flex items-center">
-                                        <img src={review.avatar} alt={review.name} className="w-13 h-13 rounded-full mr-4" />
+                                        {/* <img src={review.avatar} alt={review.name} className="w-13 h-13 rounded-full mr-4" /> */}
                                         <div>
                                             <p className="!text-md poppins-semibold mb-0 mt-3">{review.name}</p>
                                             <p className="text-gray-500">{review.date}</p>
