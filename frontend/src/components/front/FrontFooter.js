@@ -10,7 +10,7 @@ const FrontFooter = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axiosIntance.post(`/front/save_subscribe`, {email: email});
+    const res = await axiosIntance.post(`/front/save_subscribe`, { email: email });
     // console.log('res: ', res);
     if (res.status === 200) {
       setTimeout(() => {
@@ -80,13 +80,13 @@ const FrontFooter = () => {
                   <h3 className="!text-xl !font-bold mb-2 uppercase">Know Us</h3>
                   <ul className="list-none p-0 mt-3">
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Our Story</NavLink>
+                      <NavLink to="/our-story" className="!text-red-600 hover:text-red-800 !no-underline">Our Story</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="/contact" className="!text-red-600 hover:text-red-800 !no-underline">Contact Us</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Locate Us</NavLink>
+                      <NavLink to="/location" className="!text-red-600 hover:text-red-800 !no-underline">Locate Us</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Blog</NavLink>
@@ -95,7 +95,7 @@ const FrontFooter = () => {
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Media</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Careers</NavLink>
+                      <NavLink to="/careers" className="!text-red-600 hover:text-red-800 !no-underline">Careers</NavLink>
                     </li>
                   </ul>
                 </div>
