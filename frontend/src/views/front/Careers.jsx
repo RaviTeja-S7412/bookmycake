@@ -7,27 +7,50 @@ export default function Careers() {
 
     const [visible, setVisible] = useState(false);
 
-    // const [formData, setFormData] = useState({
-    //     name: "",
-    //     email: "",
-    //     mobile: "",
-    //     comment: ""
-    // });
-
-    const [message, setMessage] = useState("");
+    const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        contact_number: "",
+        current_location: "",
+        zip_code: "",
+        relevant_experience: "",
+        total_experience: "",
+        file: null,
+    });
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if(e.target.name === "file") {
+            setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+        } else {
+            setFormData({ ...formData, [e.target.name]: e.target.value });
+        }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formDataToSend = new FormData();
+        for (const key in formData) {
+            formDataToSend.append(key, formData[key]);
+        }
         try {
-            const response = await axiosInstance.post("/front/enquiry", formData);
-            setMessage(response.data.message);
-            setFormData({ name: "", email: "", mobile: "", comment: "" });
+            const response = await axiosInstance.post("/user/apply_job", formDataToSend);
+            if(response?.status === 200) {
+                setFormData({
+                    first_name: "",
+                    last_name: "",
+                    email: "",
+                    contact_number: "",
+                    current_location: "",
+                    zip_code: "",
+                    relevant_experience: "",
+                    total_experience: "",
+                    file: null,
+                });
+                setVisible(false);
+            }
         } catch (error) {
-            setMessage(error.response?.data?.message || "Something went wrong");
+            
         }
     };
 
@@ -87,15 +110,17 @@ export default function Careers() {
                     <CModalTitle id="LiveDemoExampleLabel">Apply Job</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    <form>
+                    <form method="post" onSubmit={handleSubmit}>
                         <div className="2xl:grid g2xl:rid-cols-3 xl:grid xl:grid-cols-3 lg:grid lg:grid-cols-3 gap-3">
                             <div className="block">
                                 <label>First Name</label>
                                 <br />
                                 <input
                                     type="text"
-                                    name="firstname"
+                                    name="first_name"
                                     placeholder="First Name"
+                                    required
+                                    onChange={handleChange}
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
                             </div>
@@ -104,7 +129,8 @@ export default function Careers() {
                                 <br />
                                 <input
                                     type="text"
-                                    name="lastname"
+                                    name="last_name"
+                                    onChange={handleChange}
                                     placeholder="Last Name"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -113,8 +139,10 @@ export default function Careers() {
                                 <label>Email</label>
                                 <br />
                                 <input
-                                    type="mail"
-                                    name="mail"
+                                    type="email"
+                                    name="email"
+                                    onChange={handleChange}
+                                    required
                                     placeholder="Email"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -124,7 +152,9 @@ export default function Careers() {
                                 <br />
                                 <input
                                     type="number"
-                                    name="number"
+                                    name="contact_number"
+                                    onChange={handleChange}
+                                    required
                                     placeholder="Contact Number"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -134,8 +164,10 @@ export default function Careers() {
                                 <br />
                                 <input
                                     type="text"
-                                    name="Current Location"
-                                    placeholder="Last Name"
+                                    required
+                                    name="current_location"
+                                    onChange={handleChange}
+                                    placeholder="Current Location"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
                             </div>
@@ -143,8 +175,9 @@ export default function Careers() {
                                 <label>Zip Code</label>
                                 <br />
                                 <input
-                                    type="mail"
-                                    name="mail"
+                                    type="number"
+                                    name="zipcode"
+                                    onChange={handleChange}
                                     placeholder="Zip Code"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -153,8 +186,9 @@ export default function Careers() {
                                 <label>Relevant Experiance</label>
                                 <br />
                                 <input
-                                    type="text"
-                                    name="number"
+                                    type="number"
+                                    onChange={handleChange}
+                                    name="relevant_experience"
                                     placeholder="Relevant Experiance"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -163,8 +197,9 @@ export default function Careers() {
                                 <label>Total Experiance</label>
                                 <br />
                                 <input
-                                    type="text"
-                                    name="Current Location"
+                                    type="number"
+                                    name="total_experience"
+                                    onChange={handleChange}
                                     placeholder="Total Experiance"
                                     className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
                                 />
@@ -174,18 +209,17 @@ export default function Careers() {
                                 <br />
                                 <input
                                     type="file"
-                                    name="fie"
+                                    name="file"
+                                    onChange={handleChange}
                                     placeholder="Upload Resume"
                                     className="p-1 border-1 rounded-sm  w-full mt-1"
                                 />
                             </div>
                         </div>
+                        <button className="px-5 py-2 border rounded-full !bg-black text-white border-2 border-white mt-3" type="submit">Submit</button>
+                        <button type="button" className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white mt-3" onClick={() => setVisible(false)}>Close</button>
                     </form>
                 </CModalBody>
-                <CModalFooter className="!rounded-none py-1">
-                    <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={() => setVisible(false)}>Close</button>
-                    <button className="px-5 py-2 border rounded-full !bg-black text-white border-2 border-white">Submit</button>
-                </CModalFooter>
             </CModal>
         </div>
     );
