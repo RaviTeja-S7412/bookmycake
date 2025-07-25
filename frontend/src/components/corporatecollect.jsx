@@ -63,7 +63,7 @@ export default function CorporateCollections({ data }) {
           </div>
           <p className="text-xl !text-[#ed1016] poppins-regular mt-4">At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.</p>
 
-          <button className="border border-2 border-white text-white poppins-semibold px-5 py-2 rounded-lg mt-4" onClick={() => navigate('/collections/corporate-cakes')}>
+          <button className="border border-2 !border-[#ed1016] text-[#ed1016] poppins-semibold px-5 py-2 rounded-lg mt-4" onClick={() => navigate('/collections/corporate-cakes')}>
             Explore
           </button>
         </div>
