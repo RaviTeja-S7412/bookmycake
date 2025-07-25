@@ -359,3 +359,6 @@
     background-color: #ed1016 !important;
     box-shadow: inset 0 calc(-1 * var(--cui-accordion-border-width)) 0 #e6dbdb !important;
 }
+.collapse{
+    visibility: visible;
+}
