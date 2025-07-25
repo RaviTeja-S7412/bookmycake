@@ -87,7 +87,7 @@ const FrontFooter = () => {
               </div>
             </div>
             <div className='col-span-2'>
-              <div className='grid grid-cols-3 gap-4'>
+              <div className='sm:grid sm:grid-cols-3 gap-4'>
                 <div>
                   <h3 className="!text-xl !font-bold mb-2 uppercase">Know Us</h3>
                   <ul className="list-none p-0 mt-3">
@@ -101,10 +101,10 @@ const FrontFooter = () => {
                       <NavLink to="/location" className="!text-red-600 hover:text-red-800 !no-underline">Locate Us</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Blog</NavLink>
+                      <NavLink to="/blog" className="!text-red-600 hover:text-red-800 !no-underline">Blog</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Media</NavLink>
+                      <NavLink to="/media" className="!text-red-600 hover:text-red-800 !no-underline">Media</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="/careers" className="!text-red-600 hover:text-red-800 !no-underline">Careers</NavLink>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function OurStory() {
+export default function Location() {
 
     return (
         <div className="default-width font-[Poppins] mx-auto 2xl:px-5 xl:px-5 lg:px-5 md:px-0 mb-5">
