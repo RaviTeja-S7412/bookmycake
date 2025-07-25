@@ -58,7 +58,7 @@ const FrontFooter = () => {
               </div>
               <div className='mt-1 2xl:w-[70%] xl:w-[70%] w-full'>
                 <p className="text-sm mt-2">
-                  At BMC we guarantee the freshness of our cakes which are curated, crafted and made only after we receive orders from our esteemed corporate clients. Varieties are innovations are the two pillars that our Chefs always do focus on.
+                  In Delhi and Gurgaon, we can deliver the cakes to you within 3 Hrs of receiving the order if the order is placed before 8 pm. However, if done after 8 pm, then the order might be delivered the next day.
                 </p>
               </div>
               <div className="text-xs text-left leading-tight">
@@ -141,7 +141,7 @@ const FrontFooter = () => {
                       <NavLink to="/collections/corporate-cakes" className="!text-red-600 hover:text-red-800 !no-underline">Corporate Cakes</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Coupons & Offers</NavLink>
+                      <NavLink to="/coupons" className="!text-red-600 hover:text-red-800 !no-underline">Coupons & Offers</NavLink>
                     </li>
                     {/* <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Download App</NavLink>
