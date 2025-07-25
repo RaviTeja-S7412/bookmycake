@@ -347,3 +347,10 @@
     border-image-slice: 30;
     border-image-repeat: repeat;
 }
+
+.cross .btn-close {
+    --cui-btn-close-bg: url("../public/assets/close.png");
+    --cui-btn-close-color: #ffffff;
+    --cui-btn-close-opacity: 1;
+    --cui-btn-close-hover-opacity: 1;
+}
