@@ -62,7 +62,7 @@ const FrontFooter = () => {
                 </p>
               </div>
               <div className="text-xs text-left leading-tight">
-                <div className="flex text-sm items-center mb-2"><a href="mailto:info@bookmycake.co" className="flex items-center mb-0 !text-red-600 !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.com</a></div>
+                <div className="flex text-sm items-center mb-2"><a href="mailto:info@bookmycake.co" className="flex items-center mb-0 !text-red-600 !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</a></div>
                 <div className="flex text-black text-sm items-center"><a href="tel:9870318105" className="flex items-center mb-0 !text-red-600 !no-underline"><PhoneIcon className='h-5 w-5 mr-2' />+91 9870318105</a></div>
               </div>
               <div className='flex gap-4 my-4'>
@@ -92,13 +92,13 @@ const FrontFooter = () => {
                   <h3 className="!text-xl !font-bold mb-2 uppercase">Know Us</h3>
                   <ul className="list-none p-0 mt-3">
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Our Story</NavLink>
+                      <NavLink to="/our-story" className="!text-red-600 hover:text-red-800 !no-underline">Our Story</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="/contact" className="!text-red-600 hover:text-red-800 !no-underline">Contact Us</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Locate Us</NavLink>
+                      <NavLink to="/location" className="!text-red-600 hover:text-red-800 !no-underline">Locate Us</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Blog</NavLink>
@@ -107,7 +107,7 @@ const FrontFooter = () => {
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Media</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Careers</NavLink>
+                      <NavLink to="/careers" className="!text-red-600 hover:text-red-800 !no-underline">Careers</NavLink>
                     </li>
                   </ul>
                 </div>
@@ -155,7 +155,7 @@ const FrontFooter = () => {
       </div>
       <div className="text-center py-3 w-full bg-[#fbd6db] font-[poppins]">
         <p className="text-sm text-red-600 mb-0">
-          &copy; {currentYear} Bookmycake Pvt Ltd | <b>CIN:</b> U15146DL2021PTC389546 | <b>Fassi No:</b> 10823005001700
+          &copy; {currentYear} Bookmycake Pvt Ltd | <b>CIN:</b> U15146DL2021PTC389546 | <b>FSSAI No:</b> 10823005001700
         </p>
       </div>
     </>

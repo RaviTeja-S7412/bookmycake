@@ -70,7 +70,7 @@ export default function HomeHeader() {
         {/* Right: Support + Icons */}
         <div className="flex items-center gap-4 min-w-[250px] justify-end">
           <div className="text-xs text-left leading-tight">
-            <div className="flex text-black text-sm items-center mb-2"><a href="mailto:info@bookmycake.co" className="flex items-center mb-0 text-black !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.com</a></div>
+            <div className="flex text-black text-sm items-center mb-2"><a href="mailto:info@bookmycake.co" className="flex items-center mb-0 text-black !no-underline"><EnvelopeIcon className='h-5 w-5 mr-2' />info@bookmycake.co</a></div>
             <div className="flex text-black text-sm items-center"><a href="tel:9870318105" className="flex items-center mb-0 text-black !no-underline"><PhoneIcon className='h-5 w-5 mr-2' />+91 9870318105</a></div>
           </div>
           <div className="flex items-center gap-4">

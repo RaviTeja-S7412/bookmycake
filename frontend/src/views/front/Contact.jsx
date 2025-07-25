@@ -9,35 +9,34 @@ export default function Contact() {
         email: "",
         mobile: "",
         comment: ""
-    }); 
+    });
 
-  const [message, setMessage] = useState("");
+    const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]:e.target.value });
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try{
-        const response = await axiosInstance.post("/front/enquiry", formData);
-        setMessage(response.data.message);
-        setFormData({ name: "", email: "", mobile: "", comment: ""});
-    } catch (error){
-        setMessage(error.response?.data?.message || "Something went wrong");
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-  };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axiosInstance.post("/front/enquiry", formData);
+            setMessage(response.data.message);
+            setFormData({ name: "", email: "", mobile: "", comment: "" });
+        } catch (error) {
+            setMessage(error.response?.data?.message || "Something went wrong");
+        }
+    };
 
 
     return (
-        <div className="default-width font-[Poppins] mx-auto px-5">
+        <div className="default-width font-[Poppins] mx-auto px-5 mb-5">
             <form className="space-y-4 max-w-3xl w-full mx-auto" onSubmit={handleSubmit}>
                 <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 mb-3">Contact</h2>
-               
                 <div className="flex flex-col md:flex-row gap-4">
                     <input
                         type="text"
-                        name= "name"
+                        name="name"
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Name"
