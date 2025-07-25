@@ -115,7 +115,7 @@ const FrontFooter = () => {
                   <h3 className="!text-xl !font-bold mb-2 uppercase">Need Help</h3>
                   <ul className="list-none p-0 mt-3">
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">FAQ</NavLink>
+                      <NavLink to="/faq" className="!text-red-600 hover:text-red-800 !no-underline">FAQ</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="/cancellation-and-refund-policy" className="!text-red-600 hover:text-red-800 !no-underline">Cancellation and Refund</NavLink>
@@ -127,18 +127,18 @@ const FrontFooter = () => {
                       <NavLink to="/terms-and-conditions" className="!text-red-600 hover:text-red-800 !no-underline">Terms and Conditions</NavLink>
                     </li>
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Customer Grievance</NavLink>
+                      <NavLink to="/customer-griviance" className="!text-red-600 hover:text-red-800 !no-underline">Customer Grievance</NavLink>
                     </li>
-                    <li className="mb-2">
+                    {/* <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Sitemap</NavLink>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 <div>
                   <h3 className="!text-xl !font-bold mb-2 uppercase">More Info</h3>
                   <ul className="list-none p-0 mt-3">
                     <li className="mb-2">
-                      <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Corporate Cakes</NavLink>
+                      <NavLink to="/collections/corporate-cakes" className="!text-red-600 hover:text-red-800 !no-underline">Corporate Cakes</NavLink>
                     </li>
                     <li className="mb-2">
                       <NavLink to="#" className="!text-red-600 hover:text-red-800 !no-underline">Coupons & Offers</NavLink>

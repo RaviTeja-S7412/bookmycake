@@ -21,6 +21,8 @@ const PrivacyPolicy = React.lazy(() => import('./views/front/PrivacyPolicy'));
 const Careers = React.lazy(() => import('./views/front/Careers'));
 const OurStory = React.lazy(() => import('./views/front/OurStory'));
 const Location = React.lazy(() => import('./views/front/Location'));
+const CustomerGriviance = React.lazy(() => import('./views/front/CustomerGriviance'));
+const Faq = React.lazy(() => import('./views/front/Faq'));
 const Blog = React.lazy(() => import('./views/front/Blog'));
 const Media = React.lazy(() => import('./views/front/Media'));
 
@@ -49,6 +51,8 @@ const front_routes = [
   {path: '/location', exact: true, name: 'Location', element: Location},
   {path: '/blog', exact: true, name: 'Blog', element: Blog},
   {path: '/media', exact: true, name: 'Media', element: Media},
+  {path: '/customer-griviance', exact: true, name: 'Customer Griviance', element: CustomerGriviance},
+  {path: '/faq', exact: true, name: 'FAQ', element: Faq},
 ]
 
 export default front_routes

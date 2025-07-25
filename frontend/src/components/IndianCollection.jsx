@@ -54,7 +54,7 @@ export default function IndianCollection({ data }) {
                     }
                 </div>
                 <div className="text-center" >
-                    <button className="px-5 py-2 border rounded-full bg-[#ed1016] text-white mt-5 border-2 border-white" onClick={() => navigate('/collections/indian-fusion-cakes')}>View All</button>
+                    <button className="px-5 py-2 border rounded-full bg-[#ed1016] text-white mt-5 border-2 border-white" onClick={() => navigate('/collections/shop-all')}>View All</button>
                 </div>
             </div>
         </section>

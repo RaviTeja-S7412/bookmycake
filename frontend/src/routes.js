@@ -6,6 +6,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
 const Login = React.lazy(() => import('./views/Login'));
 const Users = React.lazy(() => import('./views/users'));
 const Enquires = React.lazy(() => import('./views/enquires'));
+const CustomerGrievance = React.lazy(() => import('./views/customergrievance'));
 const Products = React.lazy(() => import('./views/inventory/products'));
 const Categories = React.lazy(() => import('./views/inventory/categories'));
 const CategoryCrud = React.lazy(() => import('./views/inventory/categories/crud'));
@@ -24,12 +25,15 @@ const Orders = React.lazy(() => import('./views/orders'));
 const OrderDetails = React.lazy(() => import('./views/orders/orderDetails'));
 const Banners = React.lazy(() => import('./views/settings/banners'));
 const Subscribers = React.lazy(() => import('./views/subscribers'));
+const Job_applications = React.lazy(() => import('./views/job_applications'));
 
 const routes = [
   { path: '/admin/login', exact: true, name: 'Home', element: Login },
   { path: '/admin/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/admin/users', name: 'Users', element: Users },
   { path: '/admin/enquires', name: 'Enquires', element: Enquires},
+  { path: '/admin/job-applications', name: 'Job Applications', element: Job_applications},
+  { path: '/admin/customer-grievances', name: 'Customer Grievances', element: CustomerGrievance},
   { path: '/admin/subscribers', name: 'Subscribers', element: Subscribers},
   { path: '/admin/inventory/products', name: 'Products', element: Products },
   { path: '/admin/inventory/create-product', name: 'Products/Create Product', element: ProductCrud },
