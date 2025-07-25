@@ -88,7 +88,7 @@ export default function Careers() {
                 </CModalHeader>
                 <CModalBody>
                     <form>
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="2xl:grid g2xl:rid-cols-3 xl:grid xl:grid-cols-3 lg:grid lg:grid-cols-3 gap-3">
                             <div className="block">
                                 <label>First Name</label>
                                 <br />
