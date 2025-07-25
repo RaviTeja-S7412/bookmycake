@@ -54,6 +54,34 @@ const _nav = [
   },
   {
     component: CNavGroup,
+    name: 'Communications',
+    to: '/base',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Contact Queries',
+        to: '/admin/enquires',
+      },
+      {
+        component: CNavItem,
+        name: 'Customer Grievances',
+        to: '/admin/customer-grievances',
+      },
+      {
+        component: CNavItem,
+        name: 'Subscribers',
+        to: '/admin/subscribers',
+      },
+      {
+        component: CNavItem,
+        name: 'Job Applications',
+        to: '/admin/job-applications',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Orders',
     to: '/base',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,

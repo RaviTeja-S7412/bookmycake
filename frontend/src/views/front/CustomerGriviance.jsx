@@ -20,9 +20,11 @@ export default function CustomerGriviance() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-        const response = await axiosInstance.post("/front/enquiry", formData);
+        const response = await axiosInstance.post("/front/customer_griviance", formData);
         setMessage(response.data.message);
-        setFormData({ name: "", email: "", mobile: "", comment: ""});
+        if(response.status === 200) {
+            setFormData({ name: "", email: "", mobile: "", comment: ""});
+        }
     } catch (error){
         setMessage(error.response?.data?.message || "Something went wrong");
     }
@@ -30,9 +32,9 @@ export default function CustomerGriviance() {
 
 
     return (
-        <div className="default-width font-[Poppins] mx-auto px-5">
+        <div className="default-width font-[Poppins] mx-auto px-5 mb-5">
             <form className="space-y-4 max-w-3xl w-full mx-auto" onSubmit={handleSubmit}>
-                <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 mb-3">Contact</h2>
+                <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 mb-3">Customer Grievance</h2>
                
                 <div className="flex flex-col md:flex-row gap-4">
                     <input
