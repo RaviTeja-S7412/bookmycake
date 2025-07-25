@@ -7,18 +7,14 @@ export default function Careers() {
 
     const [visible, setVisible] = useState(false);
 
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        mobile: "",
-        comment: ""
-    });
+    // const [formData, setFormData] = useState({
+    //     name: "",
+    //     email: "",
+    //     mobile: "",
+    //     comment: ""
+    // });
 
     const [message, setMessage] = useState("");
-
-    const openModal = () => {
-        setVisible(true);
-    }
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -84,16 +80,111 @@ export default function Careers() {
                 visible={visible}
                 onClose={() => setVisible(false)}
                 aria-labelledby="LiveDemoExampleLabel"
+                className="border-0 font-[poppins] !rounded-none "
+                size="xl"
             >
-                <CModalHeader>
-                    <CModalTitle id="LiveDemoExampleLabel">Modal title</CModalTitle>
+                <CModalHeader className="bg-[#ed1016] !text-white cross py-2">
+                    <CModalTitle id="LiveDemoExampleLabel">Apply Job</CModalTitle>
                 </CModalHeader>
-                <CModalBody>Woohoo, you're reading this text in a modal!</CModalBody>
-                <CModalFooter>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
-                        Close
-                    </CButton>
-                    <CButton color="primary">Save changes</CButton>
+                <CModalBody>
+                    <form>
+                        <div className="2xl:grid g2xl:rid-cols-3 xl:grid xl:grid-cols-3 lg:grid lg:grid-cols-3 gap-3">
+                            <div className="block">
+                                <label>First Name</label>
+                                <br />
+                                <input
+                                    type="text"
+                                    name="firstname"
+                                    placeholder="First Name"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Last Name</label>
+                                <br />
+                                <input
+                                    type="text"
+                                    name="lastname"
+                                    placeholder="Last Name"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Email</label>
+                                <br />
+                                <input
+                                    type="mail"
+                                    name="mail"
+                                    placeholder="Email"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Contact Number</label>
+                                <br />
+                                <input
+                                    type="number"
+                                    name="number"
+                                    placeholder="Contact Number"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Current Location</label>
+                                <br />
+                                <input
+                                    type="text"
+                                    name="Current Location"
+                                    placeholder="Last Name"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Zip Code</label>
+                                <br />
+                                <input
+                                    type="mail"
+                                    name="mail"
+                                    placeholder="Zip Code"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Relevant Experiance</label>
+                                <br />
+                                <input
+                                    type="text"
+                                    name="number"
+                                    placeholder="Relevant Experiance"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Total Experiance</label>
+                                <br />
+                                <input
+                                    type="text"
+                                    name="Current Location"
+                                    placeholder="Total Experiance"
+                                    className="p-1 border-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#5b0026] w-full mt-1"
+                                />
+                            </div>
+                            <div className="block">
+                                <label>Upload Resume</label>
+                                <br />
+                                <input
+                                    type="file"
+                                    name="fie"
+                                    placeholder="Upload Resume"
+                                    className="p-1 border-1 rounded-sm  w-full mt-1"
+                                />
+                            </div>
+                        </div>
+                    </form>
+                </CModalBody>
+                <CModalFooter className="!rounded-none py-1">
+                    <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={() => setVisible(false)}>Close</button>
+                    <button className="px-5 py-2 border rounded-full !bg-black text-white border-2 border-white">Submit</button>
                 </CModalFooter>
             </CModal>
         </div>
