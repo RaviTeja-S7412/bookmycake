@@ -10,18 +10,29 @@ const InvoicePreview = ({ invoice }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow border border-gray-300">
-      {/* Logo */}
-      {/* <img
-        src={`${import.meta.env.VITE_APIBASE_URL}products/logo.jpg`}
-        alt="Logo"
-        className="w-40 mb-6"
-      /> */}
 
-      {/* Header */}
-      <div className="mb-6 text-center">
-        <h2 className="text-2xl font-bold mb-1">Invoice</h2>
-        <p>Invoice #: INV_000{order_details?.o_id}</p>
-        <p>Date: {new Date().toLocaleDateString()}</p>
+      <div className="flex flex-col md:flex-row gap-8 mb-6">
+        <div className="flex-1">
+          <p className='text-sm leading-2 font-bold'>Invoice # INV_000{order_details?.o_id}</p>
+          <p className='text-sm leading-2'>Date: {new Date().toLocaleDateString()}</p>    
+        </div>
+        <div className="flex-1 text-right">
+          <img
+            src={`${import.meta.env.VITE_APIBASE_URL}products/logo.jpg`}
+            alt="Logo"
+            className="w-40 mb-2 float-right"
+          /><br />
+          <p className='text-sm leading-5 float-right'>Bookmycake Private Limited<br/>
+              1114, Sohna Road, Sector 47 Gurugram,<br/>
+              Haryana-122018<br/>
+              Phone: +91 9870318105<br/>
+              Email: info@bookmycake.co<br/>
+              CIN: U15146DL2021PTC389546<br />
+              FSSAI No: 10823005001700<br />
+              GSTIN: 06AAKCB2869B1ZS
+          </p>  
+          
+        </div>
       </div>
 
       {/* Billing & Shipping Addresses */}
@@ -93,7 +104,7 @@ const InvoicePreview = ({ invoice }) => {
 
       {/* Grand Total */}
       <div className="mt-6 text-right text-lg font-semibold">
-        Grand Total: {order_details?.total_amount} Rs/-
+        Grand Total: ₹ {order_details?.total_amount}
       </div>
       <div className='flex grid grid-cols-3 text-center'>
         <div></div>

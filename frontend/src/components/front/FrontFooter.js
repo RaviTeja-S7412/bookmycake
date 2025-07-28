@@ -57,7 +57,7 @@ const FrontFooter = () => {
                 </NavLink>
               </div>
               <div className='mt-1 2xl:w-[70%] xl:w-[70%] w-full'>
-                <p className="text-sm mt-2">
+                <p className="text-sm mt-2 text-justify">
                   In Delhi and Gurgaon, we can deliver the cakes to you within 3 Hrs of receiving the order if the order is placed before 8 pm. However, if done after 8 pm, then the order might be delivered the next day.
                 </p>
               </div>
