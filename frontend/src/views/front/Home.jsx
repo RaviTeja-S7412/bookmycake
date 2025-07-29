@@ -22,6 +22,7 @@ export default function Home() {
   const [birthdayCollections, setBirthdaycollections] = useState([]);
   const [pastries_smallcakes, setPastriessmallcakes] = useState([]);
   const [indian_fusioncakes, setIndianfusioncakes] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
 
@@ -45,6 +46,7 @@ export default function Home() {
       setIndianfusioncakes(res?.data?.selectedProducts?.filter(product => product.isIndianfusioncakes === 'true'));
       setBanners(res?.data?.banners);
       setCategories(res?.data?.categories);
+      setReviews(res?.data?.reviews);
     } else {
       setFeaturedProducts([]);
       setDesignerProducts([]);
@@ -54,6 +56,7 @@ export default function Home() {
       setIndianfusioncakes([]);
       setBanners([]);
       setCategories([]);
+      setReviews([]);
     }
     setLoading(false);
   }
@@ -86,7 +89,7 @@ export default function Home() {
         <section className="default-width mx-auto my-3">
           <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
           <div className="mt-6">
-            <Reviews />
+            <Reviews data={reviews} />
           </div>
         </section>
         <IndianCollection data={indian_fusioncakes} />
