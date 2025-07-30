@@ -517,8 +517,16 @@ export default function Cart() {
               <div className="w-full max-w-5xl mx-auto flex items-center justify-between">
                 <div className="rounded-lg w-full max-w-sm ml-auto mt-2">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-lg font-semibold">Subtotal</span>
-                    <span className="text-2xl font-bold">₹{cartTotal.toLocaleString()}</span>
+                    <span className="text-md font-semibold">Subtotal</span>
+                    <span className="text-md font-semibold">₹{cartTotal.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-md font-semibold">GST (18%)</span>
+                    <span className="text-md font-semibold">₹{Math.round(cartTotal * 0.18)}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-md font-semibold">Total</span>
+                    <span className="text-md font-semibold">₹{(cartTotal + Math.round(cartTotal * 0.18))}</span>
                   </div>
                   <p className="text-sm text-gray-500 mb-4">
                     Tax included and shipping calculated at checkout

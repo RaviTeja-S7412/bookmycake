@@ -14,7 +14,7 @@ const InvoicePreview = ({ invoice }) => {
       <div className="flex flex-col md:flex-row gap-8 mb-6">
         <div className="flex-1">
           <p className='text-sm leading-2 font-bold'>Invoice # INV_000{order_details?.o_id}</p>
-          <p className='text-sm leading-2'>Date: {new Date().toLocaleDateString()}</p>    
+          <p className='text-sm leading-2'>Date: {new Date().toLocaleDateString()}</p>
         </div>
         <div className="flex-1 text-right">
           <img
@@ -22,16 +22,16 @@ const InvoicePreview = ({ invoice }) => {
             alt="Logo"
             className="w-40 mb-2 float-right"
           /><br />
-          <p className='text-sm leading-5 float-right'>Bookmycake Private Limited<br/>
-              1114, Sohna Road, Sector 47 Gurugram,<br/>
-              Haryana-122018<br/>
-              Phone: +91 9870318105<br/>
-              Email: info@bookmycake.co<br/>
-              CIN: U15146DL2021PTC389546<br />
-              FSSAI No: 10823005001700<br />
-              GSTIN: 06AAKCB2869B1ZS
-          </p>  
-          
+          <p className='text-sm leading-5 float-right'>Bookmycake Private Limited<br />
+            1114, Sohna Road, Sector 47 Gurugram,<br />
+            Haryana-122018<br />
+            Phone: +91 9870318105<br />
+            Email: info@bookmycake.co<br />
+            CIN: U15146DL2021PTC389546<br />
+            FSSAI No: 10823005001700<br />
+            GSTIN: 06AAKCB2869B1ZS
+          </p>
+
         </div>
       </div>
 
@@ -103,21 +103,29 @@ const InvoicePreview = ({ invoice }) => {
       </div>
 
       {/* Grand Total */}
-      <div className="mt-6 text-right text-lg font-semibold">
-        Grand Total: ₹ {order_details?.total_amount}
+      <div>
+        <p className="mt-6 text-right text-md font-medium mb-2">
+          Sub Total: ₹ {order_details?.sub_total}
+        </p>
+        <p className="mt-6 text-right text-md font-medium mb-2">
+          GST (18%): ₹ {order_details?.gst}
+        </p>
+        <p className="mt-6 text-right text-lg font-semibold mb-2">
+          Grand Total: ₹ {order_details?.total_amount}
+        </p>
       </div>
       <div className='flex grid grid-cols-3 text-center'>
         <div></div>
         <BlobProvider document={<InvoiceDocument invoice={invoice} />}>
-            {({ url, loading: pdfLoading }) =>
-                pdfLoading ? (
-                    'Preparing...'
-                ) : (
-                    <a href={url} className="mt-8 px-6 py-2 justify-center !no-underline bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition" download={`invoice-${order_details?.order_id}.pdf`}>
-                        Download Invoice
-                    </a>
-                )
-            }
+          {({ url, loading: pdfLoading }) =>
+            pdfLoading ? (
+              'Preparing...'
+            ) : (
+              <a href={url} className="mt-8 px-6 py-2 justify-center !no-underline bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition" download={`invoice-${order_details?.order_id}.pdf`}>
+                Download Invoice
+              </a>
+            )
+          }
         </BlobProvider>
       </div>
     </div>

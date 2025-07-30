@@ -78,7 +78,7 @@ const InvoiceDocument = ({ invoice }) => {
               src={`${import.meta.env.VITE_APIBASE_URL}products/logo.jpg`}
               style={{
                 width: 100,
-                height: 50,
+                height: 40,
                 marginBottom: 10,
                 alignSelf: 'flex-end',
               }}
@@ -154,7 +154,13 @@ const InvoiceDocument = ({ invoice }) => {
           ))}
         </View>
 
-        <Text style={{ marginTop: 20, fontSize: 12, textAlign: 'right', fontWeight: 'bold', fontFamily: 'Roboto' }}>
+        <Text style={{ marginTop: 0, fontSize: 10, textAlign: 'right', fontWeight: 'medium', fontFamily: 'Roboto' }}>
+          Sub Total: ₹ {order_datails?.sub_total}
+        </Text>
+        <Text style={{ marginTop: 5, fontSize: 10, textAlign: 'right', fontWeight: 'medium', fontFamily: 'Roboto' }}>
+          GST (18%): ₹ {order_datails?.gst}
+        </Text>
+        <Text style={{ marginTop: 5, fontSize: 12, textAlign: 'right', fontWeight: 'bold', fontFamily: 'Roboto' }}>
           Grand Total: ₹ {order_datails?.total_amount}
         </Text>
       </Page>
