@@ -26,6 +26,7 @@ const Faq = React.lazy(() => import('./views/front/Faq'));
 const Blog = React.lazy(() => import('./views/front/Blog'));
 const Media = React.lazy(() => import('./views/front/Media'));
 const Coupons = React.lazy(() => import('./views/front/Coupons'));
+const CareersId = React.lazy(() => import('./views/front/CareersId'));
 
 const front_routes = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -55,6 +56,7 @@ const front_routes = [
   {path: '/customer-griviance', exact: true, name: 'Customer Griviance', element: CustomerGriviance},
   {path: '/faq', exact: true, name: 'FAQ', element: Faq},
   {path: '/coupons', exact: true, name: 'Coupons', element: Coupons},
+  {path: '/careers-id', exact: true, name: 'CareersId', element: CareersId},
 ]
 
 export default front_routes

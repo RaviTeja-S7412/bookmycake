@@ -20,7 +20,7 @@ export default function Careers() {
     });
 
     const handleChange = (e) => {
-        if(e.target.name === "file") {
+        if (e.target.name === "file") {
             setFormData({ ...formData, [e.target.name]: e.target.files[0] });
         } else {
             setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,7 +35,7 @@ export default function Careers() {
         }
         try {
             const response = await axiosInstance.post("/user/apply_job", formDataToSend);
-            if(response?.status === 200) {
+            if (response?.status === 200) {
                 setFormData({
                     first_name: "",
                     last_name: "",
@@ -50,45 +50,63 @@ export default function Careers() {
                 setVisible(false);
             }
         } catch (error) {
-            
+
         }
     };
 
 
     return (
         <div className="default-width font-[Poppins] mx-auto sm:px-5 mb-5">
-            <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 mb-3">Careers</h2>
-            <div className="shadow-md p-3 rounded bg-white">
-                {/* Job Title and Apply Button */}
-                <div className="2xl:grid 2xl:grid-cols-2 xl:grid xl:grid-cols-2 lg:grid lg:grid-cols-2 md:grid md:grid-cols-2 gap-4">
-                    <div>
-                        <h4 className="!font-semibold">The Bakery & Confectionary Chef</h4>
+            {/* <h2 className="text-2xl poppins-bold tracking-tight pt-0 text-gray-900 mb-3">Careers</h2> */}
+
+            <div className="2xl:w-3/4 xl:w-3/4 lg:w-3/4 w-full rounded-sm p-3 shadow-sm mx-auto mt-5 bg-white">
+                <p className="!font-semibold mb-2">Job Title: <span className="!font-medium">The Bakery & Confectionary Chef</span></p>
+                <div className="flex gap-4">
+                    <ul className="text-gray-700 text-sm leading-[2] list-[circle] ml-5">
+                        <li>Posted a month ago</li>
+                    </ul>
+                    <ul className="text-gray-700 text-sm leading-[2] list-[circle] ml-5">
+                        <li>Be among the first 10 applicants</li>
+                    </ul>
+                </div>
+
+                {/* Eminities */}
+
+                <div>
+                    <div className="flex gap-4">
+                        <div>
+                            <label className="text-sm font-semibold">Relevant Experiance</label>
+                            <p className="text-sm mb-3 mt-2"><i class="fa-solid fa-suitcase mr-2"></i> 2-5 Years</p>
+                        </div>
+                        <div>
+                            <label className="text-sm font-semibold">Location</label>
+                            <p className="text-sm mb-3 mt-2"><i class="fa-solid fa-location-dot mr-2"></i> Gurgaon</p>
+                        </div>
                     </div>
-                    <div className="ml-auto">
-                        <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={() => setVisible(!visible)}>Apply</button>
+                    <div className="flex gap-4">
+                        <div>
+                            <label className="text-sm font-semibold">Industry</label>
+                            <p className="text-sm mb-3"><i class="fa-solid fa-cake-candles mr-2"></i> Bakers</p>
+                        </div>
+                        <div>
+                            <label className="text-sm font-semibold">Gender</label>
+                            <p className="text-sm mb-3"><i class="fa-solid fa-person mr-2"></i> Male</p>
+                        </div>
                     </div>
                 </div>
-                {/* Job Entities */}
-                <div class="2xl:grid 2xl:grid-cols-4 xl:grid xl:grid-cols-4 lg:grid lg:grid-cols-4 md:grid md:grid-cols-4 gap-4 mt-4 bg-gray-200 py-2 px-3 rounded-lg">
-                    <div>
-                        <p className="font-semibold mb-0">Location</p>
-                        <p className="text-sm">Gurgaon</p>
-                    </div>
-                    <div>
-                        <p className="font-semibold mb-0">Relevant Experience</p>
-                        <p className="text-sm">2 to 4 years</p>
-                    </div>
-                    <div>
-                        <p className="font-semibold mb-0"> Gender</p>
-                        <p className="text-sm">Male</p>
-                    </div>
-                    <div>
-                        <p className="font-semibold mb-0">Education</p>
-                        <p className="text-sm">Graduation & relevant education <br />will be an added advantage</p>
-                    </div>
+
+                {/* Qualification */}
+
+                <div className="mt-1">
+                    <p className="font-semibold mb-2">Education</p>
+                    <ul className="text-gray-700 text-sm leading-[2] list-[circle] ml-5">
+                        <li>Graduation & relevant education will be an added advantage</li>
+                    </ul>
                 </div>
-                {/* Job Description */}
-                <div className="job-description xs:p-2 sm:mt-5">
+
+                {/* Description */}
+
+                <div className="mt-3">
                     <p className="font-semibold mb-2">Job Description</p>
                     <ul className="text-gray-700 text-sm leading-[2] list-[circle] ml-5">
                         <li>The Bakery & Confectionary Chef will be responsible for producing a wide range of baked goods and confectioneries like Cakes and Pastries, cookies and others.</li>
@@ -98,7 +116,15 @@ export default function Careers() {
                         <li>The Bakery & Confectionary Chef will be responsible to understand the online order process systems via online platforms like Swiggy, Zomato and other platforms. </li>
                     </ul>
                 </div>
+
+                {/* CTA */}
+
+                <div>
+                    <button className="px-5 py-2 border rounded-full !bg-[#ed1016] text-white border-2 border-white" onClick={() => setVisible(!visible)}>Apply</button>
+                </div>
+
             </div>
+
             <CModal
                 visible={visible}
                 onClose={() => setVisible(false)}

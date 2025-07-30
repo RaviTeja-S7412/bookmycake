@@ -58,7 +58,7 @@ const FrontFooter = () => {
               </div>
               <div className='mt-1 2xl:w-[70%] xl:w-[70%] w-full'>
                 <p className="text-sm mt-2 text-justify">
-                  In Delhi and Gurgaon, we can deliver the cakes to you within 3 Hrs of receiving the order if the order is placed before 8 pm. However, if done after 8 pm, then the order might be delivered the next day.
+                  We offer express cake delivery across Delhi and Gurgaon! Place your order before 8:00 PM, and we’ll deliver it to your doorstep within 3 hours in Gurgaon and Rest of Delhi NCR in 4 to 5 hours. Orders placed after 8:00 PM may be delivered the following day.
                 </p>
               </div>
               <div className="text-xs text-left leading-tight">
