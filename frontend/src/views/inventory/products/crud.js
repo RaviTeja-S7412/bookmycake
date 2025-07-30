@@ -23,6 +23,7 @@ import { cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { createProduct, get_singleproduct, updateProduct } from '../../../redux/actions/products.actions';
 import { getCategories, getSubCategoriesbycategoryID } from '../../../redux/actions/categories.actions';
+import axiosIntance from '../../../components/axios';
 
 const quillToolbar = [
     [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -43,6 +44,7 @@ const ProductCrud = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
 
+    const [loading, setLoading] = useState(false)
     const [category_name, setCategoryName] = useState('')
     const [subcategory_name, setSubCategoryName] = useState('')
     const [product_name, setproductName] = useState('')
@@ -73,14 +75,28 @@ const ProductCrud = () => {
     const [subcategoriesList, setSubCategories] = useState([])
     const [customer_type, setCustomertype] = useState("retail");
     const [optionsLength, setOptionsLength] = useState(1);
+    const [attributesLength, setAttributesLength] = useState(1);
     const [customer_types, setCustomertypes] = useState([
         { label: 'Retail', value: 'retail' },
         { label: 'Corporate', value: 'corporate' }
     ])
+    const [attributes, setAttributes] = useState([]);
+    const [sub_attributes, setSubAttributes] = useState([]);
+    const [productAttributes, setProductAttributes] = useState([""]);
+    const [productSubAttributes, setProductSubAttributes] = useState([""]);
       
     useEffect(() => {
-        dispatch({type: productConstants.PRODUCTS_RESET})
+        dispatch({type: productConstants.PRODUCTS_RESET});
+        getAttributes();
     }, [])
+
+    const getAttributes = async () => {
+        const res = await axiosIntance.get(`/admin/get_attributes`);
+        if (res.status === 200) {
+            setAttributes(res.data.attributes);
+            setSubAttributes(res.data.sub_attributes);
+        }
+    }
 
     const getSingleproduct = () => {
         const post_data = {
@@ -107,13 +123,18 @@ const ProductCrud = () => {
         setIssize(false);
         setIsflavor(false);
         setIseggtype(false);
+        setOptionsLength(1);
+        setAttributesLength(1);
         setSizes([{ kg: '', unit: 'kg' , price: '' }]);
         setFlavors([{flavor: ''}]);
         setEggtypes([{eggoption: ''}]);
+        setAttributes([""]);
+        setSubAttributes([""]);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         const selectedOptions = [];
         if (isSize) selectedOptions.push('weight');
         if (isFlavor) selectedOptions.push('flavor');
@@ -142,6 +163,8 @@ const ProductCrud = () => {
         formData.append('product_size', JSON.stringify(sizes))
         formData.append('product_flavor', JSON.stringify(flavors))
         formData.append('product_eggtype', JSON.stringify(eggtypes))
+        formData.append('attributes', JSON.stringify(productAttributes))
+        formData.append('sub_attributes', JSON.stringify(productSubAttributes))
         // Append the formatted options
         formData.append('options', selectedOptions?.length > 0 ? JSON.stringify(selectedOptions) : "");
 
@@ -149,16 +172,15 @@ const ProductCrud = () => {
             formData.append('id', queryParams.get("id"))
             formData.append('old_image', product_old_image)
             dispatch(updateProduct(formData));
+            navigate('/admin/inventory/products');
         }else{
             dispatch(createProduct(formData));
         }
+        setLoading(false);
     }
 
     useEffect(() => {
         if(products.is_product_added){
-            if(queryParams.get("id")){
-                navigate("/admin/inventory/products");
-            }
             resetValues();
         }
     }, [products.is_product_added])
@@ -168,7 +190,6 @@ const ProductCrud = () => {
             getSingleproduct();
         }else{
             if(Object.keys(products.product_data).length > 0){
-                console.log(products.product_data);
                 
                 getSubcategories(products.product_data ? products.product_data.category_id : '')
                 setCategoryName(products.product_data ? products.product_data.category_id : '')
@@ -189,6 +210,11 @@ const ProductCrud = () => {
                 setCorporatecollections(products.product_data?.isCorporatecollections);
                 setDesignercollections(products.product_data?.isDesignercollections);
                 setFeaturedproducts(products.product_data?.isFeaturedproducts);
+                setBirtdaysAnniversaries(products.product_data?.isBirthdaycollection);
+                setPastriesSmallCakes(products.product_data?.isPastries);
+                setIndianFusionCakes(products.product_data?.isIndianfusioncakes);
+                setProductAttributes(products.product_data ? products.product_data.attributes && JSON.parse(products.product_data.attributes) : [""]);
+                setProductSubAttributes(products.product_data ? products.product_data.sub_attributes && JSON.parse(products.product_data.sub_attributes) : [""]);
 
                 const options = products.product_data ? products.product_data.options : '';
                 if (options) {
@@ -273,6 +299,21 @@ const ProductCrud = () => {
             setOptionsLength(eggtypes?.length);
         }
     }, [sizes, flavors, eggtypes])
+    
+    useEffect(() => {
+        console.log(productAttributes)
+        setAttributesLength(productAttributes?.length ? productAttributes.length : 1);
+    }, [productAttributes])
+
+    const handleAttributeChange = (index, event) => {
+        const { name, value } = event.target;
+        const updatedAttributes = [...productAttributes];
+        updatedAttributes[index] = value;
+        setProductAttributes(updatedAttributes);
+    };
+
+    console.log(isBirtdaysAnniversaries, isPastriesSmallCakes, isIndianFusionCakes, isDesignercollections, isCorporatecollections, isFeaturedproducts);
+    
 
     return (
         <CRow>
@@ -379,7 +420,6 @@ const ProductCrud = () => {
                                     value={meta_keywords}
                                 />
                             </CCol>
-
                              <CCol md={6}>
                                 <CFormTextarea
                                     label="Meta Description:"
@@ -389,7 +429,7 @@ const ProductCrud = () => {
                                 />
                             </CCol>
                            
-                            <CCol md={12}><CFormLabel>Visible To:</CFormLabel></CCol>
+                            <CCol md={12}><CFormLabel className='font-bold'>Visible To:</CFormLabel></CCol>
                             <CCol md={2}>
                                 <CFormCheck
                                     type="checkbox"
@@ -445,37 +485,8 @@ const ProductCrud = () => {
                                 />
                             </CCol>
 
-                            <CCol md={12}><CFormLabel>Product Options:</CFormLabel></CCol>
-                            {/* <CCol md={2}>
-                            <CFormCheck
-                                type="checkbox"
-                                id="validationDefault09"
-                                label="Weight"
-                                onChange={() => setIssize(!isSize)}
-                                checked={isSize}
-                            />
-                            </CCol>
-                            <CCol md={2}>
-                            <CFormCheck
-                                type="checkbox"
-                                id="validationDefault10"
-                                label="Flavor"
-                                onChange={() => setIsflavor(!isFlavor)}
-                                checked={isFlavor}
-                            />
-                            </CCol> */}
-                            {/* <CCol md={2}>
-                            <CFormCheck
-                                type="checkbox"
-                                id="validationDefault11"
-                                label="Egg/Eggless"
-                                onChange={() => setIseggtype(!isEggtype)}
-                                checked={isEggtype}
-                            />
-                            </CCol> */}
-
-                            <CCol md={8}></CCol>
-
+                            <CCol md={12}><CFormLabel className='font-bold'>Product Options:</CFormLabel></CCol>
+                            
                             {(isSize || isFlavor) && (
                             <>
                                 {Array.from({ length: optionsLength }).map((_, index) => (
@@ -595,26 +606,99 @@ const ProductCrud = () => {
                                 ))}
 
                                 <CRow className="mb-3">
+                                    <CCol xs={12} md={2}>
+                                        <CButton
+                                            color="primary"
+                                            type="button"
+                                            onClick={() => {
+                                                if (isSize) setSizes([...sizes, { kg: '', unit: 'kg', price: '' }]);
+                                                if (isFlavor) setFlavors([...flavors, {flavor: ''}]);
+                                                if (isEggtype) setEggtypes([...eggtypes, {eggoption: ''}]);
+                                            }}
+                                        >
+                                        <i className='fa fa-plus'></i> Add
+                                        </CButton>
+                                    </CCol>
+                                </CRow>
+                            </>
+                            )}
+
+                            <CCol md={12}><CFormLabel className='font-bold'>Product Attributes:</CFormLabel></CCol>
+
+                            {Array.from({ length: attributesLength })?.map((_, pindex) => (
+                                <CRow key={pindex} className="mb-3">
+
+                                    <CCol xs={12} md={3}>
+                                        <CFormSelect
+                                            name="attributes"
+                                            label="Attributes"
+                                            onChange={(e) => handleAttributeChange(pindex, e)}
+                                            value={productAttributes?.[pindex]}
+                                        >
+                                        <option value="">Select Attribute</option>
+                                        {attributes.map((attribute, index) => (
+                                            <option key={index} value={attribute?.id} selected={productAttributes?.[pindex] === attribute?.id ? true : false}>
+                                                {attribute?.attribute_name}
+                                            </option>
+                                        ))}
+                                        </CFormSelect>
+                                    </CCol>
+                                    <CCol xs={12} md={3}>
+                                        <CFormSelect
+                                            name="sub_attributes"
+                                            label="Sub Attributes"
+                                            onChange={(e) => {
+                                                const updatedSubAttributes = [...productSubAttributes];
+                                                updatedSubAttributes[pindex] = e.target.value;
+                                                setProductSubAttributes(updatedSubAttributes);
+                                            }}
+                                            value={productSubAttributes?.[pindex]}
+                                        >
+                                        <option value="">Select Sub Attribute</option>
+                                        {productAttributes?.[pindex] && sub_attributes?.filter((sa) => sa?.attribute_menu_id == productAttributes?.[pindex])?.map((sub_attribute, index) => (
+                                            <option key={index} value={sub_attribute?.id} selected={productSubAttributes?.[pindex] === sub_attribute?.id ? true : false}>
+                                                {sub_attribute?.sub_attribute_name}
+                                            </option>
+                                        ))}
+                                        </CFormSelect>
+                                    </CCol>
+                                    <CCol xs={12} md={1}>
+                                    {pindex > 0 && (
+                                        <CIcon
+                                        icon={cilTrash}
+                                        height={18}
+                                        style={{ cursor: 'pointer', color: 'red', marginTop: '40px' }}
+                                        onClick={() => {
+                                            const updatedAttributes = [...productAttributes];
+                                            const updatedSubAttributes = [...productSubAttributes];
+                                            updatedAttributes.splice(pindex, 1);
+                                            updatedSubAttributes.splice(pindex, 1);
+                                            setProductAttributes(updatedAttributes);
+                                            setProductSubAttributes(updatedSubAttributes);
+                                        }}
+                                        />
+                                    )}
+                                    </CCol>
+                                </CRow>
+                            ))}
+                            <CRow className="mb-3">
                                 <CCol xs={12} md={2}>
                                     <CButton
                                         color="primary"
                                         type="button"
                                         onClick={() => {
-                                            if (isSize) setSizes([...sizes, { kg: '', unit: 'kg', price: '' }]);
-                                            if (isFlavor) setFlavors([...flavors, {flavor: ''}]);
-                                            if (isEggtype) setEggtypes([...eggtypes, {eggoption: ''}]);
+                                            setProductAttributes([...productAttributes, ""]);
+                                            setProductSubAttributes([...productSubAttributes, ""]);
                                         }}
                                     >
-                                    Add
+                                    <i className='fa fa-plus'></i> Add
                                     </CButton>
                                 </CCol>
-                                </CRow>
-                            </>
-                            )}
+                            </CRow>
 
                             <CCol xs={12}>
-                                <CButton color="primary" type="submit" disabled={products?.loading}>
-                                    {products?.loading ? 'Submitting' : 'Submit'}
+                                <CButton color="primary" type="submit" disabled={loading}>
+                                    {loading ? 'Submitting' : 'Submit'}
                                 </CButton>
                             </CCol>
                         </CForm>
