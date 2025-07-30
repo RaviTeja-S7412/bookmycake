@@ -206,6 +206,14 @@ const Orderdetails = () => {
                                 </td>
                             </tr>
                             <tr>
+                                <td className='font-medium pb-2'>Sub Total:</td>
+                                <td className='pb-2 font-semibold'>₹ {order_data?.order_details?.sub_total}</td>
+                            </tr>
+                            <tr>
+                                <td className='font-medium pb-2'>GST (18%):</td>
+                                <td className='pb-2 font-semibold'>₹ {order_data?.order_details?.gst}</td>
+                            </tr>
+                            <tr>
                                 <td className='font-medium pb-2'>Total Amount:</td>
                                 <td className='pb-2 font-semibold'>₹ {order_data?.order_details?.total_amount}</td>
                             </tr>
