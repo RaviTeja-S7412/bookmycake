@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 
-const reviews = [
+const reviews_data = [
     {
         name: "Aviral Prakash",
         date: "1 Year ago",
@@ -41,7 +41,7 @@ const reviews = [
 
 ];
 
-export default function Carousel() {
+export default function Reviews({ data }) {
 
     const settings = {
         dots: true,
@@ -86,15 +86,67 @@ export default function Carousel() {
         <>
             <div className="review slider-container mb-[80px]">
                 <Slider {...settings}>
-                    {reviews.map((review, index) => (
+                    {data.map((review, index) => {
+                        switch (review.starRating) {
+                            case "ONE":
+                                review.rating = 1;
+                                break;
+                            case "TWO":
+                                review.rating = 2;
+                                break;
+                            case "THREE":
+                                review.rating = 3;
+                                break;
+                            case "FOUR":
+                                review.rating = 4;
+                                break;
+                            case "FIVE":
+                                review.rating = 5;
+                                break;
+                            default:
+                                review.rating = 0;
+                        }
+                    // Format date as "a min ago", "a day ago", etc.
+                    function timeAgo(dateString) {
+                        const now = new Date();
+                        const date = new Date(dateString);
+                        const seconds = Math.floor((now - date) / 1000);
+
+                        if (isNaN(date.getTime())) return dateString;
+
+                        const intervals = [
+                            { label: 'year', seconds: 31536000 },
+                            { label: 'month', seconds: 2592000 },
+                            { label: 'day', seconds: 86400 },
+                            { label: 'hour', seconds: 3600 },
+                            { label: 'min', seconds: 60 },
+                            { label: 'sec', seconds: 1 }
+                        ];
+
+                        for (const interval of intervals) {
+                            const count = Math.floor(seconds / interval.seconds);
+                            if (count >= 1) {
+                                return count === 1
+                                    ? `a ${interval.label} ago`
+                                    : `${count} ${interval.label}s ago`;
+                            }
+                        }
+                        return 'just now';
+                    }
+
+                    return(
                         <div key={index} className="p-2">
-                            <div className="bg-white border border-black font-[poppins] min-h-[400px] max-h-[400px] overflow-hidden">
-                                <div className='review_body p-4'>
+                            <div className="bg-white border border-black font-[poppins] min-h-[250px] max-h-[250px] overflow-hidden">
+                                <div className='review_body p-2'>
                                     <div className="flex items-center">
-                                        {/* <img src={review.avatar} alt={review.name} className="w-13 h-13 rounded-full mr-4" /> */}
+                                        {/* <img src={review.reviewer_image} alt={review.reviewer_name} className="w-13 h-13 rounded-full mr-4" /> */}
                                         <div>
-                                            <p className="!text-md poppins-semibold mb-0 mt-3">{review.name}</p>
-                                            <p className="text-gray-500">{review.date}</p>
+                                            <p className="!text-md poppins-semibold mb-0 mt-3">{review.reviewer_name}
+                                                {/* {review.reviewer_image} */}
+                                            </p>
+                                            <p className="text-gray-500">
+                                                {timeAgo(review.createTime)}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-center mb-2">
@@ -109,15 +161,16 @@ export default function Carousel() {
                                             </svg>
                                         ))}
                                     </div>
-                                    <p className="text-gray-700 mb-0">{review.review}</p>
-                                    <p className="text-gray-500 mt-1 mb-0">{review.itemType}</p>
+                                    <p className="text-gray-700 mb-0">{review.comment}</p>
+                                    {/* <p className="text-gray-500 mt-1 mb-0">{review.itemType}</p> */}
                                 </div>
-                                <div className='review_img'>
+                                {/* <div className='review_img'>
                                     <img src={review.image} alt={review.name} className="w-full max-h-[200px] object-cover" />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
-                    ))}
+                    )}
+                    )}
                 </Slider>
             </div>
         </>
