@@ -16,11 +16,17 @@ export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [showPrice, setShowPrice] = useState(true);
-  const [showFlavor, setShowFlavor] = useState(true);
-  const [showWeight, setShowWeight] = useState(true);
+  const [showFlavor, setShowFlavor] = useState(false);
+  const [showWeight, setShowWeight] = useState(false);
+  const [showAttribute, setShowAttribute] = useState(true);
+  const [showSubAttribute, setShowSubAttribute] = useState(true);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [attributes, setAttributes] = useState([]);
+  const [sub_attributes, setSubAttributes] = useState([]);
   const [flavors, setFlavors] = useState([]);
+  const [selectedAttributes, setselectedAttributes] = useState([]);
+  const [selectedSubAttributes, setselectedSubAttributes] = useState([]);
   const [selectedFlavors, setselectedFlavors] = useState([]);
   const [weights, setWeights] = useState([]);
   const [selectedWeights, setselectedWeights] = useState([]);
@@ -68,6 +74,14 @@ export default function Products() {
       params.weights = selected_weights;
     }
 
+    if(selectedAttributes.length > 0) {
+      params.attributes = selectedAttributes;
+    }
+    
+    if(selectedSubAttributes.length > 0) {
+      params.sub_attributes = selectedSubAttributes;
+    }
+
     if (sub_category_id) {
       params.sub_category_id = sub_category_id;
     } else if (category_id) {
@@ -78,9 +92,11 @@ export default function Products() {
     const res = await axiosIntance.get(`/admin/get_filterproducts`, { params });
 
     if (res.status === 200) {
-      setProducts(res?.data?.products)
-      setFlavors(res?.data?.flavors)
-      setWeights(res?.data?.weights)
+      setProducts(res?.data?.products);
+      setFlavors(res?.data?.flavors);
+      setWeights(res?.data?.weights);
+      setAttributes(res?.data?.product_attributes);
+      setSubAttributes(res?.data?.product_subattributes);
       setHighestprice(res?.data?.highestPrice);
       setTotalproducts(res?.data?.total);
       setItemsperpage(res?.data?.limit);
@@ -125,6 +141,15 @@ export default function Products() {
       setselectedWeights(selectedWeights.filter((item) => Number(item) !== Number(weight)));
     } else {
       setselectedWeights([...selectedWeights, Number(weight)]);
+    }
+    setFilter(true);
+  };
+  
+  const handleAttributechange = (attribute_id) => {
+    if (selectedAttributes.includes(Number(attribute_id))) {
+      setselectedAttributes(selectedAttributes.filter((item) => Number(item) !== Number(attribute_id)));
+    } else {
+      setselectedAttributes([...selectedAttributes, Number(attribute_id)]);
     }
     setFilter(true);
   };
@@ -193,7 +218,7 @@ export default function Products() {
           {/* Flavor */}
           <div onClick={() => setShowFlavor(!showFlavor)} className="flex justify-between items-center cursor-pointer mt-3">
             <h6 className="poppins-semibold mb-0">Flavor</h6>
-            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showPrice ? 'rotate-180' : 'rotate-0'}`} />
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showFlavor ? 'rotate-180' : 'rotate-0'}`} />
           </div>
           {showFlavor && (
             <>
@@ -219,7 +244,7 @@ export default function Products() {
           {/* Weight */}
           <div onClick={() => setShowWeight(!showWeight)} className="flex justify-between items-center cursor-pointer mt-3">
             <h6 className="poppins-semibold mb-0">Weight</h6>
-            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showPrice ? 'rotate-180' : 'rotate-0'}`} />
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showWeight ? 'rotate-180' : 'rotate-0'}`} />
           </div>
           {showWeight && (
             <div className="checkbox-wrapper">
@@ -233,6 +258,53 @@ export default function Products() {
                       </svg>
                     </span>
                     <span>{weight / 1000 + ' Kg'}</span>
+                  </label>
+                ))
+              ) : 'No weights available'}
+            </div>
+          )}
+          <hr />
+          {/* Weight */}
+          <div onClick={() => setShowAttribute(!showAttribute)} className="flex justify-between items-center cursor-pointer mt-3">
+            <h6 className="poppins-semibold mb-0">Attributes</h6>
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showAttribute ? 'rotate-180' : 'rotate-0'}`} />
+          </div>
+          {showAttribute && (
+            <div className="checkbox-wrapper">
+              {attributes?.length > 0 ? (
+                attributes?.sort((a, b) => a - b)?.map((attribute, aindex) => (
+                  <label for={`cbk-${aindex}`} key={'at' + aindex}>
+                    <input type="checkbox" id={`cbk-${aindex}`} onChange={(e) => handleAttributechange(e.target.value)} value={attribute?.id} checked={selectedAttributes.includes(attribute?.id)} />
+                    <span className="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>{attribute?.attribute_name}</span>
+                  </label>
+                ))
+              ) : 'No Attributes available'}
+            </div>
+          )}
+
+          <hr />
+          {/* Weight */}
+          <div onClick={() => setShowSubAttribute(!showSubAttribute)} className="flex justify-between items-center cursor-pointer mt-3">
+            <h6 className="poppins-semibold mb-0">Sub Attributes</h6>
+            <ChevronDownIcon className={`size-6 text-white transition-transform duration-300 ${showSubAttribute ? 'rotate-180' : 'rotate-0'}`} />
+          </div>
+          {showSubAttribute && (
+            <div className="checkbox-wrapper">
+              {sub_attributes?.length > 0 ? (
+                sub_attributes?.sort((a, b) => a - b)?.map((sub_attribute, saindex) => (
+                  <label for={`sat-${saindex}`} key={'sat' + saindex}>
+                    <input type="checkbox" id={`sat-${saindex}`} onChange={(e) => handleWeightchange(e.target.value)} value={sub_attribute?.id} checked={selectedWeights.includes(sub_attribute?.id)} />
+                    <span className="cbx">
+                      <svg width="12px" height="11px" viewBox="0 0 12 11">
+                        <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                      </svg>
+                    </span>
+                    <span>{sub_attribute?.sub_attribute_name}</span>
                   </label>
                 ))
               ) : 'No weights available'}
