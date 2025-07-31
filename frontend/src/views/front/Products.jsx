@@ -164,7 +164,7 @@ export default function Products() {
   };
 
   return (
-    <div className="default-width font-[Poppins]">
+    <div className="default-width font-[Poppins] mb-5">
       <nav className="flex mt-3 p-1" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
           <li className="inline-flex items-center">

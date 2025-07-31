@@ -86,8 +86,8 @@ export default function Home() {
         {corporateProducts?.length > 0 && (
           <CorporateCollections data={corporateProducts} />
         )}
-        <section className="default-width mx-auto my-3">
-          <h2 className="text-2xl poppins-bold tracking-tight pt-5 text-gray-900 text-center">Our Customer Reviews</h2>
+        <section className="default-width mx-auto my-0">
+          <h2 className="text-2xl poppins-bold tracking-tight pt-4 text-gray-900 text-center">What our Customers say about BMC</h2>
           <div className="mt-6">
             <Reviews data={reviews} />
           </div>

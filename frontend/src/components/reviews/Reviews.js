@@ -44,7 +44,7 @@ export default function Reviews({ data }) {
 
     return (
         <>
-            <div className="review slider-container mb-[80px]">
+            <div className="review slider-container mb-[60px]">
                 <Slider {...settings}>
                     {data.map((review, index) => {
                         switch (review.starRating) {
@@ -96,8 +96,8 @@ export default function Reviews({ data }) {
 
                         return (
                             <div key={index} className="p-2">
-                                <div className="bg-white border rounded-sm font-[poppins] min-h-[250px] max-h-[250px] overflow-auto">
-                                    <div className='review_body p-2'>
+                                <div className="bg-white border rounded-sm font-[poppins] min-h-[250px] max-h-[250px] overflow-hidden">
+                                    <div className='review_body p-3'>
                                         <div className="flex items-center">
                                             {/* <img src={review.reviewer_image} alt={review.reviewer_name} className="w-13 h-13 rounded-full mr-4" /> */}
                                             <div>
@@ -121,7 +121,7 @@ export default function Reviews({ data }) {
                                                 </svg>
                                             ))}
                                         </div>
-                                        <p className="text-gray-700 mb-0 !text-[14px]">{review.comment}</p>
+                                        <p className="text-gray-700 mb-0 !text-[14px] text-ellipsis line-clamp-4">{review.comment}</p>
                                         {/* <p className="text-gray-500 mt-1 mb-0">{review.itemType}</p> */}
                                     </div>
                                     {/* <div className='review_img'>
