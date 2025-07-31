@@ -164,30 +164,42 @@ export default function HomeHeader() {
 
           <div className="mt-6">
             {menuItems.map((item) => (
-              <Disclosure key={item.id} as="div" className="mb-2"
-                onMouseEnter={() => item.subItems.length > 0 && setOpenPopover(item.id)}
+              <div
+                key={item.id}
+                className="relative font-[poppins]"
+                onMouseEnter={() => item.subItems?.filter((s) => s.status === 1)?.length > 0 && setOpenPopover(item.id)}
                 onMouseLeave={() => setOpenPopover(null)}
               >
-                <DisclosureButton className="flex w-full justify-between px-4 py-2 text-left text-sm font-semibold text-gray-900 hover:bg-gray-100"
-                  onClick={() => item.subItems.length === 0 && navigate('/collections/' + item.path)}
+                <button
+                  className="flex items-center gap-1 focus:outline-none px-2 py-3"
+                  onClick={() => item.subItems?.filter((s) => s.status === 1)?.length === 0 && navigate('/collections/' + item.path)}
                 >
                   {item.label}
-                  {item.subItems && <ChevronDownIcon className="size-5 text-gray-400" />}
-                </DisclosureButton>
-                {item.subItems && (
-                  <DisclosurePanel className="mt-1 space-y-1 pl-4">
-                    {item.subItems.map((sub) => (
+                  {item.subItems.filter((s) => s.status === 1)?.length > 0 && (
+                    <ChevronDownIcon className="h-4 w-4 text-white" />
+                  )}
+                </button>
+
+                {item.subItems?.filter((s) => s.status === 1)?.length > 0 && openPopover === item.id && (
+                  <div className="absolute top-full z-10 mt-0 bg-white shadow-md rounded p-2 w-48">
+                    {item.subItems?.filter((s) => s.status === 1)?.map((sub) => (
                       <a
                         key={sub.id}
-                        href={sub.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 no-underline" style={{ color: '#000000', textDecoration: 'none' }}
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate('/collections/' + item.path + '/' + sub.path);
+                          setOpenPopover(null);
+                        }}
+                        className="block px-3 py-1 text-sm hover:bg-gray-100 leading-6"
+                        style={{ color: '#000000', textDecoration: 'none' }}
                       >
                         {sub.label}
                       </a>
                     ))}
-                  </DisclosurePanel>
+                  </div>
                 )}
-              </Disclosure>
+              </div>
             ))}
           </div>
         </DialogPanel>
