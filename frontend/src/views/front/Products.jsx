@@ -284,8 +284,8 @@ export default function Products() {
               <div className="checkbox-wrapper">
                 {attributes?.length > 0 ? (
                   attributes?.sort((a, b) => a - b)?.map((attribute, aindex) => (
-                    <label for={`cbk-${aindex}`} key={'at' + aindex}>
-                      <input type="checkbox" id={`cbk-${aindex}`} onChange={(e) => handleAttributechange(e.target.value)} value={attribute?.id} checked={selectedAttributes.includes(attribute?.id)} />
+                    <label for={`cbk2-${aindex}`} key={'at' + aindex}>
+                      <input type="checkbox" id={`cbk2-${aindex}`} onChange={(e) => handleAttributechange(e.target.value)} value={attribute?.id} checked={selectedAttributes.includes(attribute?.id)} />
                       <span className="cbx">
                         <svg width="12px" height="11px" viewBox="0 0 12 11">
                           <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
