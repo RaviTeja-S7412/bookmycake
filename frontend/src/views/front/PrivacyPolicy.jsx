@@ -49,7 +49,7 @@ export default function PrivacyPolicy() {
             <p>Right to Review - You can review the data provided by you and can request us to correct or amend such data (to the extent feasible, as determined by us). That said, we will not be responsible for the authenticity of the data or information provided by you.</p>
 
             <h5>Withdrawal of your Consent</h5>
-            <p>You can choose not to provide your data, at any time while availing our goods or services or otherwise withdraw your consent provided to us earlier, in writing to our email ID: <a href="mailto:hello@bookmycake.co">hello@bookmycake.co</a></p>
+            <p>You can choose not to provide your data, at any time while availing our goods or services or otherwise withdraw your consent provided to us earlier, in writing to our email ID: <a href="mailto:info@bookmycake.co">info@bookmycake.co</a></p>
             <p>In the event you choose to not provide or later withdraw your consent, we may not be able to provide you our services or goods.</p>
             <p>Please note that these rights are subject to our compliance with applicable laws.</p>
 
