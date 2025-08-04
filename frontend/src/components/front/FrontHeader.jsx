@@ -49,10 +49,10 @@ export default function HomeHeader() {
           <span>Book My Cake - Har Teohar Ka Cake: Book My Cake | Freshness home delivered</span>
         </div>
       </div>
-      <div className="flex items-center justify-between py-4 gap-6 flex-wrap default-width">
+      <div className="flex items-center justify-between 2xl:py-4 xl:py-4 md:py-4 2xl:gap-6 xl:gap-6 md:gap-6 flex-wrap default-width mobile-padng">
         {/* Left: Logo + City */}
         <div className="flex justify-center w-full sm:w-[unset] items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
-          <img src="/assets/logo.jpg" alt="Logo" />
+          <img src="/assets/logo.png" alt="Logo" />
         </div>
 
         {/* Middle: Search */}
