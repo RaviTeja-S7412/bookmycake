@@ -306,6 +306,9 @@
     .cart-fit {
         display: block;
     }
+    .mobile-h {
+        display: none;
+    }
 }
 
 /* Responsive styles for laptops (min-width: 1024px) */
