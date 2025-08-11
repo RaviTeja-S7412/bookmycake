@@ -111,6 +111,12 @@ export default function Products() {
     getProducts(sortOptions?.find((option) => option.current)?.value, search);
   }, [category_id, sub_category_id, searchParams?.get('search'), currentPage]);
 
+  useEffect(() => {
+    if (category_id || sub_category_id) {
+      setCurrentPage(1);
+    }
+  }, [category_id, sub_category_id, searchParams?.get('search')]);
+
   const filterProducts = () => {
     const min_price = minPrice ? Number(minPrice) : Number(0);
     const max_price = maxPrice ? Number(maxPrice) : Number(highestPrice);
@@ -365,7 +371,7 @@ export default function Products() {
 
               return products.map((product, index) => {
                 var startingSize = product?.product_options && JSON.parse(product.product_options)?.sort((a, b) => a.price - b.price)?.[0];
-                const imgLoaded = imgLoadedArr[index] || false;
+               /*  const imgLoaded = imgLoadedArr[index] || false;
 
                 const handleImgLoad = () => {
                   setImgLoadedArr((prev) => {
@@ -373,7 +379,7 @@ export default function Products() {
                     updated[index] = true;
                     return updated;
                   });
-                };
+                }; */
 
                 return (
                   loading ? <div className="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
@@ -387,14 +393,14 @@ export default function Products() {
                   </div> :
                     <div key={index} className="shadow-md p-2 bg-white ">
                       <div className="relative feature-img rounded-lg overflow-hidden cursor-pointer">
-                        {!imgLoaded && (
+                        {/* {!imgLoaded && (
                           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10 min-h-[220px]">
                             <svg className="animate-spin h-8 w-8 text-[#910f3f]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                             </svg>
                           </div>
-                        )}
+                        )} */}
                         <div className="absolute top-2 left-2 z-10 w-[20px] h-[20px] border-2 border-green-500 bg-white flex items-center justify-center">
                           <span className="inline-block w-[10px] h-[10px] bg-[#3DA66E] rounded-full"></span>
                         </div>
@@ -403,7 +409,7 @@ export default function Products() {
                           alt={product.product_image}
                           className={`w-full h-48 object-cover cursor-pointer max-h-[320px]`}
                           onClick={() => navigate('/products/' + product.route)}
-                          onLoad={handleImgLoad}
+                          // onLoad={handleImgLoad}
                         />
                       </div>
                       <div className="relative">

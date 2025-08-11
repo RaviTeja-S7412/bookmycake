@@ -4,10 +4,11 @@ import { CSpinner } from '@coreui/react'
 
 // routes config
 import front_routes from '../../front_routes'
+import Spinner from '../../components/front/Spinner';
 
 const FrontContent = () => {
   return (
-    <Suspense fallback={<CSpinner color="primary" />}>
+    <Suspense fallback={<Spinner />}>
       <Routes>
         {front_routes.map((route, idx) => {
           return (
